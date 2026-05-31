@@ -8,7 +8,7 @@
 --   5. Eliminat separatorul "/" specific Oracle SQL*Plus
 --   6. Duplicate la profesori (p20, p21) — păstrate cu comentariu
 -- ============================================================
-
+-- CREATE DATABASE facultate;
 DROP TABLE IF EXISTS note      CASCADE;
 DROP TABLE IF EXISTS didactic  CASCADE;
 DROP TABLE IF EXISTS studenti  CASCADE;

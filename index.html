@@ -18,6 +18,18 @@
         .sidebar a.lab-link { display:block; padding:6px 10px; border-radius:4px; color:#1b6e1f; text-decoration:none; }
         .sidebar a.lab-link:hover { background:rgba(0,0,0,.08); }
         .sidebar a.lab-link.active { background:#2e7d32; color:#fff; }
+        .sidebar-toggle { display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; background:none; border:none; padding:6px 4px; font:inherit; font-weight:bold; cursor:pointer; color:inherit; white-space:nowrap; }
+        .sidebar-toggle .chevron { transition:transform .2s; font-size:.8em; }
+        .sidebar { transition:flex-basis .2s; }
+        .sidebar.collapsed { flex:0 0 auto; }
+        .sidebar.collapsed .sidebar-toggle .chevron { transform:rotate(-90deg); }
+        .sidebar.collapsed .sidebar-toggle .label { display:none; }
+        .sidebar.collapsed ul { display:none; }
+        @media (max-width: 768px) {
+            .layout { flex-direction:column; }
+            .sidebar { flex:0 0 auto; position:static; width:100%; box-sizing:border-box; }
+            .sidebar.collapsed { width:auto; align-self:flex-start; }
+        }
         .content { flex:1 1 auto; min-width:0; }
         .lab-title { border-bottom:2px solid #a5d6a7; padding-bottom:8px; margin-bottom:18px; }
         .content img { max-width:100%; height:auto; }
@@ -28,8 +40,11 @@
 </head>
 <body>
     <div class="layout">
-        <nav class="sidebar">
-            <strong>Laborator</strong>
+        <nav class="sidebar" id="sidebar">
+            <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" aria-expanded="true">
+                <span class="label">Laborator</span>
+                <span class="chevron">&#9660;</span>
+            </button>
             <ul>
 <li><a href="#" class="lab-link active" data-target="lab_instalare" onclick="showLab('lab_instalare', this); return false;">Instalare</a></li>
 <li><a href="#" class="lab-link" data-target="lab_pgadmin" onclick="showLab('lab_pgadmin', this); return false;">Ghid pgAdmin</a></li>
@@ -2179,6 +2194,21 @@ Realizarea de exercitii: modelare a bazelor de date.
     </div>
 
     <script>
+        function toggleSidebar() {
+            var sb = document.getElementById('sidebar');
+            var collapsed = sb.classList.toggle('collapsed');
+            sb.querySelector('.sidebar-toggle').setAttribute('aria-expanded', String(!collapsed));
+        }
+        // colapsare automata pe ecrane mici
+        var sidebarMq = window.matchMedia('(max-width: 768px)');
+        function applySidebarMq(e) {
+            var sb = document.getElementById('sidebar');
+            if (e.matches) sb.classList.add('collapsed');
+            else sb.classList.remove('collapsed');
+            sb.querySelector('.sidebar-toggle').setAttribute('aria-expanded', String(!sb.classList.contains('collapsed')));
+        }
+        sidebarMq.addEventListener('change', applySidebarMq);
+        document.addEventListener('DOMContentLoaded', function() { applySidebarMq(sidebarMq); });
         function showLab(id, el) {
             document.querySelectorAll('.lab-section').forEach(function(s) { s.style.display='none'; });
             var t = document.getElementById(id);
