@@ -1,0 +1,294 @@
+<p><b>Obiective:</b></p>
+<ul>
+   <li>Lucrul cu funcții linie în SQL</li>
+</ul>
+
+
+<h2> Funcții linie </h2>
+<p>Funcţiile de tip linie sunt funcţii care, utilizate în interogări, sunt apelate pentru fiecare linie și returnează un rezultat pe linie pentru tabelul interogat. Argumentul funcțiilor poate fi o simplă constantă dată de utilizator, numele unei variabile, numele unei coloane sau o expresie.</p>
+<p>Pot fi utilizate în cadrul listei SELECT, în clauzele WHERE, ORDER BY.</p>
+<p>Apelate cu argument NULL funcţiile returnează în general NULL. Excepţie fac CONCAT, COALESCE, REPLACE şi REGEXP_REPLACE.</p>
+
+<p>Funcţiile listate în continuare sunt cele oferite de PostgreSQL.</p>
+
+<h3> Funcţii numerice </h3>
+<p>primesc ca argument şi returnează date de tip numeric</p>
+<table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
+    <tr>
+        <td>CEIL (n)</td>
+        <td>Rotunjeşte superior pe n</td>
+        <td>SELECT CEIL(51.3);</td>
+    </tr>
+    <tr>
+        <td>FLOOR(n)</td>
+        <td>Rotunjeşte inferior pe n	</td>
+        <td>SELECT FLOOR(51.3);</td>
+    </tr>
+    <tr>
+        <td>ROUND(n [,m])</td>
+        <td>Rotunjeşte pe n la m zecimale. Implicit m este 0, echivalent cu rotunjirea la cel mai apropiat întreg. m poate fi şi negativ.</td>
+        <td>SELECT ROUND(21.365,2) AS "Rotunjire - pozitiv", ROUND (21.665,-1) AS " Rotunjire - negativ ";</td>
+    </tr>
+    <tr>
+        <td>TRUNC(n [,m]) </td>
+        <td>Trunchează pe n la m zecimale; implicit m e 0; m poate fi şi negativ.</td>
+        <td>SELECT TRUNC(21.365,2) AS "Trunchiere - pozitiv", TRUNC(21.665,-1) AS " Trunchiere - negativ";</td>
+    </tr>
+    <tr>
+        <td>MOD(m, n)</td>
+        <td>Returnează restul împărţirii lui m la n</td>
+        <td>SELECT MOD (26,11) AS "Mod";</td>
+    </tr>
+</table>
+         
+
+
+<p>La acestea se mai adaugă funcţiile trigonometrice uzuale (COS(n), ACOS(n), SIN(n), ASIN(n), TAN(n), ATAN(n)), funcţiile de calcul de logaritmi (LN(n), LOG(base, n)), ridicarea la putere (EXP(n), POWER(m,n), rădăcina pătrată (SQRT(n)).</p>
+
+<h3>Funcţii ce iau ca argument date caracter şi returnează valori numerice</h3>
+<table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
+    <tr>
+        <td>LENGTH (char)</td>
+        <td>Returneză lungimea şirului char.</td>
+        <td>SELECT LENGTH('cuvant') AS "Lungime cuvant";<br>SELECT prenume, LENGTH(prenume) FROM profesori WHERE UPPER(TRIM(prenume))='COSMIN'; -- de ce 10?</td>
+    </tr>   
+    <tr>
+        <td>ASCII (char)</td>
+        <td>Returnează codul ASCII al primului character din şir</td>
+        <td>SELECT ASCII('A');</td>
+    </tr>   
+    <tr>
+        <td>POSITION(char2 IN char1)<br>STRPOS(char1, char2)</td>
+        <td>Returnează poziţia primei apariţii a şirului char2 în char1 (numerotare de la 1). Dacă nu se identifică nicio apariţie rezultatul este 0.</td>
+        <td>SELECT POSITION('OR' IN 'CORPORATE FLOOR') AS "Pozitie"; <br>SELECT nume, STRPOS(nume,'ra') FROM profesori;</td>
+    </tr>   
+</table>
+
+
+
+
+<h3>Funcţii ce iau ca argument date caracter și returnează date de tip caracter</h3>
+
+<table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
+    <tr>
+        <td>INITCAP(char)</td>
+        <td>Prima literă a fiecărui cuvânt e transformată în majusculă.</td>
+        <td>SELECT INITCAP('prima litera majuscula');</td>
+    </tr>   
+    <tr><td>UPPER(char) </td><td>Returnează şirul char rescris cu majuscule	</td><td>SELECT UPPER('Stefan');</td></tr>
+    
+    <tr><td>LOWER(char) </td><td>Returnează şirul char rescris cu litere mici	</td><td>SELECT LOWER('LOWER');</td></tr>
+    
+    <tr><td>REVERSE(char) </td><td>Returnează şirul char rescris de la coadă la cap	</td><td>SELECT REVERSE('OREZ');</td></tr>
+    
+    <tr><td>CONCAT(char1, char2)	</td><td>Concatenează şirurile argument echivalent cu operatorul de concatenare	</td><td>SELECT CONCAT( CONCAT(nume, ' este student in anul '), an) FROM studenti;</td></tr>
+    
+    <tr><td>SUBSTR(char, m [, n ])	</td><td>Extrage din şirul char n caractere începând de la poziţia m; omisiunea lui n semnifică finalul şirului; o valoare negativă pentru m semnifică numărarea de la stânga la dreapta	</td><td>SELECT SUBSTR('ABCDEFG',3,4);</td></tr>
+    
+    <tr><td>RPAD(char1,n [,char2 ])  	</td><td>Returnează char1 cu spaţii adăugate la dreapta până la lungimea n, dacă se omite char2; altfel char2 este copiat de oricâte ori e nevoie pentru a completa char1 până la lungimea n	</td><td>SELECT RPAD(nume,12,'ab') FROM studenti WHERE nume = 'Popescu';</td></tr>
+    
+    <tr><td>LPAD(char1,n [,char2 ])  	</td><td>Similar RPAD cu diferenţa că alipirea se face la stânga	</td><td>SELECT LPAD('Pagina',15,'*.');</td></tr>
+    
+    <tr><td>CHR(n) </td><td>Returnează caracterul corespunzător codului n, ca tip text	</td><td>SELECT CHR(68)||CHR(65)||CHR(84)||CHR(69);</td></tr>
+    
+    <tr><td>TRIM (char) </td><td>Elimină spaţiile goale de la inceputul şi sfârşitul textului </td><td> SELECT '-'||TRIM(' &nbsp; test &nbsp; ')||'-' AS "Fara spatii";</td></tr>
+    
+    <tr><td>LTRIM(char) </td><td>Elimină spaţiile goale de la inceputul textului	</td><td> SELECT '-'||LTRIM(' &nbsp; test &nbsp; ')||'-' AS "Fara spatiile de la inceput";</td></tr>
+    
+    <tr><td>REPLACE(char, search_string [, replacement_string])	</td><td>Returnează şirul char în care subşirul search_string este înlocuit de replacement_string; absenţa ultimului reprezintă ştergerea tuturor apariţiilor subşirului căutat 	</td><td>SELECT REPLACE('Andrei','i','ea');</td></tr>
+    
+    <tr><td>TRANSLATE(char, from, to)	</td><td>Returnează char modificat astfel: fiecare apariţie a unui character din şirul from este înlocuită de corespondentul (caracterul de pe aceeaşi poziţie) din şirul to; dacă from este mai lung decât to, caracterele fără corespondent sunt şterse	</td><td>SELECT TRANSLATE('48KLM980', '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', '9999999999XXXXXXXXXXXXXXXXXXXXXXXXXX') "COD";</td></tr>
+    
+    </table>
+
+
+
+
+    <p>Funcțiile care schimbă <span style="font-style:italic">case</span>-ul literelor (transformă textul în litere mici sau în majuscule) sunt frecvent utilizate în clauza WHERE pentru a regăsi text. De exemplu, dacă dorim identificarea datelor despre studentul Andrei și nu avem garanția că prenumele acestuia a fost inserat în baza de date cu toate litere majuscule sau doar cu prima literă majusculă, vom procesa atributul <i>prenume</i> aducându-l la forma dorită pentru testare:</p>
+
+    <pre><code class="language-sql">SELECT * FROM studenti WHERE prenume = 'ANDREI'; --returneaza 0 linii</code></pre>
+    
+    <pre><code class="language-sql">SELECT * FROM studenti WHERE UPPER(prenume) = 'ANDREI'; --returneaza înregistrările dorite</code></pre>
+    
+    <p>De asemenea funcția TRIM are o largă utilizare pentru regăsirea datelor atunci cand atributele sunt declarate de tip CHAR:</p>
+    
+    <pre><code class="language-sql">SELECT * FROM profesori WHERE UPPER(nume) = 'BREABAN'; --returneaza 0 linii</code></pre>
+    
+    <pre><code class="language-sql">SELECT * FROM profesori WHERE TRIM(UPPER(nume)) = 'BREABAN'; --returneaza înregistrările dorite</code></pre>
+    
+    <pre><code class="language-sql"> SELECT TRIM('1' FROM '1test1'); -- elimina caracterul de la inceput si de la sfarsit din "1test1"</code></pre>
+    
+    <pre><code class="language-sql"> SELECT TRIM(LEADING '0' FROM '00010230'); -- Elimina zerourile de la inceput</code></pre>
+    
+    <pre><code class="language-sql"> SELECT TRIM(TRAILING '1' FROM 'Tech1'); -- elimina caracterele '1' de la sfarsit</code></pre>
+    
+    <pre><code class="language-sql"> SELECT TRIM(BOTH '1' FROM '123Tech111'); -- elimina caracterele '1' de la inceput si de la sfarsit</code></pre>
+    
+    <h3>Funcţii pentru tipul DATE (date calendaristice)</h3>
+    <p>Formatul implicit pentru afişarea datelor calendaristice în PostgreSQL este ISO, "YYYY-MM-DD" (ex: '2015-06-10'). Constantele de tip dată se pot scrie ca literali tipaţi, de ex. <code>DATE '2015-06-10'</code>, sau folosind funcţia TO_DATE (descrisă mai jos) care specifică explicit formatul şirului introdus, evitând ambiguităţile.</p>
+    
+    
+    <table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
+    
+        <tr>
+            <td>CURRENT_DATE </td>
+            <td>Returnează data curentă relativ la zona de timp (time zone) a sesiunii curente	</td>
+            <td>SELECT CURRENT_DATE;</td>
+        </tr>
+    
+        <tr>
+            <td>CURRENT_TIMESTAMP </td>
+            <td>Returnează data, ora si fusul orar curente relative la zona de timp (time zone) a sesiunii curente	</td>
+            <td>SELECT CURRENT_TIMESTAMP;</td>
+        </tr>
+    
+        <tr><td>NOW()<br>LOCALTIMESTAMP	</td>
+            <td>Returnează data şi ora curentă a sistemului (timestamp). Pentru doar dată folosiţi CURRENT_DATE.	</td>
+            <td>SELECT NOW();<br> SELECT TO_CHAR(NOW(), 'DD-MM-YYYY HH24:MI');</td>
+        </tr>
+
+        <tr>
+            <td>vârsta între două date<br>AGE(d1, d2)	</td>
+            <td>Returnează intervalul (ani, luni, zile) dintre d1 şi d2. Numărul de luni se poate obţine din componentele intervalului.	</td>
+            <td>SELECT EXTRACT(YEAR FROM AGE(DATE '2015-02-02', DATE '2015-01-01'))*12<br>&nbsp;&nbsp;&nbsp;+ EXTRACT(MONTH FROM AGE(DATE '2015-02-02', DATE '2015-01-01')) AS "Luni";</td>
+        </tr>
+
+        <tr>
+            <td>adunarea de luni<br>d + n * INTERVAL '1 month'</td>
+            <td>Adaugă un număr de luni la o dată calendaristică (folosind intervale).</td>
+            <td>SELECT data_nastere, data_nastere + INTERVAL '1 month' FROM studenti WHERE nume= 'Popescu';</td>
+        </tr>
+
+        <tr>
+            <td>următoarea zi a săptămânii	</td>
+            <td>Data corespunzătoare următoarei apariţii a unei zile a săptămânii. Se obţine prin aritmetică pe date folosind funcţia EXTRACT(DOW ...) (DOW: 0=duminică … 6=sâmbătă). Exemplul găseşte următoarea zi de marţi (DOW=2).	</td>
+            <td>SELECT d + ((2 - EXTRACT(DOW FROM d)::int + 7 - 1) % 7 + 1) * INTERVAL '1 day'<br>FROM (SELECT DATE '2015-10-13' AS d) t;</td>
+        </tr>
+
+        <tr>
+            <td>LAST_DAY ≈<br>(date_trunc('month', d) + INTERVAL '1 month - 1 day')	</td>
+            <td>Ultima zi din luna datei d.	</td>
+            <td>SELECT (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month' - INTERVAL '1 day')::date AS "Last";</td>
+        </tr>
+
+        <tr>
+            <td>DATE_TRUNC(unitate, d)	</td>
+            <td>Trunchiază data la unitatea specificată ('year', 'month', 'day', 'hour'...). Înlocuieşte rotunjirea/trunchierea datelor.	</td>
+            <td>SELECT DATE_TRUNC('year', DATE '2016-10-27') AS "Prima zi a anului"; <br>
+            SELECT DATE_TRUNC('month', DATE '2016-10-27') AS "Prima zi a lunii";</td>
+        </tr>
+    </table>
+
+    <p>Studiaţi modelele de format pentru date la adresa <a href="https://www.postgresql.org/docs/current/functions-formatting.html">documentaţia PostgreSQL</a> (măcar astea să ştiţi ce fac: D, DAY, DD, HH24, MI, MM, MON, MONTH, SS, YYYY, YY, YEAR).</p>
+
+    <p>În PostgreSQL datelor calendaristice li se pot aplica operaţii aritmetice cu numere întregi (zile) şi cu intervale: </p>
+    <ul>
+    <li>adunarea sau scăderea unui număr (de zile) la/dintr-o dată are ca rezultat o nouă dată:</li>
+    </ul>
+
+
+    <pre><code class="language-sql">SELECT CURRENT_DATE + 10;</code></pre> <p>Valoarea adunată reprezintă un număr de zile. Pentru a adăuga ore folosim un interval, de ex. <code>NOW() + INTERVAL '5 hours'</code>.</p>
+    <ul>
+    <li>diferența a două date are ca rezultat numărul de zile</li>
+    </ul>
+
+
+    <pre><code class="language-sql"> SELECT (CURRENT_DATE - data_nastere)/365 FROM studenti;</code></pre>
+    
+    <h3>Funcţii de conversie</h3>
+    <p>În PostgreSQL conversiile între tipuri se fac explicit, fie cu funcţiile de mai jos, fie cu operatorul de cast <code>::tip</code> (de ex. <code>'123'::integer</code> sau <code>bursa::text</code>). Spre deosebire de alte sisteme, PostgreSQL nu converteşte automat un text într-un număr într-o expresie aritmetică.</p>
+
+    <p>Pentru conversii există funcţiile:</p>
+    <table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
+
+        <tr>
+            <td>TO_CHAR(n [, fmt])	</td>
+            <td>Converteşte o valoare numerică n la text conform formatului specificat fmt. Studiați formatul numeric în <a href="https://www.postgresql.org/docs/current/functions-formatting.html">documentaţia PostgreSQL</a>. </td>
+            <td>SELECT TO_CHAR(1110 + 1, '9999'); <br> SELECT TO_CHAR(bursa,'99999') FROM studenti;</td>
+        </tr>
+
+        <tr>
+            <td>TO_CHAR(datetime [, fmt ])</td>
+            <td>Converteşte o dată/timp la text conform formatului specificat fmt	</td>
+            <td>SELECT TO_CHAR(CURRENT_DATE, 'Day, Month, DD, YYYY') AS "Exemplu TO_CHAR";</td>
+        </tr>
+
+        <tr>
+            <td>TO_DATE(char, fmt)</td>
+            <td>Convertește un șir de caractere în dată calendaristică conform formatului specificat. Modelele de format sunt descrise în <a href="https://www.postgresql.org/docs/current/functions-formatting.html">documentaţia PostgreSQL</a>.</td>
+            <td>SELECT TO_DATE('January 26, 1996', 'Month DD YYYY');</td>
+        </tr>
+
+        <tr>
+            <td>TO_NUMBER(char, fmt)	</td>
+            <td>Converteşte un şir de caractere într-un număr conform formatului specificat.</td>
+            <td>SELECT TO_NUMBER('100.52','9999.99');</td>
+        </tr>
+
+        <tr>
+            <td>CAST(expr AS type_name)<br>expr::type_name</td>
+            <td>Conversie explicită de tip.</td>
+            <td>SELECT CAST(CURRENT_TIMESTAMP AS VARCHAR(50));<br>SELECT CURRENT_TIMESTAMP::VARCHAR(50);</td>
+        </tr>
+    </table>
+
+    <p>Exemple in care data calendaristica (ziua/luna) este afişată în limba română. Numele localizate se obţin cu modificatorul <code>TM</code> (Translated Month/Day), care foloseşte localizarea sesiunii. Setaţi întâi localizarea pentru timp:</p>
+
+    <pre><code class="language-sql">SET lc_time = 'ro_RO';</code></pre>
+    <pre><code class="language-sql">SELECT 'Este o zi frumoasa de ' || TO_CHAR(CURRENT_DATE, 'TMMonth');</code></pre>
+    <pre><code class="language-sql">SELECT nume, prenume, TO_CHAR(data_nastere, 'TMDay') AS "zi nastere" FROM studenti; </code></pre>
+
+
+
+    <p>Pentru a studia formatarea datelor calendaristice în cadrul funcţiei to_char consultaţi:</p>
+    <p><a href="https://www.postgresql.org/docs/current/functions-formatting.html">https://www.postgresql.org/docs/current/functions-formatting.html</a></p>
+    
+    <h3>Alte funcţii</h3>
+    <table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
+    
+    <tr><td>CURRENT_USER	</td><td>Returnează numele utilizatorului curent	</td><td>SELECT CURRENT_USER;</td></tr>
+
+    <tr><td>COALESCE(expr1, expr2 [, ...])	</td>
+        <td>Returnează prima expresie care nu este NULL din listă	</td>
+        <td>SELECT nume, COALESCE(bursa,0) AS "bursa" FROM studenti;<br>SELECT nume, COALESCE(TO_CHAR(bursa,'99999'),'Nu are bursa') AS "bursa" FROM studenti;</td></tr>
+
+    <tr><td>NULLIF(expr1, expr2)</td>
+        <td>Dacă expr1 este egală cu expr2 returnează NULL, altfel returnează expr1	</td><td></td></tr>
+
+    <tr><td>CASE WHEN conditie THEN rezultat<br>[WHEN ...] [ELSE default] END	</td>
+        <td>Expresie condiţională: evaluează condiţiile pe rând şi returnează rezultatul primei condiţii adevărate; dacă niciuna nu e adevărată returnează ELSE (sau NULL).	</td>
+        <td>SELECT CASE bursa WHEN 450 THEN 'premiul 1' WHEN 350 THEN 'premiul 2' WHEN 250 THEN 'premiul 3' ELSE '?' END FROM studenti;</td></tr>
+    
+    <tr><td>LEAST(expr1[, expr2 ]...) 	</td>
+        <td>Returnează cel mai mic element din listă	</td>
+        <td>SELECT LEAST('Mihai','Andrei','Anca') "LEAST";</td></tr>
+    
+    <tr><td>GREATEST (expr1 [, expr2 ]...)	</td>
+    <td>Returnează cel mai mare element din listă	</td>
+    <td>SELECT GREATEST('Stefan','Mihai','Andrei','Anca') "GREATEST"; </td>
+    </table>
+    <p>Funcția COALESCE este deseori utilă pentru a evita rezultatele nule la aplicarea unor operatori/funcții. De exemplu, dacă toți studenții facultății ar fi finanțați cu o sumă dată (de ex. 100), suma totală ridicată de un student nu se poate obține prin</p>
+
+    <pre><code class="language-sql">SELECT 100+bursa FROM studenti;</code></pre>
+
+    <p>ci prin</p>
+
+    <pre><code class="language-sql">SELECT 100+COALESCE(bursa,0) FROM studenti;</code></pre>
+    
+    <h2>Exerciții</h2>
+    <ol>
+        <li> Scrieți o interogare pentru a afișa data de azi. Etichetați coloana "Astazi".</li>
+        <li> Pentru fiecare student afișați numele, data de nastere si numărul de luni între data curentă și data nașterii.</li>
+        <li> Afișați ziua din săptămână în care s-a născut fiecare student.</li>
+        <li> Utilizând functia de concatenare, obțineți pentru fiecare student textul 'Elevul &lt;prenume&gt; este in grupa &lt;grupa&gt;'.</li>
+        <li> Afisati valoarea bursei pe 10 caractere, completand valoarea numerica cu caracterul $.</li>
+        <li> Pentru profesorii al căror nume începe cu B, afișați numele cu prima litera mică si restul mari, precum și lungimea (nr. de caractere a) numelui.</li>
+        <li> Pentru fiecare student afișați numele, data de nastere, data la care studentul urmeaza sa isi sarbatoreasca ziua de nastere si prima zi de duminică de dupa.</li>
+        <li> Ordonați studenții care nu iau bursă în funcție de luna cand au fost născuți; se va afișa doar numele, prenumele și luna corespunzătoare datei de naștere.</li>
+        <li> Pentru fiecare student afișati numele, valoarea bursei si textul: 'premiul 1' pentru valoarea 450, 'premiul 2' pentru valoarea 350, 'premiul 3' pentru valoarea 250 și 'mentiune' pentru cei care nu iau bursa. Pentru cea de a treia coloana dati aliasul "Premiu".</li>
+        <li> Afişaţi numele tuturor studenților înlocuind apariţia literei i cu a şi apariţia literei a cu i.</li>
+        <li> Afișați pentru fiecare student numele, vârsta acestuia la data curentă sub forma '&lt;x&gt; ani &lt;y&gt; luni și &lt;z&gt; zile' (de ex '19 ani 3 luni și 2 zile') și numărul de zile până își va sărbători (din nou) ziua de naștere.</li>
+        <li> Presupunând că în următoarea lună bursa de 450 RON se mărește cu 10%, cea de 350 RON cu 15% și cea de 250 RON cu 20%, afișați pentru fiecare student numele acestuia, data corespunzătoare primei zile din luna urmatoare și valoarea bursei pe care o va încasa luna următoare. Pentru cei care nu iau bursa, se va afisa valoarea 0.</li>
+        <li> Pentru studentii bursieri (doar pentru ei) afisati numele studentului si bursa in stelute: fiecare steluta valoreaza 50 RON. In tabel, alineati stelutele la dreapta.</li>
+    </ol>
+    

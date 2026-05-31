@@ -1,0 +1,261 @@
+
+<p><b>Obiective:</b></p>
+<p><ul></p>
+<p><li>Înțelegerea modelului relațional al bazelor de date</p>
+<p><li>Realizarea unei imagini de ansamblu asupra limbajului SQL</p>
+<p></ul></p>
+
+
+
+<h2> Modelul relațional. </h2>
+<ul>
+<li> este un model simplu, cu implementări foarte eficiente şi un limbaj de interogare (SQL) descriptiv simplu si expresiv;</li>
+<li> propus in anii '70 de catre Edgar Frank Codd, se regaseste in cele mai populare sisteme de gestiune de baze de date: http://db-engines.com/en/ranking_trend</li>
+</ul>
+
+
+<p>Elemente:</p>
+<ul>
+<li> Baza de date constă dintr-o multime de tabele/relaţii</li>
+<li> Fiecare tabel/relaţie are un nume unic in baza de date şi conţine un set de coloane/atribute/câmpuri</li>
+<li> Fiecare atribut are un nume unic in tabelul la care aparţine si are asociat tip/domeniu din care poate lua valori</li>
+<li> Fiecare linie/înregistrare/tuplu din tabel conţine valori pentru toate atributele</li>
+<li> Ordinea liniilor/tuplelor nu are semnificaţie</li>
+</ul>
+
+
+<p><b>Schema bazei de date relaţionale </b> reprezintă descrierea structurală a tabelelor în baza de date.</p>
+
+<p><b>Instanţa bazei de date </b> reprezintă conţinutul bazei de date la un anumit moment</p>
+
+<p><b>NULL</b> – este o valoare specială utilizată când nu se cunoaşte (sau e nedefinită) valoarea unui atribut pentru o înregistrare.</p>
+
+<p><b>Cheie candidat</b> – un atribut care are valori unice pentru fiecare înregistrare </p>
+<p>- sau un set de atribute ale căror valori combinate sunt unice, minimală în raport cu această proprietate (nici o submulţime nu e cheie); dacă nu este îndeplinită proprietatea de mulţime minimală avem de a face cu o supercheie</p>
+
+<p><b>Cheie primară</b> – una dintre cheile candidat aleasă pentru a identifica în mod unic înregistrările din tabel; nici un atribut implicat nu poate avea valoarea NULL</p>
+
+<p><b>Cheie alternativă</b> – cheie candidat care nu a fost aleasă drept cheie primară</p>
+
+<p><b>Cheie străină</b> – un atribut sau un set de atribute dintr-o relaţie care are corespondent o cheie candidat a altei relaţii ( sau chiar a relaţiei curente, caz în care o numim cheie străină recursivă)</p>
+
+<p>Obţinerea de informaţii din baza de date se realizează cu ajutorul interogărilor SQL. Rezultatul unei interogări este un nou tabel.</p>
+
+<p><b>Algebra relaţională</b></p>
+<ul>
+<li> Un limbaj formal</li>
+<li> Operatorii de bază din algebra relaţională: selecţie, proiecţie, produs cartezian, intersecţie, diferenţă, redenumire</li>
+<li> Bazată pe mulţimi (duplicatele se elimină)</li>
+</ul>
+
+
+<h2> Limbajul SQL </h2>
+<p>SQL - Structured Query Language</p>
+<ul>
+<li> limbajul utilizat în manipularea bazelor de date relaţionale</li>
+<li> un limbaj esenţial declarativ; exprimă ce se doreşte de la baza de date, nu şi cum se obţine rezultatul</li>
+<li> un limbaj implementat cu fundamente în algebra relaţională (semantica este definită cu ajutorul algebrei relaţionale), bazat pe multi-seturi  (nu se elimină duplicatele)</li>
+<li> deşi considerat un limbaj de programare non-procedural, majoritatea SGBD-urilor relaţionale oferă şi extensii procedurale.</li>
+</ul>
+
+
+<p>Limbajul SQL a fost pentru prima dată standardizat de către Organizaţia Internaţională pentru Standardizare (ISO) în anul 1987. De atunci limbajul a suferit modificări/îmbunătăţiri în mai multe rânduri, ultima versiune stabilă fiind SQL:2016.</p>
+
+<p>Deşi standardizat la nivel internaţional, fiecare dezvoltator de baze de date a modificat şi a extins versiunea standard pentru a exploata avantajele oferite de implementarea particulară a produsului propriu. Datorită dimensiunii mari şi a complexităţii standardului cei mai mulţi dezvoltatori nu l-au implementat în totalitate. Vice-versa, standardul nu specifică comportamentul bazei de date în anumite situaţii, decizille ramânând la latitudinea dezvoltatorilor. Se vorbeşte astfel de dialecte SQL. Rezultatul este apariţia de incompatibilităţi între SGBD-uri relaţionale diferite. Unele incompatibilităţi sunt intenţionat păstrate de dezvoltatori cu scopul de fidelizare a clienţilor.</p>
+
+<p>Gradul de conformitate al PostgreSQL cu standardul SQL poate fi studiat în documentaţia oficială: </p>
+<p><a href="https://www.postgresql.org/docs/current/features.html">https://www.postgresql.org/docs/current/features.html</a></p>
+
+<p>În continuare sunt listate în forma Backus-Naur cele mai uzuale comenzi SQL. Convenţiile de sintaxă în acest format sunt următoarele:</p>
+<ul>
+<li>	<>		reprezintă o variabilă de substituţie</li>
+<li>	|  		reprezintă disjuncţia</li>
+<li>	[…]		reprezintă elemente opţionale</li>
+<li>	{…|…|…}	reprezintă exact un element din listă</li>
+</ul>
+
+
+<h3> Comenzi DDL (de definire a datelor) </h3>
+
+<h4> Crearea tabelelor </h4>
+<pre><code class="language-sql">CREATE [{GLOBAL | LOCAL} TEMPORARY] TABLE
+        &lt;nume_tabel&gt;
+        (&lt;nume_coloană1&gt; data_type [constrângeri] 
+        [,&lt;nume_coloana2&gt; data_type [constrângeri]]
+        […]
+        )     
+       [ ON COMMIT { DELETE | PRESERVE } ROWS ]
+</code></pre>
+
+
+
+<p>Opţiunea TEMPORARY specifică crearea unui tabel temporar, care îşi păstrează conţinutul doar pe durata unei tranzacţii (opţiunea ON COMMIT DELETE ROWS) sau pe parcursul sesiunii curente (implicit, respectiv ON COMMIT PRESERVE ROWS). În PostgreSQL un tabel temporar este vizibil doar în sesiunea care l-a creat şi este şters automat la închiderea sesiunii. </p>
+
+
+<h4> Ştergerea unui tabel </h4>
+<pre><code class="language-sql">DROP TABLE &lt;nume_tabel&gt;  [CASCADE CONSTRAINTS]
+</code></pre>
+
+<p>Opţiunea CASCADE permite ştergerea unui tabel care e referenţiat de un VIEW sau de chei străine din alte tabele, ştergând automat şi obiectele dependente (view-ul şi restricţiile de tip cheie străină). Fără CASCADE, ştergerea unui tabel referenţiat eşuează cu eroare.</p>
+
+<p>Atenţie: ştergerea unui tabel este definitivă - datele nu pot fi recuperate. Pentru a anula modificările făcute într-o tranzacţie încă neîncheiată se poate folosi ROLLBACK (vezi laboratorul despre tranzacţii).</p>
+
+
+<h3> Comenzi DML (de manipulare a datelor) </h3>
+
+<h4> Inserarea înregistrărilor </h4>
+<pre><code class="language-sql">INSERT INTO &lt;nume_tabel&gt; 
+            [ (lista_coloane) ]
+            VALUES (lista_valori)
+</code></pre>
+
+
+<h4> Actualizarea valorilor </h4>
+<pre><code class="language-sql">UPDATE &lt;nume_tabel&gt;
+       SET &lt;nume_coloana1&gt; = valoare1
+           [, &lt;nume_coloana2&gt; = valoare2...]
+       [WHERE conditie]
+</code></pre>
+
+
+<h4> Ştergerea înregistrărilor </h4>
+<pre><code class="language-sql">DELETE FROM &lt;nume_tabel&gt; 
+      [WHERE conditie]
+</code></pre>
+
+
+
+<h4> Interogarea bazei de date </h4>
+<pre><code class="language-sql">SELECT [DISTINCT | ALL] {* | [expresie_coloana [AS <nume_nou>]] [,...] }
+       FROM &lt;nume_tabel&gt; [alias] [, ...]
+       [WHERE conditie]
+       [GROUP BY lista_coloane] [HAVING conditie]
+       [ORDER BY exp1 [ASC/DESC] [,exp2...]] 
+</code></pre>
+
+
+<h2> Tipuri de date (în PostgreSQL) </h2>
+
+<table>
+   <tr>
+      <th>Tip</th>
+      <th>Proprietăţi</th>
+   </tr>
+   <tr>
+      <td>CHAR(n)</td>
+      <td>Şiruri de lungime fixă n. Dacă valorile introduse au mai puţine caractere se adaugă blanks (spaţii) la sfârşit; dacă valorile introduse conţin mai multe caractere apare eroare.</td>
+   </tr>
+   <tr>
+      <td>VARCHAR(n)</td>
+      <td>Şiruri de lungime variabilă, n este lungimea maximă. Este indicat a fi folosit când valorile pentru un atribut diferă ca lungime, fiindcă se consumă spaţiu proporţional cu numărul de caractere din şir. (Tipul <code>TEXT</code> stochează şiruri de lungime nelimitată.)</td>
+   </tr>
+   <tr>
+      <td>NUMERIC</td>
+      <td>Corespunde numerelor în virgulă fixă, cu precizie arbitrară. Poate stoca numere foarte mari, exacte (fără erori de rotunjire). Pentru numere în virgulă mobilă există tipurile <code>REAL</code> şi <code>DOUBLE PRECISION</code>.</td>
+   </tr>
+   <tr>
+      <td>NUMERIC(n1, n2)</td>
+      <td>Numere ce conţin în total n1 cifre semnificative (precizia), n2 precizând numărul de cifre după punctul zecimal (scala). Ex. NUMERIC(6,2) poate stoca valori de forma 9999.99.</td>
+   </tr>
+   <tr>
+      <td>SMALLINT, INTEGER, BIGINT</td>
+      <td>Numere întregi pe 2, 4, respectiv 8 octeţi. Utile pentru câmpuri ce stochează doar numere întregi (ani, contoare etc.).</td>
+   </tr>
+   <tr>
+      <td>DATE</td>
+      <td>Reprezintă o dată calendaristică (an, lună, zi). Pentru a stoca şi ora se folosesc tipurile <code>TIMESTAMP</code> (dată şi oră) sau <code>TIME</code> (doar ora).</td>
+   </tr>
+   <tr>
+      <td>BYTEA / TEXT</td>
+      <td>Permit stocarea datelor nestructurate: <code>BYTEA</code> pentru date binare (imagini, fişiere), <code>TEXT</code> pentru text de dimensiune mare.</td>
+   </tr>
+</table>
+
+
+
+<p>PostgreSQL acceptă şi aliasuri/tipuri precum: <code>DECIMAL</code> (sinonim cu NUMERIC), <code>INT</code>, <code>BOOLEAN</code>, <code>SERIAL</code> (întreg cu auto-incrementare).</p>
+
+<p>O listă completă a tipurilor de date găsiți în documentaţia PostgreSQL: <a href="https://www.postgresql.org/docs/current/datatype.html">https://www.postgresql.org/docs/current/datatype.html</a></p>
+
+<p><b>NULL</b> este o valoare specială care semnifică lipsa informaţiei. Ambele teste NULL=NULL şi NULL<>NULL returnează FALSE. Verificarea (in)egalităţii cu NULL se face utilizând IS [NOT] NULL.</p>
+
+<h2>Schema bazei de date - studiu de caz</h2>
+
+<p>Fiecare facultate a unei universităţi are nevoie să-şi facă managementul intern al studenţilor pe care îi are. Spre exemplu, un aspect important în cadrul secretariatului este cunoaşterea notelor pe care studenţii le-au luat la diversele materii pe care le-au studiat. Pe baza acestor informaţii, se poate decide dacă studentul va avea sau nu bursă, dacă va primi sau nu cazare în anul ce urmează sau daca va trebui să repete o anumită materie. Deşi aceste informaţii sunt disponibile în format clasic, în cataloage, este mult mai uşor de lucrat cu un număr mare de studenţi atunci când aceştia sunt stocaţi într-o bază de date. </p>
+
+<p>În afara informaţiilor referitoare la studenţi (nume, prenume, anul în care sunt înmatriculaţi, etc.) ce ar putea forma o tabelă într-o bază de date, şi alte informaţii precum notele sau numele cursurilor la care au participat trebuie să fie stocate. Nu este natural ca aceste informaţii să fie stocate împreună cu informaţiile personale ale studentului (de exemplu din cauză ca participarea la doua cursuri diferite ar presupune introducerea de doua ori - ca şi înregistrari diferite în tabelă - a aceloraşi informaţii privitoare la student) şi din acest motiv sunt necesare tabele suplimentare.</p>
+
+<p>În cadrul laboratorului de baze de date, vom folosi tabelele studenti, cursuri, note şi profesori, ce au urmatoarele structuri: </p>
+
+
+<p>Tabela studenti:</p>
+<ul>
+<li> nr_matricol - câmp alfanumeric de 6 caractere ce nu poate fi null;</li>
+<li> nume - câmp alfanumeric, variabil ca dimensiune dar având maxim 10 caractere ce nu poate fi null;</li>
+<li> prenume - câmp alfanumeric, variabil ca dimensiune dar având maxim 10 caractere;</li>
+<li> an - câmp numeric ce poate reţine numere formate doar dintr-o singură cifră;</li>
+<li> grupa - câmp alfanumeric de 2 caractere;</li>
+<li> bursa - câmp numeric ce poate ţine minte valori reale formate din 4 cifre înainte de virgulă şi două cifre după;</li>
+<li> data_nastere - câmp de tip dată calendaristică.</li>
+</ul>
+
+
+<p>  </p>
+
+
+<p>Tabela cursuri:</p>
+<ul>
+<li> id_curs - câmp alfanumeric de 4 caractere ce nu poate fi null;</li>
+<li> titlu_curs - câmp alfanumeric, variabil ca dimensiune dar având maxim 10 caractere ce nu poate fi null;</li>
+<li> an - câmp numeric ce poate reţine numere formate doar dintr-o singură cifră;</li>
+<li> semestru  - câmp numeric ce poate reţine o cifra;</li>
+<li> credite - câmp numeric ce poate reţine numere formate din două cifre.</li>
+</ul>
+
+
+<p>Tabela note:</p>
+<ul>
+<li> nr_matricol - câmp alfanumeric de 6 caractere ce nu poate fi null;</li>
+<li> id_curs - câmp alfanumeric de 4 caractere ce nu poate fi null;</li>
+<li> valoare - câmp numeric ce poate reţine numere formate din două cifre;</li>
+<li> data_notare - câmp de tip dată calendaristică.</li>
+</ul>
+
+
+<p>Tabela profesori:</p>
+<ul>
+<li> id_prof - câmp alfanumeric de 4 caractere ce nu poate fi null;</li>
+<li> nume - câmp alfanumeric, fix ca dimensiune având 10 caractere ce nu poate fi null;</li>
+<li> prenume - câmp alfanumeric, fix ca dimensiune având 10 caractere;</li>
+<li> grad_didactic - câmp alfanumeric, variabil ca dimensiune dar având maxim 5 caractere.</li>
+</ul>
+
+
+<p>Tabela didactic</p>
+<ul>
+<li> id_prof - câmp alfanumeric de 4 caractere ce nu poate fi null;</li>
+<li> id_curs - câmp alfanumeric de 4 caractere ce nu poate fi null.</li>
+</ul>
+
+
+<p>  </p>
+
+<p><span style="color:green">1. Creaţi aceste tabele utilizând contul student.</span></p>
+
+<p><span style="color:green">2. Inseraţi în baza de date nou creată un student Popescu Ionut, proaspat înmatriculat în anul 2 care a luat nota 10 la materia Logica pentru informatica predata de  Cristian Masalagiu în primul semestru din anul 1.</span></p>
+
+<p><span style="color:green">3. Executaţi comanda de mai jos pentru a rula un script de creare care are rolul de a crea toate tabelele de mai sus şi de a le popula cu date. Studiati continutul scriptului.</span></p>
+
+<p>Descarcati acest fisier: <a href="https://edu.info.uaic.ro/baze-de-date/resurse/script/facultate.sql">facultate.sql</a> si salvati-l pe disc.</p>
+
+<p>În pgAdmin, deschideți <b>Query Tool</b> pe baza de date de lucru, apăsați iconița <i>Open File</i>, selectați fișierul <code>facultate.sql</code> și apoi rulați-l cu <b>F5</b> (execută toate comenzile din script).</p>
+
+<p>Pentru a vedea care sunt tabelele din baza de date curentă se poate executa:</p>
+
+<pre><code class="language-sql">SELECT tablename FROM pg_tables WHERE schemaname = 'public';</code></pre>
+
+
+<p>Pentru a vedea care este structura unei tabele (în cazul în care aţi uitat spre exemplu din câte litere poate fi format numele de familie al unui student), o puteți inspecta în arborele din stânga al pgAdmin (<i>Schemas → public → Tables → nume_tabel → Columns</i>). În consola psql, comanda echivalentă este:</p>
+
+<pre><code class="language-sql">\d nume_tabel</code></pre>
+  

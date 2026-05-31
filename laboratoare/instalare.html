@@ -1,0 +1,45 @@
+<h2> Instalarea PostgreSQL și pgAdmin </h2>
+
+<p>Pentru laboratoarele de Baze de date vom folosi sistemul de gestiune a bazelor de date <b>PostgreSQL</b>, unul dintre cele mai populare SGBD-uri relaționale, împreună cu interfața grafică <b>pgAdmin</b>. Tot lucrul la laborator (scrierea și rularea scripturilor SQL) se va face din pgAdmin.</p>
+
+<p>Descărcați installer-ul de pe pagina oficială: <a href="https://www.postgresql.org/download/">https://www.postgresql.org/download/</a> (pe Windows este recomandat installer-ul EDB, care include și serverul PostgreSQL, și pgAdmin 4). Versiunea PostgreSQL 14 sau mai nouă este suficientă pentru buna desfășurare a orelor de laborator.</p>
+
+<h2> Pașii de instalare </h2>
+<ul>
+    <li>Rulați installer-ul și parcurgeți pașii (Next). Bifați componentele <i>PostgreSQL Server</i> și <i>pgAdmin 4</i>.</li>
+    <li>În timpul instalării vi se va cere o parolă pentru utilizatorul administrator <code>postgres</code>. Rețineți această parolă - veți avea nevoie de ea la prima conectare din pgAdmin.</li>
+    <li>Lăsați portul implicit <code>5432</code>.</li>
+    <li>La final, serverul PostgreSQL pornește automat ca serviciu, iar pgAdmin 4 poate fi deschis din meniul Start.</li>
+</ul>
+
+<h2> Crearea unei baze de date </h2>
+<p>Deschideți <b>pgAdmin 4</b>. La prima pornire vi se va cere o parolă master (parola pentru pgAdmin) și apoi parola utilizatorului <code>postgres</code> setată la instalare, pentru a vă conecta la server (în arborele din stânga: <i>Servers → PostgreSQL</i>).</p>
+
+<p>O dată conectați, creați o bază de date proprie pentru laborator:</p>
+<ul>
+    <li>click dreapta pe <i>Databases → Create → Database...</i>;</li>
+    <li>la <i>Database</i> scrieți numele <code>facultate</code> și apăsați <i>Save</i>.</li>
+</ul>
+
+<p>Alternativ, puteți crea baza de date scriind o comandă SQL (vezi mai jos cum se deschide Query Tool):</p>
+
+<pre><code class="language-sql">CREATE DATABASE facultate;</code></pre>
+
+<h2> Query Tool - rularea comenzilor </h2>
+<p>Selectați baza de date <code>facultate</code> în arborele din stânga, apoi deschideți instrumentul de interogare: click dreapta pe baza de date → <i>Query Tool</i> (sau iconița Query Tool din bara de sus).</p>
+
+<p>În fereastra Query Tool scrieți o comandă de test și executați-o cu tasta <b>F5</b> (sau butonul ▶ Execute):</p>
+
+<pre><code class="language-sql">SELECT 1;</code></pre>
+
+<p>Dacă în partea de jos apare rezultatul (valoarea 1), totul funcționează și puteți începe lucrul la <b>Laborator 1</b>. Pentru detalii despre folosirea Query Tool consultați secțiunea <b>Ghid pgAdmin</b>.</p>
+
+<h2> Rularea unui script SQL </h2>
+<p>Multe laboratoare vă cer să rulați un script (un fișier <code>.sql</code> ce conține mai multe comenzi). Pentru a rula un astfel de fișier din pgAdmin:</p>
+<ul>
+    <li>asigurați-vă că sunteți conectați la baza de date corectă (<code>facultate</code>) și aveți Query Tool deschis;</li>
+    <li>apăsați iconița <i>Open File</i> (folder) din Query Tool și selectați fișierul <code>.sql</code> dorit;</li>
+    <li>conținutul fișierului se încarcă în editor; apăsați <b>F5</b> pentru a executa toate comenzile din script.</li>
+</ul>
+
+<p>Astfel, în loc să scrieți manual zeci de comenzi, puteți rula scripturi pregătite (de exemplu scriptul care creează și populează tabelele folosite la laborator).</p>

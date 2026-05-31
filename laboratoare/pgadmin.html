@@ -1,0 +1,46 @@
+<h2> Utilizarea pgAdmin </h2>
+
+<p>O dată cu PostgreSQL se instalează <b>pgAdmin 4</b>, o interfață grafică prin care ne conectăm la server, administrăm bazele de date și rulăm comenzi SQL. La laborator vom lucra aproape exclusiv în <b>Query Tool</b> (instrumentul de interogare).</p>
+
+<h2> Conectarea la server </h2>
+<p>În arborele din stânga (<i>Browser</i>) extindeți <i>Servers → PostgreSQL</i>. La prima conectare vi se cere parola utilizatorului <code>postgres</code> (cea setată la instalare). După conectare veți vedea bazele de date sub nodul <i>Databases</i>.</p>
+
+<p>Pentru a lucra, selectați baza de date dorită (de ex. <code>facultate</code>). Toate comenzile rulate în Query Tool se execută pe baza de date curent selectată.</p>
+
+<h2> Query Tool </h2>
+<p>Deschideți Query Tool: click dreapta pe baza de date → <i>Query Tool</i> (sau iconița din bara de sus). Fereastra are un editor (sus) unde scrieți comenzile SQL și o zonă de rezultate (jos).</p>
+
+<ul>
+<li>Fiecare comandă SQL se termină cu simbolul punct și virgulă <code>;</code>.</li>
+<li>Puteți scrie o comandă pe mai multe rânduri; ea este considerată completă la întâlnirea lui <code>;</code>.</li>
+<li>Puteți scrie mai multe comenzi în același editor, fiecare terminată cu <code>;</code>.</li>
+</ul>
+
+<h2> Execuția comenzilor </h2>
+<ul>
+<li><b>Execute / Refresh (F5)</b> sau butonul ▶ : execută <u>tot</u> textul din editor. Dacă există mai multe comenzi, ele se execută pe rând.</li>
+<li>Pentru a executa <u>o singură</u> comandă dintr-un script mai mare, selectați (cu mouse-ul) doar textul comenzii dorite și apăsați F5 - se execută doar selecția.</li>
+<li>Rezultatul unei interogări <code>SELECT</code> apare în tabul <i>Data Output</i>; mesajele și erorile apar în tabul <i>Messages</i>.</li>
+</ul>
+
+<h2> Lucrul cu fișiere .sql </h2>
+<ul>
+<li><b>Open File</b> (iconița folder): încarcă în editor conținutul unui fișier <code>.sql</code> de pe disc. Apoi îl rulați cu F5.</li>
+<li><b>Save / Save As</b> (iconița dischetă): salvează conținutul editorului într-un fișier <code>.sql</code>, pentru a-l păstra și a-l reutiliza.</li>
+</ul>
+
+<p>Astfel puteți salva interogările pe care le scrieți (de exemplu pentru a le preda) și puteți rula scripturi pregătite, fără a rescrie comenzile de fiecare dată.</p>
+
+<h2> Vizualizarea structurii unei tabele </h2>
+<p>Dacă ați uitat structura unei tabele (ce coloane are, ce tipuri, dimensiuni), o puteți inspecta în arborele din stânga: <i>baza de date → Schemas → public → Tables</i>, apoi extindeți tabela și nodul <i>Columns</i>.</p>
+
+<p>Alternativ, dacă folosiți consola <b>psql</b> (clientul în linie de comandă al PostgreSQL), comanda echivalentă este:</p>
+
+<pre><code class="language-sql">\d nume_tabel</code></pre>
+
+<p>iar pentru lista tuturor tabelelor:</p>
+
+<pre><code class="language-sql">\dt</code></pre>
+
+<h2> Observații </h2>
+<p>Spre deosebire de comenzile SQL (care sunt trimise serverului PostgreSQL), comenzile care încep cu <code>\</code> (de exemplu <code>\d</code>, <code>\dt</code>, <code>\i</code>) sunt comenzi specifice utilitarului <b>psql</b> și funcționează doar în consola psql, nu și în Query Tool din pgAdmin. În pgAdmin echivalentele lor se obțin prin interfața grafică (arborele Browser, butoanele Open File etc.).</p>

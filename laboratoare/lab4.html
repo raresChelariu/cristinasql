@@ -1,0 +1,166 @@
+<p><b>Obiective:</b></p>
+<ul>
+   <li>JOIN - afișarea informațiilor din mai multe tabele</li>
+</ul>
+
+
+
+<h2>Produsul cartezian a două tabele</h2>
+<p>Pentru a pune împreună informația din mai multe tabele avem la dispoziție 
+   două modalități:</p>
+<ul>
+   <li> utilizarea operatorilor pe mulțimi (gen reuniune, intersecție, diferență) 
+       care pun împreună rezultatele a două sau a mai multor interogări - 
+       discutați la laboratorul 2</li>
+   <li> utilizarea produsului cartezian si, derivat, a joinului.</li>
+</ul>
+
+<p>Toate frazele SELECT din cadrul laboratoarelor anterioare au utilizat în cadrul 
+   clauzei FROM o singură tabelă. Încercați însă, pe rand, următoarele interogări:</p>
+
+<pre><code class="language-sql">SELECT * FROM studenti; --cate linii sunt returnate?</code></pre>
+
+<pre><code class="language-sql">SELECT * FROM note; --cate linii sunt returnate?</code></pre>
+
+<pre><code class="language-sql">SELECT * FROM studenti, note; --cate linii sunt returnate? de ce?</code></pre>
+
+<pre><code class="language-sql">SELECT * FROM studenti, note WHERE prenume='Andrei'; --cate linii sunt returnate? de ce?</code></pre>
+
+<pre><code class="language-sql">SELECT * FROM studenti, note, cursuri; --cate linii sunt returnate? de ce?</code></pre>
+
+<p>Dacă în cadrul clauzei FROM sunt utilizate mai multe tabele, rezultatul este produsul 
+   cartezian al tuturor tabelelor. Numarul de linii returnate este produsul numarului de linii ale tabelelor.</code></pre>
+
+<p>Forma de mai sus, în care în clauza FROM se află o listă de tabele separate prin virgulă, este o scriere mai veche. Modalitatea recomandată de a realiza produsul cartezian, conformă cu standardul SQL, foloseşte cuvintele cheie CROSS JOIN:</p>
+
+<pre><code class="language-sql">SELECT * FROM studenti CROSS JOIN note</code></pre>
+
+<pre><code class="language-sql">SELECT * FROM studenti CROSS JOIN note WHERE prenume='Andrei';</code></pre>
+
+<pre><code class="language-sql">SELECT * FROM studenti CROSS JOIN note CROSS JOIN cursuri;</code></pre>
+
+<h2>Joinul natural a două tabele</h2>
+
+<p>Înregistrările dintr-o tabelă își găsesc corespondentul în alt(e) tabel(e) prin intermediul unui atribut ce joacă rol de cheie străină trimițând la un atribut cu rol de cheie (proprietate de identificare unică) în tabela referențiată. De exemplu, în tabela <i>note</i> atributul <i>nr_matricol</i> are rolul de a identifica studentul din tabela <i>studenti</i> iar atributul <i>id_curs</i> identifică înregistrarea corespunzătoare din tabelul <i>cursuri</i>.</p>
+
+<p>Pentru a identifica notele unui anumit student nu este suficient să solicităm informația din ambele tabele - studenti si note (vezi exemplul anterior unde solicitând notele lui Andrei s-a realizat de fapt un produs cartezian conducând la un rezultat incorect), ci trebuie să specificăm și condiția de join - și anume atributul care joacă rol de cheie străină să fie egal cu atributul care joaca rol de identificare unică în tabelul referențiat:</p>
+
+<pre><code class="language-sql">SELECT * FROM studenti, note WHERE studenti.nr_matricol = note.nr_matricol ORDER BY nume; 
+   --cate inregistrari au fost returnate? de ce?</code></pre>
+
+
+<p>Operația care s-a efectuat a fost joinul intern a două tabele, păstrându-se în rezultat acele linii din produsul cartezian care satisfac condiția impusă de clauza WHERE (pentru a înțelege operația de join este util să priviți joinul ca un produs cartezian urmat de selecție; în realitate sistemul tratează operația cu unul dintre algoritmii dedicați joinului - care vor fi explicati la curs). Versiunea recomandată de standardul SQL utilizează explicit cuvintele cheie JOIN...ON, după cum urmează:</p>
+
+<pre><code class="language-sql">SELECT * FROM studenti JOIN note ON studenti.nr_matricol = note.nr_matricol ORDER BY nume;</code></pre>
+
+<pre><code class="language-sql">SELECT * FROM studenti JOIN note ON studenti.nr_matricol = note.nr_matricol WHERE prenume='Andrei' 
+   --cate inregistrari au fost returnate? de ce?</code></pre>
+
+<pre><code class="language-sql">SELECT * FROM studenti JOIN note ON studenti.nr_matricol = note.nr_matricol WHERE prenume='Ioana'; 
+   --cate inregistrari au fost returnate? de ce?</code></pre>
+
+<p>Fiindcă numele atributului cu rol de cheie străină și numele atributului cu rol de identificare unică referențiat coincid în exemplul prezentat, ele au fost prefixate de numele tabelului la care aparțin.</p>
+<p>Ca alternativă, atunci când numele coloanei după care se face JOIN este identic în ambele tabele, condiţia de egalitate a acestora poate fi omisă dacă se foloseşte operaţia de Join natural:</p>
+
+<pre><code class="language-sql">SELECT nume, prenume, valoare FROM studenti NATURAL JOIN note WHERE prenume='Ioana';</code></pre>
+
+<h2>Alias pentru tabele </h2>
+<p>De fiecare dată când într-o interogare apar mai multe tabele și ele conțin atribute cu același nume, orice referire la astfel de atribute trebuiesc prefixate de numele tabelei din care se dorește a fi citită valoarea.</p>
+
+<p>Încercați pe rand</p>
+
+<pre><code class="language-sql">SELECT nume, prenume, valoare, nr_matricol FROM studenti JOIN note 
+   ON studenti.nr_matricol=note.nr_matricol WHERE prenume = 'Ioana'; 
+   --de ce nu functioneaza ?</code></pre>
+
+<pre><code class="language-sql">SELECT nume, prenume, valoare, studenti.nr_matricol FROM studenti JOIN note 
+   ON studenti.nr_matricol = note.nr_matricol WHERE prenume = 'Ioana';</code></pre>
+
+<p>In cazul joinului natural, SGBD-ul ştie că între cele două coloane oricum se aplică operatorul de egalitate. In acest caz nu mai trebuie să prefixaţi numele coloanei cu numele tabelei:</p>
+
+<pre><code class="language-sql">SELECT nume, prenume, valoare, nr_matricol FROM studenti NATURAL JOIN note  WHERE prenume='Ioana';</code></pre>
+
+<p>Orice utilizare a unui atribut a cărui nume se regăsește în mai multe tabele referențiate în interogare trebuie prefixat de numele tabelei (exceptie fac tabelele implicate în join natural). Dacă însă numele tabelelor este incomod a fi repetat, putem să dăm aliasuri simple acestora - specificate în clauza FROM imediat dupa numele tabelei. Identificarea atributelor în acest caz se face utilizand aliasul ca și prefix:</p>
+
+<pre><code class="language-sql">SELECT nume, prenume, valoare, s.nr_matricol FROM studenti s JOIN note n ON s.nr_matricol = n.nr_matricol;</code></pre>
+
+<p>ATENȚIE: introducerea de aliasuri pentru numele tabelelor necesită utilizarea acestora oriunde e necesar în cadrul interogării.</p>
+
+<p>Încercați:</p>
+
+<pre><code class="language-sql">SELECT nume, prenume, valoare, studenti.nr_matricol FROM studenti s JOIN note n ON s.nr_matricol = n.nr_matricol;</code></pre>
+
+<h2>Join extern</h2>
+
+
+<p>Să afișăm în mod distinct numele studenților din joinul între tabelele <i>studenti</i> și <i>note</i>:</p>
+
+<pre><code class="language-sql">SELECT DISTINCT nume FROM studenti s NATURAL JOIN note n;</code></pre>
+
+<p>Câte înregistrări au fost returnate? Și câte nume distincte sunt în tabela studenti de fapt? De unde diferența?</p>
+
+<p>Sunt cazuri în care nu toate înregistrările dintr-o tabelă au corespondent în altă tabelă. În exemplul anterior, nu toți studenții au note. În cadrul joinului anterior s-a văzut cum înregistrările fără corespondent nu fac parte din mulțimea rezultat.</p>
+
+<p>In cazul în care se doreşte realizarea unui join între tabelele studenţi şi note, se poate observa că există studenţi care nu au încă note (fiind primul semestru, ei sunt înscrişi la cursurile din anul întâi dar nu au primit încă note). Spunem despre tabela note că este deficitară în informaţii deoarece nu conţine toate numerele matricole existente în tabela studenţi. Dacă se doreşte ca în rezultat să se regăsească şi studenţii fără note, se va utiliza un join extern.</p>
+
+<p>Joinul extern poate fi de mai multe tipuri: </p>
+
+<ul>
+<li> LEFT OUTER JOIN este utilizat atunci când se doreşte preluarea tuturor informaţiilor din tabela din stânga operatorului join (deci join in acest caz nu este comutativ) şi, eventual, aceste informaţii să fie completate (dacă se poate) cu informaţii din tabela deficitară în informaţii aflată în dreapta operatorului join. De exemplu: <code>SELECT DISTINCT nume FROM studenti s LEFT OUTER JOIN note n ON s.nr_matricol = n.nr_matricol;</code></li>
+<li> RIGHT OUTER JOIN este similar dar de aceasta dată tabela deficitară în informaţii se va afla în stanga. Se vor prelua toate informaţiile din tabela din dreapta şi se vor completa (atunci când se poate) cu informaţii din tabela din stânga. Ca şi exemplu putem schimba ordinea tabelelor din LEFT OUTER JOIN-ul anterior: <code> SELECT DISTINCT nume FROM note n RIGHT OUTER JOIN studenti s ON s.nr_matricol = n.nr_matricol;</code></li>
+</ul>
+
+
+<ul>
+<li> FULL OUTER JOIN este reuniunea celor de mai sus: sunt afişate toate informaţiile din ambele tabele şi completate (eventual) cu informaţii din cealaltă tabelă. Exemplu: <code>SELECT DISTINCT nume FROM studenti s FULL OUTER JOIN note n ON s.nr_matricol = n.nr_matricol;</code></li>
+</ul>
+
+
+<p>Ce valori primesc în urma unui join extern înregistrările care nu au corespondent?</p>
+
+<p>Alte detalii despre tipurile de join găsiți în <a href="https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN">documentaţia PostgreSQL</a>.</p>
+
+<p>Schița tipurilor de join o găsiți <a href="http://i.stack.imgur.com/udQpD.jpg">aici</a>.</p>
+
+<h2>Joinul mai multor tabele</h2>
+<p>În interogările anterioare am identificat notele tuturor studenților utilizând un join între două tabele - studenti și note. Cum aflăm însă la ce discipline au fost puse notele? Adăugăm în interogare un al treilea tabel, împreună cu condiția de join necesară:</p>
+
+<pre><code class="language-sql">SELECT nume, prenume, titlu_curs, valoare 
+   FROM studenti s 
+              JOIN note n ON s.nr_matricol=n.nr_matricol 
+              JOIN cursuri c ON c.id_curs=n.id_curs;
+</code></pre>
+
+
+<h2>Self-joinul - joinul unei tabele cu ea insăși</h2>
+<p>Uneori, modul în care este structurată informația în tabele ne pune în situația de a căuta corespondentul unor înregistrări chiar în același tabel. În cazul de față, un exemplu este determinarea colegilor de grupă pentru un anumit student. Oricând suntem în situația de a apela de două ori la un tabel într-o singură interogare, spunem că realizăm un <i>self-join</i>. În cazul unui self join tabela în cauză este apelată de două ori cu aliasuri distincte, ca și când ar exista două instanțe identice ale aceluiași tabel.</p>
+
+<p>Exemplu:</p>
+<pre><code class="language-sql">SELECT s.nume||' '||s.prenume||' este coleg cu '||colegi.nume||' '||colegi.prenume AS "Colegi de grupa" 
+    FROM studenti s JOIN studenti colegi ON s.grupa=colegi.grupa AND s.an=colegi.an
+    WHERE s.prenume='Andrei';
+</code></pre>
+
+
+<p>Cum eliminăm înregistrarea în care studentul apare coleg cu el însuși?</p>
+
+<h2>Exerciții</h2>
+<ol>
+   <li>Afişaţi studenţii şi notele pe care le-au luat si profesorii care le-au pus acele note.</li>
+   <li>Afişaţi studenţii care au luat nota 10 la materia 'BD'. Singurele valori pe care aveţi voie să le hardcodaţi în interogare sunt valoarea notei (10) şi numele cursului ('BD').</li>
+   <li>Afisaţi profesorii (numele şi prenumele) impreuna cu cursurile pe care fiecare le ţine. </li>
+   <li>Modificaţi interogarea de la punctul 3 pentru a fi afişaţi şi acei profesori care nu au încă alocat un curs.</li>
+   <li>Modificaţi interogarea de la punctul 3 pentru a fi afişate acele cursuri ce nu au alocate încă un profesor.</li>
+   <li>Modificaţi interogarea de la punctul 3 astfel încât să fie afişaţi atat profesorii care nu au nici un curs alocat cât şi cursurile care nu sunt încă predate de nici un profesor.</li>
+ 
+   <li>În tabela studenți există studenți care s-au născut în aceeași zi a săptămânii. De exemplu, Cobzaru George și Pintescu Andrei s-au născut amândoi într-o zi de marți. Construiți o listă cu studenții care s-au născut în aceeași zi, grupându-i doi câte doi în ordine alfabetică a numelor (de exemplu, în rezultat va apărea combinația Cobzaru-Pintescu, dar nu va apărea și Pintescu-Cobzaru). Lista va trebui să conțină doar numele de familie a celor doi, împreună cu ziua în care cei doi s-au născut. Evident, dacă există și alți studenți care s-au născut marți, vor apărea și ei în combinație cu cei doi amintiți mai sus. Lista va fi ordonată în funcție de ziua săptămânii în care s-au născut și, în cazul în care sunt mai mult de trei studenți născuți în aceeași zi, rezultatele vor fi ordonate și după numele primei persoane din listă. <!--[pont: interogarea trebuie să returneze 10 rânduri dacă nu se iau în considerare și perechile de studenți care au același nume, 12 rânduri dacă se iau în considerare și studenții care au același nume, dar corect ar fi ca Bodnar să apară cu Bodnar o singură dată și să fie 11 rânduri]--></li> 
+   <li>Să se afișeze, pentru fiecare student, numele colegilor care au luat notă mai mare ca ei la fiecare dintre cursuri. Formulați rezultatele ca propoziții (de forma "Popescu Gigel a luat notă mai mare ca Vasilescu Ionel la materia BD."). Dați un nume corespunzător coloanei [pont: interogarea trebuie să returneze 118 rânduri].</li>
+
+   <li>Afișați studenții doi câte doi împreună cu diferența de vârstă dintre ei. Sortați în ordine crescătoare în funcție de aceste diferențe. Aveți grijă să nu comparați un student cu el însuși.</li> 
+   <li>Afișați posibilele prietenii dintre studenți și profesori. Un profesor și un student se pot împrieteni dacă numele lor de familie are același număr de litere.</li> 
+   <li>Afișați denumirile cursurilor la care s-au pus note cel mult egale cu 8 (&lt;=8).</li> 
+   <li>Afișați numele studenților care au toate notele mai mari ca 7 sau egale cu 7.</li> 
+   <li>Să se afișeze studenții care au luat nota 7 sau nota 10 la OOP într-o zi de marți.</li> 
+   <li>O sesiune este identificată prin luna și anul în care a fost ținută. Scrieți numele și prenumele studenților ce au promovat o anumită materie, cu notele luate de aceștia și sesiunea în care a fost promovată materia. Formatul ce identifică sesiunea este "LUNA, AN", fără alte spații suplimentare (De ex. "JUNE, 2015" sau "FEBRUARY, 2014"). În cazul în care luna în care s-a ținut sesiunea a avut mai puțin de 30 de zile, afișați simbolul "+" pe o coloană suplimentară, indicând faptul că acea sesiune a fost mai grea (având mai puține zile), în caz contrar (când luna are mai mult de 29 de zile) valoarea coloanei va fi null.</li>
+</ol>  
+    

@@ -1,0 +1,148 @@
+<h2>Subinterogări necorelate</h2>
+
+<p>Subinterogările necorelate sunt fraze SELECT încorporate în 
+    clauzele WHERE, HAVING și FROM ale unei interogări (foarte 
+    foarte rar se pot intalni in ORDER BY sau in SELECT), adica 
+    ale altei fraze SELECT. Subinterogarea necorelată (denumită 
+    și <i>interogarea interioară</i> sau <i>interogarea imbricată</i>) 
+    se execută o singură dată, înaintea <i>interogării exterioare</i>, 
+    cea din urmă utilizând rezultatul subinterogării în general 
+    pentru a filtra. </p>
+
+<p>Subinterogarea are în general rolul de extrage valori din 
+    baza de date care ulterior vor servi la filtrarea altor înregistrări. 
+    Subinterogarea trebuie delimitata de fiecare data de paranteze si 
+    poate sa apară doar în partea din dreapta a operatorului de comparatie.</p>
+
+<p>Sintaxa este următoarea:</p>
+<pre><code class="language-sql">SELECT ...
+    FROM ...
+    WHERE expr operator
+          (SELECT ...
+              FROM ...
+              [WHERE ...]
+              [GROUP BY...[HAVING...]])
+    [GROUP BY...[HAVING...]]
+    [ORDER BY...]
+</code></pre>
+
+<p>Exemple:</p>
+<pre><code class="language-sql">SELECT nume, prenume
+    FROM studenti
+    WHERE nr_matricol IN
+          (SELECT nr_matricol
+              FROM note
+              WHERE valoare=10)
+    ORDER BY nume, prenume;
+--ce returneaza interogarea de mai sus?
+</code></pre>
+
+<pre><code class="language-sql">SELECT DISTINCT nume, prenume
+    FROM studenti s, note n
+    WHERE s.nr_matricol=n.nr_matricol and valoare>
+          (SELECT MAX(valoare)
+              FROM studenti s, note n
+              WHERE s.nr_matricol=n.nr_matricol AND nume='Archip')
+    ORDER BY nume, prenume;
+--ce returneaza interogarea de mai sus?
+</code></pre>
+
+<p>Dacă subinterogarea returnează o singură linie rezultat, 
+    operatorul poate fi unul standard precum &gt;, =, &gt;=, &lt;, &lt;&gt;, &lt;=. 
+    Dacă subinterogarea returnează mai multe linii rezultat se utilizează operatori 
+    specifici precum IN, ALL, ANY, SOME.</p>
+
+<p>Într-o interogare pot fi utilizate si mai multe subinterogări:</p>
+<pre><code class="language-sql">SELECT DISTINCT nume, prenume
+    FROM studenti s, note n
+    WHERE s.nr_matricol=n.nr_matricol and valoare>
+          (SELECT MAX(valoare)
+              FROM studenti s, note n
+              WHERE s.nr_matricol=n.nr_matricol AND nume='Archip')
+      AND grupa=
+          (SELECT grupa FROM studenti WHERE nume='Archip')
+    ORDER BY nume, prenume;
+--ce returneaza interogarea de mai sus?
+--ce s-ar intampla daca am avea doi studenti cu numele Archip, in grupe diferite ?
+</code></pre>
+
+<p>Subinterogările pot returna mai multe coloane, caz în care condiția 
+    e formulată la nivel de tuplu de valori:</p>
+
+<pre><code class="language-sql">SELECT DISTINCT an, grupa, nume, prenume, valoare
+    FROM studenti s, note n
+    WHERE s.nr_matricol=n.nr_matricol and (grupa,an,valoare) IN
+          (SELECT grupa, an, MAX(valoare)
+              FROM studenti s, note n
+              WHERE s.nr_matricol=n.nr_matricol
+              GROUP BY grupa, an)
+    ORDER BY an, grupa;
+--ce returneaza interogarea de mai sus?
+</code></pre>
+
+<h2>Limitarea numărului de înregistrări: LIMIT și OFFSET</h2>
+<p>Uneori este necesară limitarea numărului de linii returnate de o
+    interogare. Exemplul clasic general este realizarea unor clasamente
+    de tipul <i>"top n"</i>. Pentru baza noastră de date un exemplu
+    specific ar fi <i>"Care sunt primii trei studenți în ordinea
+        descrescătoare a mediilor?"</i></p>
+
+<p>În PostgreSQL limitarea numărului de linii se face cu clauza
+    <b>LIMIT n</b> (sau, echivalent şi conform standardului SQL,
+    <b>FETCH FIRST n ROWS ONLY</b>), scrisă la finalul interogării.
+    Opţional, clauza <b>OFFSET m</b> sare peste primele m linii.</p>
+
+<p>Spre deosebire de filtrarea din clauza WHERE, clauza LIMIT se aplică
+    <u>după</u> ce întreaga interogare a fost procesată şi ordonată.
+    Ordinea de procesare a clauzelor este următoarea:</p>
+
+<ul>
+    <li> înregistrările sunt aduse din tabelele specificate în clauza
+        FROM și sunt filtrate conform clauzei WHERE (ce corespunde
+        operatorului de selecție);</li>
+    <li> se creează grupurile conform GROUP BY;</li>
+    <li> se filtrează grupurile conform HAVING;</li>
+    <li> operatorul de proiecție corespunzător listei SELECT este aplicat;</li>
+    <li> se ordonează conform ORDER BY;</li>
+    <li> se limitează numărul de linii conform LIMIT / OFFSET.</li>
+</ul>
+
+
+<p>Deoarece LIMIT se aplică ultimul, după ORDER BY, putem obţine corect
+    primii trei studenți în ordine alfabetică a numelui și prenumelui
+    astfel:</p>
+<pre><code class="language-sql">SELECT * FROM studenti ORDER BY nume, prenume LIMIT 3;
+</code></pre>
+
+<p>Echivalent, folosind sintaxa standard:</p>
+<pre><code class="language-sql">SELECT * FROM studenti ORDER BY nume, prenume FETCH FIRST 3 ROWS ONLY;
+</code></pre>
+
+<p>Pentru a sări peste primii şi a lua următorii (paginare), folosim OFFSET:</p>
+<pre><code class="language-sql">SELECT * FROM studenti ORDER BY nume, prenume LIMIT 3 OFFSET 3;
+</code></pre>
+
+<p>Observatie: pot manipula pozitia in care apar valorile de null
+    intr-o ordonare prin intermediul cuvintelor cheie "NULLS FIRST"
+    sau "NULLS LAST" scrise dupa clauza ORDER BY.</p>
+
+<h2>Exerciții</h2>
+<ol>
+    <li>Afișați numele studenților care iau cea mai mare bursa acordată.</li>
+    <li>Afișați numele studenților care sunt colegi cu un student pe nume Arhire (coleg = același an si aceeași grupă).</li>
+    <li>Pentru fiecare grupă afișați numele studenților care au obținut cea mai mică notă la nivelul grupei.</li>
+    <li>Identificați studenții a căror medie este mai mare decât media tuturor notelor din baza de date. Afișați numele și media acestora.</li>
+    <li>Afișați numele și media primilor trei studenți ordonați descrescător după medie.</li>
+    <li>Afișați numele studentului (studenților) cu cea mai mare medie precum și valoarea mediei (atenție: limitarea numărului de linii poate elimina studenții de pe poziții egale; găsiți altă soluție).</li>
+    <li> Afişaţi numele şi prenumele tuturor studenţilor care au luat aceeaşi nota ca şi Ciprian Ciobotariu la materia Logică. Excludeţi-l pe acesta din listă. (Se știe în mod cert că există un singur Ciprian Ciobotariu și că acesta are o singură notă la logică)</li>
+    <li> Din tabela studenti, afisati al cincilea prenume in ordine alfabetica.</li>
+    <li> Punctajul unui student se calculeaza ca fiind o suma intre produsul dintre notele luate si creditele la materiile la care au fost luate notele. Afisati toate informatiile studentului care este pe locul 3 in acest top.</li>
+    <li>Afișați studenții care au notă maximă la o materie precum și nota și materia respectivă.</li>
+</ol>
+
+<!--</p>
+<p>Tematică: Proiectarea bazelor de date. Normalizare</p>
+
+<h2>Exercitii==</h2>
+<p>[http://profs.info.uaic.ro/~pmihaela/BD/pdfs/Ex10.pdf Enunț si rezolvari]</p>
+<p>-->

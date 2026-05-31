@@ -1,0 +1,277 @@
+<h2>Variabile în psql</h2>
+
+<p>Variabilele au rolul de a suplini constante,
+  condiții utilizate în clauza WHERE, nume de câmpuri utilizate în
+  clauza ORDER BY, nume de tabele sau chiar întregi fraze SELECT,
+  pentru a refolosi aceeași interogare cu valori diferite.</p>
+
+<p>În consola <b>psql</b> variabilele se definesc cu meta-comanda
+  <code>\set</code> și se folosesc prefixându-le cu <b>:</b>. Pentru a
+  insera valoarea ca șir de caractere (între apostroafe) se folosește
+  forma <code>:'nume'</code>.</p>
+
+<p>Exemplu 1:</p>
+<pre><code class="language-sql">\set an 1
+\set nume 'P%'
+SELECT * FROM studenti
+    WHERE an = :an AND nume LIKE :'nume';
+</code></pre>
+
+<p>Exemplu 2:</p>
+<pre><code class="language-sql">\set camp_afisare prenume
+\set camp_sortare prenume
+SELECT nume, :camp_afisare
+    FROM studenti
+    ORDER BY :camp_sortare;
+</code></pre>
+
+<p>Valoarea poate fi cerută interactiv de la utilizator cu
+  <code>\prompt</code>:</p>
+
+<pre><code class="language-sql">\prompt 'Anul: ' an
+SELECT * FROM studenti WHERE an = :an;
+</code></pre>
+
+<p>Variabila este stocată pe parcursul sesiunii psql
+  până la eliminarea ei cu comanda <code>\unset</code> sau până la
+  închiderea sesiunii.</p>
+<pre><code class="language-sql">\unset camp
+</code></pre>
+
+<p>Comenzile <code>\set</code>, <code>\unset</code> și <code>\prompt</code> sunt specifice utilitarului psql și nu fac parte din limbajul SQL. În pgAdmin (Query Tool) acestea nu sunt disponibile - acolo scrieți direct interogarea cu valorile concrete dorite.</p>
+
+<h2>Comenzi DML - Modificare date</h2>
+<p>Până acum s-au utilizat în cadrul laboratoarelor doar comenzi 
+  de interogarea a datelor - adică fraza SELECT - care sunt parte 
+  tot din cadrul componentei DML (Data Manipulation Language) a 
+  limbajului SQL.</p>
+<p>În această secțiune exemplificăm comenzile de modificare a datelor.</p>
+
+<h3>Adăugarea înregistrărilor</h3>
+<p>Inserarea de noi înregistrări în baza de date se realizează cu 
+  ajutorul comenzii INSERT care poate lua două forme:</p>
+
+
+<pre><code class="language-sql">INSERT INTO nume_tabel [ (lista_coloane) ]
+    VALUES (lista_valori)</code></pre>
+
+
+<pre><code class="language-sql">INSERT INTO cursuri VALUES(30, 'Inv. automata', 3, 1, 5);
+INSERT INTO cursuri (ID_curs, titlu_curs) VALUES(31, 'NoSQL');</code></pre>
+
+<pre><code class="language-sql">INSERT INTO nume_tabel [ (lista_coloane) fraza_select	</code></pre>
+<pre><code class="language-sql">INSERT INTO note
+SELECT nr_matricol, 30, 10, CURRENT_DATE
+  FROM studenti
+  WHERE an=3;
+</code></pre>
+
+<h2>Secvențe</h2>
+<p>De multe ori suntem puși în situația de a crea atribute sintetice 
+  care să joace rol de cheie, deci să ia valori unice în cadrul unei 
+  tabele. Secvențele sunt obiecte care ne ajută să generăm automat 
+  numere întregi unice în momentul inserării înregistrilor.</p>
+
+<p>Sintaxa creării unei secvențe:</p>
+<pre><code class="language-sql">CREATE SEQUENCE nume_secventa
+  [INCREMENT BY n]                 -- pasul
+  [START WITH n1]                  -- valoarea de start
+  [MAXVALUE n_max | NO MAXVALUE]   -- valoarea maxima
+  [MINVALUE n_min | NO MINVALUE]   -- valoarea minima (pasul poate fi negativ -> sir descrescator)
+  [CYCLE | NO CYCLE]               -- daca se continua generarea cand se ajunge la min/max
+</code></pre>
+
+<p>Funcția <code>nextval('nume_secventa')</code> generează următorul număr din șir, iar
+  <code>currval('nume_secventa')</code> obține valoarea curentă (ultima generată în sesiune).
+  <code>nextval</code> trebuie executată cel puțin o dată înainte de a putea folosi <code>currval</code>.</p>
+
+<p>Exemplu:</p>
+<pre><code class="language-sql">CREATE SEQUENCE s1
+  INCREMENT BY 2
+  START WITH 10
+  MAXVALUE 15;
+</code></pre>
+<pre><code class="language-sql">SELECT nextval('s1'); --executati in mod repetat comanda; cand ridica eroare?
+</code></pre>
+
+<p>Pentru a elimina secventa se va executa comanda </p>
+<pre><code class="language-sql">DROP SEQUENCE nume_secventa;</code></pre>
+
+<p>În PostgreSQL, modul idiomatic de a avea o cheie cu auto-incrementare este folosirea tipului
+  <code>SERIAL</code> sau a clauzei <code>GENERATED ALWAYS AS IDENTITY</code> la crearea tabelei,
+  care creează și gestionează automat o secvență:</p>
+<pre><code class="language-sql">CREATE TABLE exemplu (
+  id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  descriere VARCHAR(40)
+);</code></pre>
+
+<h3>Exerciții</h3>
+<ol>
+  <li>Cum poate fi utilizată o secvență la inserare?</li>
+  <li>Răspundeți creând o secvență care sa vă ajute sa inserați 
+  noi cursuri cu id unic, cu intrari consecutive crescătoare 
+  cu pasul 1. Inserati 3 cursuri noi cu id-ul generat de secventa.</li>
+</ol>
+
+<h2>Actualizarea înregistrărilor</h2>
+
+<pre><code class="language-sql">UPDATE nume_tabel [alias]
+  SET nume_coloana1 = valoare1
+    [, nume_coloana2 = valoare2...]
+    [WHERE conditie]</code></pre>
+<pre><code class="language-sql">UPDATE studenti 
+SET bursa=bursa*0.15 WHERE bursa&lt;300; </code></pre>
+
+<pre><code class="language-sql">UPDATE nume_tabel [alias]
+  SET (nume_coloana1 [,nume_coloana2]...) = (subinterogare)
+    [WHERE conditie]</code></pre>
+
+
+<h3>Exerciții</h3>
+<ol>
+  <li>Actualizati valoarea bursei pentru studentii care au măcar o 
+  notă de 10. Acestia vor primi ca bursa 500RON.</li>
+  <li>Toti studentii primesc o bursa egala cu 100*media notelor 
+  lor. Efectuati modificarile necesare.</li>
+</ol>
+
+<h2>Ștergerea înregistrărilor</h2>
+<pre><code class="language-sql">DELETE FROM nume_tabel
+ [WHERE conditie]</code></pre>
+ <pre><code class="language-sql">DELETE FROM note WHERE valoare &lt; 5;</code></pre>
+
+
+<h3>Exerciții</h3>
+<ol><li>1.Stergeti toti studentii care nu au nici o nota.</li></ol>
+
+<h2>Comenzi DDL - creare/modificare structuri de date</h2>
+<p>Aceste comenzi sunt menite a crea sau a șterge tabele (sau alte tipuri de obiecte), precum și a modifica structura tabelelor (obiectelor) existente. Comenzile necesare fac parte din componenta DDL (Data Definition Language) a limbajului SQL.</p>
+
+<h2>CREATE TABLE AS</h2>
+<p>Comenzile de creare a tabelelor au fost pe larg explicate la curs, cu diversele constrângeri care pot fi impuse asupra datelor la momentul creării. Aici tratăm doar comanda CREATE cu subinterogări.</p>
+
+<pre><code class="language-sql">CREATE TABLE nume_tabel [(col1, col2,...)] AS fraza_select;</code></pre>
+
+<p>Comanda este similară cu cea dedicată creării viewului, diferența fiind că la crearea unui tabel, acesta este umplut cu datele returnate de interogare.</p>
+<h3>Exercitii</h3>
+<p>Asigurați-vă că lucrați pe datele inițiale (re-rulați scriptul de creare dacă ați modificat datele). Creați apoi o tabelă care să stocheze numele, prenumele, bursa și mediile studenților.</p>
+
+<h2>ALTER TABLE</h2>
+<p>Structura tabelelor create deja poate fi modificată, chiar dacă tabelul conține deja date. Modificările pot să vizeze adăugarea de noi coloane, ștergerea unor coloane existente, modificarea definiției unei coloane (tipul și constrângerile impuse), redenumirea unei coloane, redenumirea tabelului, adăugarea sau ștergerea de constângeri (chei candidat, chei primare, chei străine, constrângeri NOT NULL, CHECK).</p>
+
+<p>Găsiți în continuare comenzile necesare: </p>
+<p>Pentru adăugarea unor coloane într-un tabel:</p>
+<pre><code class="language-sql">ALTER TABLE nume_tabel ADD COLUMN col1 definitie_col1 [, ADD COLUMN col2 definitie_col2 ...] </code></pre>
+Exemplu:
+<pre><code class="language-sql">ALTER TABLE cursuri ADD COLUMN abreviere CHAR(2),
+                    ADD COLUMN descriere VARCHAR(40) DEFAULT 'curs obligatoriu';</code></pre>
+
+                
+<p>Pentru eliminearea unor coloane dintr-un tabel:</p>
+<pre><code class="language-sql"> 
+ALTER TABLE nume_tabel DROP COLUMN col</code></pre>
+<pre><code class="language-sql">ALTER TABLE cursuri DROP COLUMN descriere;</code></pre>
+
+<p>Pentru modificarea tipului unei coloane:</p>
+<pre><code class="language-sql">
+  ALTER TABLE nume_tabel ALTER COLUMN col1 TYPE definitie_col1 [, ALTER COLUMN col2 TYPE definitie_col2 ...]</code></pre>
+  <pre><code class="language-sql">ALTER TABLE profesori ALTER COLUMN nume TYPE VARCHAR(20),
+                      ALTER COLUMN prenume TYPE VARCHAR(20);</code></pre>
+<p>Pentru a impune sau a elimina constrângerea NOT NULL pe o coloană:</p>
+<pre><code class="language-sql">ALTER TABLE studenti ALTER COLUMN nume SET NOT NULL;
+ALTER TABLE studenti ALTER COLUMN nume DROP NOT NULL;</code></pre>
+
+<p>Pentru redenumirea unor coloane:</p>
+<pre><code class="language-sql">
+ALTER TABLE nume_tabel RENAME COLUMN col_veche TO col_noua</code></pre>
+<pre><code class="language-sql">ALTER TABLE note RENAME COLUMN valoare TO nota;</code></pre>
+
+<p>Pentru redenumirea tabelului:</p>
+<pre><code class="language-sql">
+ALTER TABLE nume_vechi_tabel RENAME TO nume_nou_tabel</code></pre>
+<pre><code class="language-sql">ALTER TABLE profesori RENAME TO cadre_didactice;</code></pre>
+
+<p>Pentru adăugarea unor constrangeri asupra unei coloane dintr-un tabel (PRIMARY KEY, FOREIGN KEY, CHECK(conditie), UNIQUE(coloana)):</p>
+<pre><code class="language-sql">ALTER TABLE nume_tabel ADD CONSTRAINT nume_constrangere definitie_constrangere;</code></pre>
+<pre><code class="language-sql">ALTER TABLE studenti ADD CONSTRAINT 
+     pk_studs PRIMARY KEY (nr_matricol);</code></pre>
+
+<pre><code class="language-sql">ALTER TABLE note ADD CONSTRAINT 
+     fk_studs FOREIGN KEY (nr_matricol) 
+     REFERENCES studenti(nr_matricol) ON DELETE CASCADE;</code></pre>
+
+<p>Pentru eliminarea unor constrangeri definite de utilizator:</p>     
+<pre><code class="language-sql">     
+ALTER TABLE nume_tabel DROP CONSTRAINT nume_constrangere;</code></pre>
+<pre><code class="language-sql">ALTER TABLE note DROP CONSTRAINT fk_studs;</code></pre>
+
+
+<h3>Exerciții</h3>
+<ol>
+  <li>Rulați din nou scriptul de creare (facultate.sql) în pgAdmin: Query Tool → Open File → selectați fișierul → F5.</li>
+  <li>Adăugați constrângerile de tip cheie primară pentru tabelele Studenti, Profesori, Cursuri.</li>
+  <li>Adăugați constrângerile referențiale pentru tabelele Note și Didactic. La ștergerea unui profesor din tabela Profesori, în tabela Didactic id-ul profesorului șters va deveni null. La stergerea unui curs din tabela Cursuri, in tabela Didactic va fi stearsă înregistrarea care referențiază cursul șters. Scrieți comenzi de ștergere înregistrări pentru tabelele referențiate și studiați comportamentul.</li>
+  <li>Impuneți constrângerea ca un student să nu aibă mai mult de o notă la un curs.</li>
+  <li>Impuneți constrângerea ca valoarea notei să fie cuprinsă între 1 și 10.</li>
+<p><!-- alter table note add constraint my_check check(valoare between 1 and 10);--></p>
+</ol>
+
+<h2>Tranzacții</h2>
+<p>O tranzacție reprezintă un grup de comenzi de modificare de 
+  date (DML) care trebuie executate împreună, pentru a garanta 
+  consistența datelor. Eșuarea oricărei comenzi din cadrul unei 
+  tranzacții determină revenirea la starea inițială, dinaintea 
+  tranzacției.</p>
+
+<p>Implicit, PostgreSQL funcționează în mod <i>autocommit</i>: fiecare comandă
+  reprezintă propria sa tranzacție și este salvată (commit) automat imediat ce
+  se execută cu succes. Pentru a grupa mai multe comenzi într-o singură
+  tranzacție, o începem explicit cu comanda <code>BEGIN</code> (sau
+  <code>START TRANSACTION</code>) și o încheiem cu <code>COMMIT</code> sau
+  <code>ROLLBACK</code>.</p>
+
+<p>Comanda <code>COMMIT</code> face permanente toate modificările efectuate de la
+  începutul tranzacției. Comanda <code>ROLLBACK</code> încheie tranzacția
+  readucând baza de date la starea de dinaintea începerii ei. O eroare în
+  cadrul tranzacției sau o cădere a sistemului are același efect ca un
+  ROLLBACK - este modalitatea prin care este protejată integritatea datelor.</p>
+
+<p>În PostgreSQL și comenzile DDL (CREATE, ALTER, DROP) sunt tranzacționale:
+  dacă au fost executate în interiorul unei tranzacții deschise cu BEGIN, ele
+  pot fi anulate cu ROLLBACK, la fel ca modificările de date. Astfel, dacă într-o
+  tranzacție ștergeți date și apoi creați un tabel, un ROLLBACK anulează ambele
+  operații.</p>
+
+<p>Pe parcursul unei tranzacții pot fi adăugați niște marcatori/indicatori
+  cu ajutorul cărora să putem reveni la stări intermediare. Adăugarea
+  unui indicator se realizează cu ajutorul comenzii
+  <code>SAVEPOINT nume_indicator</code> iar revenirea la starea bazei de
+  date din acel moment se realizează cu ajutorul comenzii
+  <code>ROLLBACK TO SAVEPOINT nume_indicator</code>.</p>
+
+
+<h3>Exerciții</h3>
+<h5>Exercițiul 1</h5>
+<ol>
+  <li> Începeți o nouă tranzacție cu comanda <code>BEGIN</code>.</li>
+  <li> Ștergeți toate înregistrările din tabela Profesori.</li>
+  <li> Inserați un profesor.</li>
+  <li> Marcați starea curentă ca 's1'.</li>
+  <li> Schimbați numele profesorului inserat.</li>
+  <li> Vizualizați datele.</li>
+  <li> Reveniți la starea s1.</li>
+  <li> Vizualizați datele.</li>
+  <li> Reveniția la starea de dinaintea ștergerii.</li>
+</ol>
+
+<h5>Exercițiul 2</h5>
+<ol>
+  <li> Rulați scriptul de creare (pentru a vă asigura că aveți baza de date inițială).</li>
+  <li> Deschideți două sesiuni separate (două ferestre Query Tool în pgAdmin), ambele conectate la aceeași bază de date.</li>
+  <li> Verificați că în ambele sesiuni aveți aceleași date în tabelul studenti (e firesc să fie așa).</li>
+  <li> In sesiunea A rulați <code>BEGIN</code>, apoi o comandă de modificare a burselor din 250 în 300 (fără COMMIT încă).</li>
+  <li> Verificați că modificarea se vede în sesiunea A.</li>
+  <li> Are loc modificarea în sesiunea B ? De ce ?</li>
+  <li> In sesiunea B rulați <code>BEGIN</code>, apoi o comandă de modificare a burselor din 250 în 400 - în sesiunea B ar fi trebuit să vedeți că există încă burse de 250, la pasul precedent. Ce se întâmplă și de ce ? (nu vă speriați, nu vi s-a blocat calculatorul - sesiunea B așteaptă să se elibereze blocajul pe rânduri).</li>
+  <li> Executați comanda <code>COMMIT</code> în sesiunea A. Ce s-a întâmplat cu sesiunea B și de ce ?</li>
+</ol>
