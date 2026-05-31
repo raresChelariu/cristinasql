@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS profesori CASCADE;
 -- ============================================================
 
 CREATE TABLE studenti (
-    nr_matricol CHAR(6)        NOT NULL,
+    nr_matricol VARCHAR(6)     NOT NULL,
     nume        VARCHAR(10),
     prenume     VARCHAR(10),
     an          INTEGER,
@@ -30,7 +30,7 @@ CREATE TABLE studenti (
 );
 
 CREATE TABLE cursuri (
-    id_curs     CHAR(4)        NOT NULL,
+    id_curs     VARCHAR(4)     NOT NULL,
     titlu_curs  VARCHAR(15),
     an          INTEGER,
     semestru    INTEGER,
@@ -38,22 +38,22 @@ CREATE TABLE cursuri (
 );
 
 CREATE TABLE note (
-    nr_matricol CHAR(6),
-    id_curs     CHAR(4),
+    nr_matricol VARCHAR(6),
+    id_curs     VARCHAR(4),
     valoare     INTEGER,
     data_notare DATE
 );
 
 CREATE TABLE profesori (
-    id_prof      CHAR(4),
-    nume         CHAR(10),
-    prenume      CHAR(10),
+    id_prof      VARCHAR(4),
+    nume         VARCHAR(10),
+    prenume      VARCHAR(10),
     grad_didactic VARCHAR(5)
 );
 
 CREATE TABLE didactic (
-    id_prof CHAR(4),
-    id_curs CHAR(4)
+    id_prof VARCHAR(4),
+    id_curs VARCHAR(4)
 );
 
 -- ============================================================
