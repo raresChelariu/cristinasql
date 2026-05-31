@@ -56,7 +56,12 @@
 
 <p>Pentru laboratoarele de Baze de date vom folosi sistemul de gestiune a bazelor de date <b>PostgreSQL</b>, unul dintre cele mai populare SGBD-uri relaționale, împreună cu interfața grafică <b>pgAdmin</b>. Tot lucrul la laborator (scrierea și rularea scripturilor SQL) se va face din pgAdmin.</p>
 
-<p>Descărcați installer-ul de pe pagina oficială: <a href="https://www.postgresql.org/download/">https://www.postgresql.org/download/</a> (pe Windows este recomandat installer-ul EDB, care include și serverul PostgreSQL, și pgAdmin 4). Versiunea PostgreSQL 14 sau mai nouă este suficientă pentru buna desfășurare a orelor de laborator.</p>
+<p>Pentru descărcarea și alegerea versiunii:</p>
+<ul>
+    <li>descărcați installer-ul de pe pagina oficială: <a href="https://www.postgresql.org/download/">https://www.postgresql.org/download/</a>;</li>
+    <li>pe Windows este recomandat installer-ul EDB, care include și serverul PostgreSQL, și pgAdmin 4;</li>
+    <li>versiunea PostgreSQL 14 sau mai nouă este suficientă pentru buna desfășurare a orelor de laborator.</li>
+</ul>
 
 <h2> Pașii de instalare </h2>
 <ul>
@@ -216,7 +221,14 @@
 
 <p>Limbajul SQL a fost pentru prima dată standardizat de către Organizaţia Internaţională pentru Standardizare (ISO) în anul 1987. De atunci limbajul a suferit modificări/îmbunătăţiri în mai multe rânduri, ultima versiune stabilă fiind SQL:2016.</p>
 
-<p>Deşi standardizat la nivel internaţional, fiecare dezvoltator de baze de date a modificat şi a extins versiunea standard pentru a exploata avantajele oferite de implementarea particulară a produsului propriu. Datorită dimensiunii mari şi a complexităţii standardului cei mai mulţi dezvoltatori nu l-au implementat în totalitate. Vice-versa, standardul nu specifică comportamentul bazei de date în anumite situaţii, decizille ramânând la latitudinea dezvoltatorilor. Se vorbeşte astfel de dialecte SQL. Rezultatul este apariţia de incompatibilităţi între SGBD-uri relaţionale diferite. Unele incompatibilităţi sunt intenţionat păstrate de dezvoltatori cu scopul de fidelizare a clienţilor.</p>
+<p>Deşi standardizat la nivel internaţional, în practică apar <b>dialecte SQL</b>:</p>
+<ul>
+<li>fiecare dezvoltator de baze de date a modificat şi a extins versiunea standard pentru a exploata avantajele implementării proprii;</li>
+<li>datorită dimensiunii mari şi a complexităţii standardului, cei mai mulţi dezvoltatori nu l-au implementat în totalitate;</li>
+<li>standardul nu specifică comportamentul bazei de date în anumite situaţii, deciziile rămânând la latitudinea dezvoltatorilor;</li>
+<li>rezultatul este apariţia de incompatibilităţi între SGBD-uri relaţionale diferite;</li>
+<li>unele incompatibilităţi sunt intenţionat păstrate de dezvoltatori cu scopul de fidelizare a clienţilor.</li>
+</ul>
 
 <p>Gradul de conformitate al PostgreSQL cu standardul SQL poate fi studiat în documentaţia oficială: </p>
 <p><a href="https://www.postgresql.org/docs/current/features.html">https://www.postgresql.org/docs/current/features.html</a></p>
@@ -244,14 +256,24 @@
 
 
 
-<p>Opţiunea TEMPORARY specifică crearea unui tabel temporar, care îşi păstrează conţinutul doar pe durata unei tranzacţii (opţiunea ON COMMIT DELETE ROWS) sau pe parcursul sesiunii curente (implicit, respectiv ON COMMIT PRESERVE ROWS). În PostgreSQL un tabel temporar este vizibil doar în sesiunea care l-a creat şi este şters automat la închiderea sesiunii. </p>
+<p>Opţiunea TEMPORARY specifică crearea unui tabel temporar:</p>
+<ul>
+<li>cu <code>ON COMMIT DELETE ROWS</code> îşi păstrează conţinutul doar pe durata unei tranzacţii;</li>
+<li>cu <code>ON COMMIT PRESERVE ROWS</code> (implicit) îşi păstrează conţinutul pe parcursul sesiunii curente;</li>
+<li>în PostgreSQL un tabel temporar este vizibil doar în sesiunea care l-a creat şi este şters automat la închiderea sesiunii.</li>
+</ul>
 
 
 <h4> Ştergerea unui tabel </h4>
 <pre><code class="language-sql">DROP TABLE &lt;nume_tabel&gt;  [CASCADE CONSTRAINTS]
 </code></pre>
 
-<p>Opţiunea CASCADE permite ştergerea unui tabel care e referenţiat de un VIEW sau de chei străine din alte tabele, ştergând automat şi obiectele dependente (view-ul şi restricţiile de tip cheie străină). Fără CASCADE, ştergerea unui tabel referenţiat eşuează cu eroare.</p>
+<p>Despre opţiunea CASCADE:</p>
+<ul>
+<li>permite ştergerea unui tabel care e referenţiat de un VIEW sau de chei străine din alte tabele;</li>
+<li>şterge automat şi obiectele dependente (view-ul şi restricţiile de tip cheie străină);</li>
+<li>fără CASCADE, ştergerea unui tabel referenţiat eşuează cu eroare.</li>
+</ul>
 
 <p>Atenţie: ştergerea unui tabel este definitivă - datele nu pot fi recuperate. Pentru a anula modificările făcute într-o tranzacţie încă neîncheiată se poate folosi ROLLBACK (vezi laboratorul despre tranzacţii).</p>
 
@@ -336,9 +358,19 @@
 
 <h2>Schema bazei de date - studiu de caz</h2>
 
-<p>Fiecare facultate a unei universităţi are nevoie să-şi facă managementul intern al studenţilor pe care îi are. Spre exemplu, un aspect important în cadrul secretariatului este cunoaşterea notelor pe care studenţii le-au luat la diversele materii pe care le-au studiat. Pe baza acestor informaţii, se poate decide dacă studentul va avea sau nu bursă, dacă va primi sau nu cazare în anul ce urmează sau daca va trebui să repete o anumită materie. Deşi aceste informaţii sunt disponibile în format clasic, în cataloage, este mult mai uşor de lucrat cu un număr mare de studenţi atunci când aceştia sunt stocaţi într-o bază de date. </p>
+<p>Fiecare facultate a unei universităţi are nevoie să-şi facă managementul intern al studenţilor:</p>
+<ul>
+<li>un aspect important în cadrul secretariatului este cunoaşterea notelor pe care studenţii le-au luat la diversele materii studiate;</li>
+<li>pe baza acestor informaţii se poate decide dacă studentul va avea sau nu bursă, dacă va primi sau nu cazare în anul ce urmează sau dacă va trebui să repete o anumită materie;</li>
+<li>deşi aceste informaţii sunt disponibile şi în format clasic (în cataloage), este mult mai uşor de lucrat cu un număr mare de studenţi atunci când aceştia sunt stocaţi într-o bază de date.</li>
+</ul>
 
-<p>În afara informaţiilor referitoare la studenţi (nume, prenume, anul în care sunt înmatriculaţi, etc.) ce ar putea forma o tabelă într-o bază de date, şi alte informaţii precum notele sau numele cursurilor la care au participat trebuie să fie stocate. Nu este natural ca aceste informaţii să fie stocate împreună cu informaţiile personale ale studentului (de exemplu din cauză ca participarea la doua cursuri diferite ar presupune introducerea de doua ori - ca şi înregistrari diferite în tabelă - a aceloraşi informaţii privitoare la student) şi din acest motiv sunt necesare tabele suplimentare.</p>
+<p>Pe lângă informaţiile personale ale studenţilor (nume, prenume, anul de înmatriculare etc.), trebuie stocate şi notele sau numele cursurilor la care au participat:</p>
+<ul>
+<li>nu este natural ca aceste informaţii să fie stocate împreună cu datele personale ale studentului;</li>
+<li>de exemplu, participarea la două cursuri diferite ar presupune introducerea de două ori - ca înregistrări diferite în tabelă - a aceloraşi informaţii despre student;</li>
+<li>din acest motiv sunt necesare tabele suplimentare.</li>
+</ul>
 
 <p>În cadrul laboratorului de baze de date, vom folosi tabelele studenti, cursuri, note şi profesori, ce au urmatoarele structuri: </p>
 
@@ -442,11 +474,22 @@
 
 
 
-<p>Atunci când, dintr-un anumit motiv, denumirea coloanei nu este reprezentativă la afișare, aceasta poate fi modificată în timpul exprimării comenzii SELECT prin definirea unui alias. Pentru aceasta se va folosi cuvântul cheie "AS" după numele coloanei ce trebuie redenumită, urmat de numele nou al coloanei. În cazul în care noua denumire este formată din mai multe cuvinte, aceasta trebuie să fie incadrată între simbolurile ghilimele. Spre exemplu, următoarea comandă va redenumi numele coloanei "nume" din tabelul profesori în "Nume Profesor":</p>
+<p>Atunci când denumirea coloanei nu este reprezentativă la afișare, aceasta poate fi modificată în comanda SELECT prin definirea unui <b>alias</b>:</p>
+<ul>
+<li>se folosește cuvântul cheie "AS" după numele coloanei de redenumit, urmat de numele nou;</li>
+<li>dacă noua denumire este formată din mai multe cuvinte, aceasta trebuie încadrată între ghilimele.</li>
+</ul>
+<p>Spre exemplu, următoarea comandă va redenumi coloana "nume" din tabelul profesori în "Nume Profesor":</p>
 
 <pre><code class="language-sql">SELECT nume AS "Nume Profesor" FROM profesori;</code></pre>
 
-<p><span style="color:red">Observaţie:</span> Cuvântul AS este optional, în cazul în care acesta lipseste se va insera doar un spaţiu între numele vechi al coloanei ce trebuie selectat şi noul nume. Dacă numele nou al coloanei este format doar dintr-un singur cuvânt, ghilimelele pot fi omise (în fapt, ghilimelele sunt utilizate atunci când noul nume conţine spaţii, caractere speciale sau se doreşte a fi afişat case-sensitive - predefinit este afişat cu litere mari). Ca şi exemplu, încercaţi să executaţi comanda:</p>
+<p><span style="color:red">Observaţie:</span></p>
+<ul>
+<li>cuvântul AS este opţional; dacă lipseşte, se inserează doar un spaţiu între numele vechi al coloanei şi noul nume;</li>
+<li>dacă noul nume este format dintr-un singur cuvânt, ghilimelele pot fi omise;</li>
+<li>ghilimelele se folosesc când noul nume conţine spaţii, caractere speciale sau se doreşte afişarea case-sensitive (predefinit este afişat cu litere mari).</li>
+</ul>
+<p>Ca exemplu, încercaţi să executaţi comanda:</p>
 
 <pre><code class="language-sql">SELECT nume profesor FROM profesori;</code></pre>
 
@@ -465,7 +508,13 @@
 <pre><code class="language-sql">SELECT DISTINCT an, grupa FROM studenti;</code></pre>
 
 
-<p><span style="color:red">Observaţie:</span> Deşi comenzile SQL au fost scrise cu litere mari, limbajul SQL nu este unul case-sensitive. Comenzile poti fi aşadar scrise şi cu litere mici. În cadrul laboratoarelor de baze de date (în această pagină) vom scrie totuşi (sau cel puţin vom încerca) cuvintele cheie cu litere mari tocmai pentru ca voi să le puteţi diferenţia de restul obiectelor (nume de tabele, nume de câmpuri) care nu fac parte din limbaj. Singurul loc în care SQL va face totuşi diferenţa între literele mari şi cele mici este în cadrul şirurilor de caractere din diverse câmpuri ale unui tabel. De exemplu, dacă veţi încerca să executaţi comanda <code>SELECT * FROM cursuri WHERE titlu_curs='LOGICA';</code> , probabil nu va funcţiona (decât dacă aveţi în tabelă un curs cu denumirea "LOGICA" - scris cu litere mari).</p>
+<p><span style="color:red">Observaţie:</span> despre litere mari/mici în SQL:</p>
+<ul>
+<li>limbajul SQL nu este case-sensitive, deci comenzile pot fi scrise şi cu litere mici;</li>
+<li>în cadrul laboratoarelor vom scrie totuşi cuvintele cheie cu litere mari, ca să le puteţi diferenţia de restul obiectelor (nume de tabele, nume de câmpuri) care nu fac parte din limbaj;</li>
+<li>singurul loc în care SQL face diferenţa între litere mari şi mici este în interiorul şirurilor de caractere din câmpurile unui tabel;</li>
+<li>de exemplu, comanda <code>SELECT * FROM cursuri WHERE titlu_curs='LOGICA';</code> probabil nu va funcţiona (decât dacă aveţi în tabelă un curs cu denumirea "LOGICA" scris cu litere mari).</li>
+</ul>
 
 <p><span style="color:red">Observaţie:</span> O comanda SQL poate fi scrisă pe mai multe rânduri. Comanda va fi considerată completă la întâlnirea simbolului punct şi virgulă; abia atunci este trimisă serverului spre execuție.</p>
 
@@ -481,11 +530,24 @@
 
 <h3> Valori NULL </h3>
 
-<p>Uneori, anumite câmpuri pot fi lăsate fără valoare (de exemplu pentru studenţii care nu au bursă, în loc să trecem valoarea 0, nu va fi trecută nici o valoare - uneori chiar şi valoarea 0 poate avea o semnificaţie interpretabilă: spre exemplu, aceasta ar putea însemna că studentul ia de fapt bursă dar că această bursă nu poate fi acoperită din punct de vedere financiar [insert sad student image here]). Neinserarea unei valori într-un câmp va avea ca efect trecerea în acel câmp a valorii NULL (sau &rsquo;&rsquo; - şirul vid ce este reprezentat prin două apostroafe). Dacă valoarea unui câmp este nulă şi acest câmp este utilizat într-o expresie aritmetică, rezultatul va fi de asemenea o valoare nulă (se poate observa pentru cazul  studenţilor ce nu aveau bursă).</p>
+<p>Despre câmpurile fără valoare:</p>
+<ul>
+<li>uneori un câmp poate fi lăsat fără valoare - de exemplu, pentru studenţii care nu au bursă, în loc de valoarea 0 nu se trece nicio valoare;</li>
+<li>uneori chiar şi valoarea 0 poate avea o semnificaţie: ar putea însemna că studentul ia bursă, dar că aceasta nu poate fi acoperită financiar;</li>
+<li>neinserarea unei valori într-un câmp duce la trecerea valorii NULL (sau &rsquo;&rsquo; - şirul vid, reprezentat prin două apostroafe);</li>
+<li>dacă un câmp nul este utilizat într-o expresie aritmetică, rezultatul este tot NULL (se observă în cazul studenţilor fără bursă).</li>
+</ul>
 
 <h3> Concatenarea şirurilor de caractere </h3>
 
-<p>Pentru concatenarea a două şiruri de caractere se va utiliza operatorul || (două bare verticale). Prin intermediul acestuia pot fi concatenate două şiruri de caractere oarecare, un şir de caractere cu un număr, un şir de caractere cu valoarea dintr-o coloană, sau chiar două valori ce se dorește a fi tratate ca și șiruri de caractere (conversia va fi făcută automat prin utilizarea acestui operator). Rezultatul este o nouă coloană. In cazul tipurilor de date de tip char, în baza de date sunt reţinute şi spaţiile necesare ajungerii la un număr de caractere egal cu dimensiunea câmpului (de exemplu dacă într-un câmp de tip char de 10 caractere s-au introdus doar 3 caractere, automat sunt stocate 7 spaţii pentru a completa cele 10 caractere). In cazul datelor de tip varchar nu sunt introduse spaţii suplimentare.  Să vedem un exemplu:</p>
+<p>Pentru concatenarea a două şiruri de caractere se utilizează operatorul || (două bare verticale):</p>
+<ul>
+<li>pot fi concatenate două şiruri oarecare, un şir cu un număr, un şir cu valoarea dintr-o coloană sau chiar două valori tratate ca şiruri (conversia se face automat);</li>
+<li>rezultatul este o nouă coloană;</li>
+<li>la tipul <code>char</code>, în baza de date sunt reţinute şi spaţiile necesare pentru a atinge dimensiunea câmpului (ex. într-un câmp char de 10 caractere cu doar 3 introduse se stochează automat 7 spaţii);</li>
+<li>la tipul <code>varchar</code> nu sunt introduse spaţii suplimentare.</li>
+</ul>
+<p>Să vedem un exemplu:</p>
 
 <pre><code class="language-sql">SELECT 'Studentul '||nume||' '||prenume||' este inmatriculat in anul '|| an ||'.' AS info FROM studenti;</code></pre>
 
@@ -818,7 +880,11 @@
 
 
 
-    <p>Funcțiile care schimbă <span style="font-style:italic">case</span>-ul literelor (transformă textul în litere mici sau în majuscule) sunt frecvent utilizate în clauza WHERE pentru a regăsi text. De exemplu, dacă dorim identificarea datelor despre studentul Andrei și nu avem garanția că prenumele acestuia a fost inserat în baza de date cu toate litere majuscule sau doar cu prima literă majusculă, vom procesa atributul <i>prenume</i> aducându-l la forma dorită pentru testare:</p>
+    <p>Funcțiile care schimbă <span style="font-style:italic">case</span>-ul literelor (transformă textul în litere mici sau majuscule) sunt frecvent utilizate în clauza WHERE pentru a regăsi text:</p>
+    <ul>
+    <li>de exemplu, dacă dorim datele despre studentul Andrei şi nu avem garanţia formei în care a fost inserat prenumele (toate majuscule, doar prima literă etc.);</li>
+    <li>vom procesa atributul <i>prenume</i> aducându-l la forma dorită pentru testare.</li>
+    </ul>
 
     <pre><code class="language-sql">SELECT * FROM studenti WHERE prenume = 'ANDREI'; --returneaza 0 linii</code></pre>
     
@@ -839,7 +905,12 @@
     <pre><code class="language-sql"> SELECT TRIM(BOTH '1' FROM '123Tech111'); -- elimina caracterele '1' de la inceput si de la sfarsit</code></pre>
     
     <h3>Funcţii pentru tipul DATE (date calendaristice)</h3>
-    <p>Formatul implicit pentru afişarea datelor calendaristice în PostgreSQL este ISO, "YYYY-MM-DD" (ex: '2015-06-10'). Constantele de tip dată se pot scrie ca literali tipaţi, de ex. <code>DATE '2015-06-10'</code>, sau folosind funcţia TO_DATE (descrisă mai jos) care specifică explicit formatul şirului introdus, evitând ambiguităţile.</p>
+    <p>Despre formatul datelor calendaristice în PostgreSQL:</p>
+    <ul>
+    <li>formatul implicit pentru afişare este ISO, "YYYY-MM-DD" (ex: '2015-06-10');</li>
+    <li>constantele de tip dată se pot scrie ca literali tipaţi, de ex. <code>DATE '2015-06-10'</code>;</li>
+    <li>alternativ se foloseşte funcţia TO_DATE (descrisă mai jos), care specifică explicit formatul şirului introdus, evitând ambiguităţile.</li>
+    </ul>
     
     
     <table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
@@ -910,7 +981,11 @@
     <pre><code class="language-sql"> SELECT (CURRENT_DATE - data_nastere)/365 FROM studenti;</code></pre>
     
     <h3>Funcţii de conversie</h3>
-    <p>În PostgreSQL conversiile între tipuri se fac explicit, fie cu funcţiile de mai jos, fie cu operatorul de cast <code>::tip</code> (de ex. <code>'123'::integer</code> sau <code>bursa::text</code>). Spre deosebire de alte sisteme, PostgreSQL nu converteşte automat un text într-un număr într-o expresie aritmetică.</p>
+    <p>Despre conversiile între tipuri în PostgreSQL:</p>
+    <ul>
+    <li>conversiile se fac explicit, fie cu funcţiile de mai jos, fie cu operatorul de cast <code>::tip</code> (de ex. <code>'123'::integer</code> sau <code>bursa::text</code>);</li>
+    <li>spre deosebire de alte sisteme, PostgreSQL nu converteşte automat un text într-un număr într-o expresie aritmetică.</li>
+    </ul>
 
     <p>Pentru conversii există funcţiile:</p>
     <table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
@@ -1053,7 +1128,11 @@
 
 <h2>Joinul natural a două tabele</h2>
 
-<p>Înregistrările dintr-o tabelă își găsesc corespondentul în alt(e) tabel(e) prin intermediul unui atribut ce joacă rol de cheie străină trimițând la un atribut cu rol de cheie (proprietate de identificare unică) în tabela referențiată. De exemplu, în tabela <i>note</i> atributul <i>nr_matricol</i> are rolul de a identifica studentul din tabela <i>studenti</i> iar atributul <i>id_curs</i> identifică înregistrarea corespunzătoare din tabelul <i>cursuri</i>.</p>
+<p>Înregistrările dintr-o tabelă își găsesc corespondentul în alte tabele printr-un atribut ce joacă rol de cheie străină, trimiţând la un atribut cu rol de identificare unică în tabela referenţiată. De exemplu, în tabela <i>note</i>:</p>
+<ul>
+<li>atributul <i>nr_matricol</i> identifică studentul din tabela <i>studenti</i>;</li>
+<li>atributul <i>id_curs</i> identifică înregistrarea corespunzătoare din tabelul <i>cursuri</i>.</li>
+</ul>
 
 <p>Pentru a identifica notele unui anumit student nu este suficient să solicităm informația din ambele tabele - studenti si note (vezi exemplul anterior unde solicitând notele lui Andrei s-a realizat de fapt un produs cartezian conducând la un rezultat incorect), ci trebuie să specificăm și condiția de join - și anume atributul care joacă rol de cheie străină să fie egal cu atributul care joaca rol de identificare unică în tabelul referențiat:</p>
 
@@ -1061,7 +1140,13 @@
    --cate inregistrari au fost returnate? de ce?</code></pre>
 
 
-<p>Operația care s-a efectuat a fost joinul intern a două tabele, păstrându-se în rezultat acele linii din produsul cartezian care satisfac condiția impusă de clauza WHERE (pentru a înțelege operația de join este util să priviți joinul ca un produs cartezian urmat de selecție; în realitate sistemul tratează operația cu unul dintre algoritmii dedicați joinului - care vor fi explicati la curs). Versiunea recomandată de standardul SQL utilizează explicit cuvintele cheie JOIN...ON, după cum urmează:</p>
+<p>Operaţia efectuată a fost <b>joinul intern</b> a două tabele:</p>
+<ul>
+<li>se păstrează în rezultat acele linii din produsul cartezian care satisfac condiţia impusă de clauza WHERE;</li>
+<li>pentru a-l înţelege, este util să priviţi joinul ca un produs cartezian urmat de selecţie;</li>
+<li>în realitate sistemul tratează operaţia cu unul dintre algoritmii dedicaţi joinului (care vor fi explicaţi la curs).</li>
+</ul>
+<p>Versiunea recomandată de standardul SQL utilizează explicit cuvintele cheie JOIN...ON:</p>
 
 <pre><code class="language-sql">SELECT * FROM studenti JOIN note ON studenti.nr_matricol = note.nr_matricol ORDER BY nume;</code></pre>
 
@@ -1092,7 +1177,12 @@
 
 <pre><code class="language-sql">SELECT nume, prenume, valoare, nr_matricol FROM studenti NATURAL JOIN note  WHERE prenume='Ioana';</code></pre>
 
-<p>Orice utilizare a unui atribut a cărui nume se regăsește în mai multe tabele referențiate în interogare trebuie prefixat de numele tabelei (exceptie fac tabelele implicate în join natural). Dacă însă numele tabelelor este incomod a fi repetat, putem să dăm aliasuri simple acestora - specificate în clauza FROM imediat dupa numele tabelei. Identificarea atributelor în acest caz se face utilizand aliasul ca și prefix:</p>
+<p>Despre prefixarea atributelor şi aliasuri:</p>
+<ul>
+<li>orice atribut al cărui nume se regăseşte în mai multe tabele referenţiate trebuie prefixat de numele tabelei (excepţie fac tabelele implicate în join natural);</li>
+<li>dacă numele tabelelor este incomod de repetat, le putem da aliasuri simple, specificate în clauza FROM imediat după numele tabelei;</li>
+<li>în acest caz, identificarea atributelor se face folosind aliasul ca prefix.</li>
+</ul>
 
 <pre><code class="language-sql">SELECT nume, prenume, valoare, s.nr_matricol FROM studenti s JOIN note n ON s.nr_matricol = n.nr_matricol;</code></pre>
 
@@ -1113,7 +1203,12 @@
 
 <p>Sunt cazuri în care nu toate înregistrările dintr-o tabelă au corespondent în altă tabelă. În exemplul anterior, nu toți studenții au note. În cadrul joinului anterior s-a văzut cum înregistrările fără corespondent nu fac parte din mulțimea rezultat.</p>
 
-<p>In cazul în care se doreşte realizarea unui join între tabelele studenţi şi note, se poate observa că există studenţi care nu au încă note (fiind primul semestru, ei sunt înscrişi la cursurile din anul întâi dar nu au primit încă note). Spunem despre tabela note că este deficitară în informaţii deoarece nu conţine toate numerele matricole existente în tabela studenţi. Dacă se doreşte ca în rezultat să se regăsească şi studenţii fără note, se va utiliza un join extern.</p>
+<p>La un join între tabelele studenţi şi note:</p>
+<ul>
+<li>există studenţi care nu au încă note (fiind primul semestru, sunt înscrişi la cursurile din anul întâi, dar nu au primit încă note);</li>
+<li>spunem că tabela note este <b>deficitară în informaţii</b>, deoarece nu conţine toate numerele matricole existente în tabela studenţi;</li>
+<li>dacă dorim ca în rezultat să se regăsească şi studenţii fără note, vom utiliza un <b>join extern</b>.</li>
+</ul>
 
 <p>Joinul extern poate fi de mai multe tipuri: </p>
 
@@ -1145,7 +1240,12 @@
 
 
 <h2>Self-joinul - joinul unei tabele cu ea insăși</h2>
-<p>Uneori, modul în care este structurată informația în tabele ne pune în situația de a căuta corespondentul unor înregistrări chiar în același tabel. În cazul de față, un exemplu este determinarea colegilor de grupă pentru un anumit student. Oricând suntem în situația de a apela de două ori la un tabel într-o singură interogare, spunem că realizăm un <i>self-join</i>. În cazul unui self join tabela în cauză este apelată de două ori cu aliasuri distincte, ca și când ar exista două instanțe identice ale aceluiași tabel.</p>
+<p>Despre <i>self-join</i> (joinul unei tabele cu ea însăşi):</p>
+<ul>
+<li>uneori modul în care e structurată informaţia ne pune în situaţia de a căuta corespondentul unor înregistrări chiar în acelaşi tabel (ex. determinarea colegilor de grupă pentru un student);</li>
+<li>oricând apelăm de două ori la un tabel într-o singură interogare, spunem că realizăm un <i>self-join</i>;</li>
+<li>tabela în cauză este apelată de două ori cu aliasuri distincte, ca şi când ar exista două instanţe identice ale aceluiaşi tabel.</li>
+</ul>
 
 <p>Exemplu:</p>
 <pre><code class="language-sql">SELECT s.nume||' '||s.prenume||' este coleg cu '||colegi.nume||' '||colegi.prenume AS "Colegi de grupa" 
@@ -1382,19 +1482,15 @@
 <h2 class="lab-title">Laborator 7</h2>
 <h2>Subinterogări necorelate</h2>
 
-<p>Subinterogările necorelate sunt fraze SELECT încorporate în 
-    clauzele WHERE, HAVING și FROM ale unei interogări (foarte 
-    foarte rar se pot intalni in ORDER BY sau in SELECT), adica 
-    ale altei fraze SELECT. Subinterogarea necorelată (denumită 
-    și <i>interogarea interioară</i> sau <i>interogarea imbricată</i>) 
-    se execută o singură dată, înaintea <i>interogării exterioare</i>, 
-    cea din urmă utilizând rezultatul subinterogării în general 
-    pentru a filtra. </p>
-
-<p>Subinterogarea are în general rolul de extrage valori din 
-    baza de date care ulterior vor servi la filtrarea altor înregistrări. 
-    Subinterogarea trebuie delimitata de fiecare data de paranteze si 
-    poate sa apară doar în partea din dreapta a operatorului de comparatie.</p>
+<p>Caracteristicile subinterogărilor necorelate:</p>
+<ul>
+    <li>sunt fraze SELECT încorporate în clauzele WHERE, HAVING şi FROM ale altei fraze SELECT (foarte rar se pot întâlni şi în ORDER BY sau SELECT);</li>
+    <li>se mai numesc <i>interogarea interioară</i> sau <i>interogarea imbricată</i>;</li>
+    <li>se execută o singură dată, înaintea <i>interogării exterioare</i>, care îi foloseşte rezultatul în general pentru a filtra;</li>
+    <li>au rolul de a extrage valori din baza de date ce vor servi ulterior la filtrarea altor înregistrări;</li>
+    <li>trebuie delimitate de fiecare dată de paranteze;</li>
+    <li>pot apărea doar în partea din dreapta a operatorului de comparaţie.</li>
+</ul>
 
 <p>Sintaxa este următoarea:</p>
 <pre><code class="language-sql">SELECT ...
@@ -1429,10 +1525,11 @@
 --ce returneaza interogarea de mai sus?
 </code></pre>
 
-<p>Dacă subinterogarea returnează o singură linie rezultat, 
-    operatorul poate fi unul standard precum &gt;, =, &gt;=, &lt;, &lt;&gt;, &lt;=. 
-    Dacă subinterogarea returnează mai multe linii rezultat se utilizează operatori 
-    specifici precum IN, ALL, ANY, SOME.</p>
+<p>În funcţie de numărul de linii returnate de subinterogare, operatorul diferă:</p>
+<ul>
+    <li>o singură linie rezultat &rarr; operator standard: &gt;, =, &gt;=, &lt;, &lt;&gt;, &lt;=;</li>
+    <li>mai multe linii rezultat &rarr; operatori specifici: IN, ALL, ANY, SOME.</li>
+</ul>
 
 <p>Într-o interogare pot fi utilizate si mai multe subinterogări:</p>
 <pre><code class="language-sql">SELECT DISTINCT nume, prenume
@@ -1469,10 +1566,11 @@
     specific ar fi <i>"Care sunt primii trei studenți în ordinea
         descrescătoare a mediilor?"</i></p>
 
-<p>În PostgreSQL limitarea numărului de linii se face cu clauza
-    <b>LIMIT n</b> (sau, echivalent şi conform standardului SQL,
-    <b>FETCH FIRST n ROWS ONLY</b>), scrisă la finalul interogării.
-    Opţional, clauza <b>OFFSET m</b> sare peste primele m linii.</p>
+<p>În PostgreSQL limitarea numărului de linii se face astfel:</p>
+<ul>
+    <li>clauza <b>LIMIT n</b> (sau, echivalent şi conform standardului SQL, <b>FETCH FIRST n ROWS ONLY</b>), scrisă la finalul interogării;</li>
+    <li>opţional, clauza <b>OFFSET m</b> sare peste primele m linii.</li>
+</ul>
 
 <p>Spre deosebire de filtrarea din clauza WHERE, clauza LIMIT se aplică
     <u>după</u> ce întreaga interogare a fost procesată şi ordonată.
@@ -1533,9 +1631,10 @@
 
 <div id="lab_lab8" class="lab-section" style="display:none">
 <h2 class="lab-title">Laborator 8</h2>
-<p>In aceasta saptamana se recomanda studiul individual acasa (deoarece este 
-saptamana in care se fac evaluari). Desi nu vom face evaluari la materia Baze de Date, 
-ne dorim sa va consolidati cunostintele acumulate pana acum.</p>
+<ul>
+<li>în această săptămână se recomandă studiul individual acasă (deoarece este săptămâna în care se fac evaluări);</li>
+<li>deşi nu vom face evaluări la materia Baze de Date, ne dorim să vă consolidaţi cunoştinţele acumulate până acum.</li>
+</ul>
 
 </div>
 
@@ -1588,21 +1687,19 @@ Această medie a putut fi obţinută numai din subinterogarea în care am ţinut
 cont că media trebuie să fie calculată doar pentru anul 3 (în interogarea 
 interioară am utilizat utilizat valoarea s1.an). </p>
 
-<p>A doua procesare poate este facuta pentru studentul Pintescu Andrei 
-(sa presupunem) care este in anul 1. El nu apare in rezultatul final deoarece 
-bursa lui este de 250 in timp ce media burselor studentilor din anul sau este 
-300. Este important sa retinem ca subinterogarea este executata chiar si 
-pentru randurile care nu sunt afisate - acestea nefiind afisate tocmai din 
-cauza ca valoarea returnata de subinterogare nu satisface conditia din clauza WHERE.</p>
+<p>A doua procesare se face (să presupunem) pentru studentul Pintescu Andrei, care este în anul 1:</p>
+<ul>
+<li>el nu apare în rezultatul final deoarece bursa lui este 250, în timp ce media burselor studenţilor din anul său este 300;</li>
+<li>este important de reţinut că subinterogarea se execută chiar şi pentru rândurile care nu sunt afişate;</li>
+<li>acestea nu sunt afişate tocmai pentru că valoarea returnată de subinterogare nu satisface condiţia din clauza WHERE.</li>
+</ul>
 
-<p>Linia următoare este pentru un student din anul 2. Deoarece puţin 
-mai înainte subinterogarea a întors media burselor studenţilor din anul 1, 
-aceasta trebuie recalculată pentru studenţii din anul 2 - deci subinterogarea 
-va fi executată din nou. Procesul continuă şi, pentru fiecare linie ce ar 
-putea fi returnată în cadrul interogării principale, este calculată media 
-studenţilor din acelaşi an cu studentul din linia curentă. Linia curentă este 
-apoi filtrată în funcţie de criteriul stabilit (vor fi considerate doar liniile 
-în care bursa este mai mare sau egală cu această medie).</p>
+<p>Linia următoare este pentru un student din anul 2:</p>
+<ul>
+<li>deoarece puţin mai înainte subinterogarea a întors media burselor studenţilor din anul 1, aceasta trebuie recalculată pentru anul 2 - deci subinterogarea va fi executată din nou;</li>
+<li>procesul continuă: pentru fiecare linie ce ar putea fi returnată de interogarea principală se calculează media studenţilor din acelaşi an cu studentul din linia curentă;</li>
+<li>linia curentă este apoi filtrată după criteriul stabilit (sunt considerate doar liniile în care bursa este mai mare sau egală cu această medie).</li>
+</ul>
 
 
 <p>În cazul interogărilor corelate, interogarea principală preia unul câte 
@@ -1619,14 +1716,12 @@ aceasta utilizează valoarea unei coloane din interogarea principală.</p>
 
 <h3>EXISTS</h3>
 
-<p>Uneori, nu ne interesează efectiv valoarea returnată de subinterogare ci 
-doar dacă aceasta returnează măcar un rând. Spre exemplu, am putea fi 
-interesaţi să afişăm toţi studenţii care au în grupă măcar un bursier. 
-Deoarece grupa este identificată atât prin an cât şi prin grupă, ambele 
-câmpuri vor fi utilizate în subinterogare. Dacă subinterogarea returnează 
-măcar un rând (de fapt, în subinterogare vom selecta count(*) şi vom ţine 
-cont ca valoarea să fie strict mai mare ca 0) atunci înseamnă că studentul 
-din rândul curent are în grupă măcar un bursier:</p>
+<p>Uneori nu ne interesează valoarea returnată de subinterogare, ci doar dacă aceasta returnează măcar un rând. Spre exemplu, să afişăm toţi studenţii care au în grupă măcar un bursier:</p>
+<ul>
+<li>grupa este identificată atât prin an, cât şi prin grupă, deci ambele câmpuri vor fi utilizate în subinterogare;</li>
+<li>în subinterogare selectăm <code>count(*)</code> şi cerem ca valoarea să fie strict mai mare ca 0;</li>
+<li>dacă subinterogarea returnează măcar un rând, înseamnă că studentul din rândul curent are în grupă măcar un bursier.</li>
+</ul>
 
 <pre><code class="language-sql"> SELECT nume, prenume, bursa, grupa, an 
     FROM studenti s1 
@@ -1639,12 +1734,11 @@ din rândul curent are în grupă măcar un bursier:</p>
         ) > 0;
 </code></pre> 
 
-<p>Operaţia count în acest caz este destul de costisitoare: chiar dacă 
-s-a găsit că există un student bursier, tabelul studenti este parcurs 
-în continuare de către subinterogare pentru a-i găsi şi pe alţi eventuali 
-studenţi care sunt în aceeaşi grupă şi au bursă). Cu alte cuvinte, nu ne 
-interesează foarte tare dacă operaţia de numărare returnează 1,2 sau mai 
-mulţi bursieri aflaţi în aceeaşi grupă ci doar că acolo există măcar unul. </p>
+<p>Operaţia count în acest caz este destul de costisitoare:</p>
+<ul>
+<li>chiar dacă s-a găsit deja un student bursier, tabelul studenti este parcurs în continuare pentru a-i găsi şi pe ceilalţi studenţi din aceeaşi grupă care au bursă;</li>
+<li>de fapt nu ne interesează dacă numărarea returnează 1, 2 sau mai mulţi bursieri în aceeaşi grupă, ci doar că acolo există măcar unul.</li>
+</ul>
 
 
 <p>Un operator important în cazul interogărilor corelate este operatorul 
@@ -1666,11 +1760,12 @@ până când se găseşte primul student bursier. În acel moment, condiţia est
 îndeplinită şi nu se încearcă numărarea tuturor studenţilor ce au bursă în 
 acea grupă ci se va trece la următoarea linie din interogarea principală.</p>
 
-<p>În versiunile anterioare, subinterogările erau materializate chiar şi 
-în cazul lui EXISTS. Acest lucru înseamnă că efectiv erau intoarse randuri 
-de către subinterogare. Pentru a se evita accesul la HDD, ca şi optimizare, 
-se putea cere altceva decât randuri efective din tabel. Spre exemplu, în 
-locul informaţiei se putea trece o constanta:</p>
+<p>În versiunile anterioare, subinterogările erau materializate chiar şi în cazul lui EXISTS:</p>
+<ul>
+<li>acest lucru înseamnă că efectiv erau întoarse rânduri de către subinterogare;</li>
+<li>pentru a evita accesul la HDD, ca optimizare, se putea cere altceva decât rânduri efective din tabel;</li>
+<li>spre exemplu, în locul informaţiei se putea trece o constantă:</li>
+</ul>
 
 <pre><code class="language-sql"> SELECT nume, prenume, bursa, grupa, an 
      FROM studenti s1 
@@ -1711,10 +1806,13 @@ cât timp este executată subinterogarea ? Când se iese din subinterogare ?</p>
 <h2 class="lab-title">Laborator 10</h2>
 <h2>Variabile în psql</h2>
 
-<p>Variabilele au rolul de a suplini constante,
-  condiții utilizate în clauza WHERE, nume de câmpuri utilizate în
-  clauza ORDER BY, nume de tabele sau chiar întregi fraze SELECT,
-  pentru a refolosi aceeași interogare cu valori diferite.</p>
+<p>Variabilele au rolul de a refolosi aceeaşi interogare cu valori diferite. Ele pot suplini:</p>
+<ul>
+  <li>constante;</li>
+  <li>condiţii utilizate în clauza WHERE;</li>
+  <li>nume de câmpuri utilizate în clauza ORDER BY;</li>
+  <li>nume de tabele sau chiar întregi fraze SELECT.</li>
+</ul>
 
 <p>În consola <b>psql</b> variabilele se definesc cu meta-comanda
   <code>\set</code> și se folosesc prefixându-le cu <b>:</b>. Pentru a
@@ -1778,10 +1876,11 @@ SELECT nr_matricol, 30, 10, CURRENT_DATE
 </code></pre>
 
 <h2>Secvențe</h2>
-<p>De multe ori suntem puși în situația de a crea atribute sintetice 
-  care să joace rol de cheie, deci să ia valori unice în cadrul unei 
-  tabele. Secvențele sunt obiecte care ne ajută să generăm automat 
-  numere întregi unice în momentul inserării înregistrilor.</p>
+<p>Despre secvenţe:</p>
+<ul>
+  <li>de multe ori trebuie să creăm atribute sintetice care să joace rol de cheie, deci să ia valori unice în cadrul unei tabele;</li>
+  <li>secvenţele sunt obiecte care ne ajută să generăm automat numere întregi unice în momentul inserării înregistrărilor.</li>
+</ul>
 
 <p>Sintaxa creării unei secvențe:</p>
 <pre><code class="language-sql">CREATE SEQUENCE nume_secventa
@@ -1868,7 +1967,15 @@ SET bursa=bursa*0.15 WHERE bursa&lt;300; </code></pre>
 <p>Asigurați-vă că lucrați pe datele inițiale (re-rulați scriptul de creare dacă ați modificat datele). Creați apoi o tabelă care să stocheze numele, prenumele, bursa și mediile studenților.</p>
 
 <h2>ALTER TABLE</h2>
-<p>Structura tabelelor create deja poate fi modificată, chiar dacă tabelul conține deja date. Modificările pot să vizeze adăugarea de noi coloane, ștergerea unor coloane existente, modificarea definiției unei coloane (tipul și constrângerile impuse), redenumirea unei coloane, redenumirea tabelului, adăugarea sau ștergerea de constângeri (chei candidat, chei primare, chei străine, constrângeri NOT NULL, CHECK).</p>
+<p>Structura tabelelor create deja poate fi modificată, chiar dacă tabelul conţine deja date. Modificările pot viza:</p>
+<ul>
+<li>adăugarea de noi coloane;</li>
+<li>ştergerea unor coloane existente;</li>
+<li>modificarea definiţiei unei coloane (tipul şi constrângerile impuse);</li>
+<li>redenumirea unei coloane;</li>
+<li>redenumirea tabelului;</li>
+<li>adăugarea sau ştergerea de constrângeri (chei candidat, chei primare, chei străine, constrângeri NOT NULL, CHECK).</li>
+</ul>
 
 <p>Găsiți în continuare comenzile necesare: </p>
 <p>Pentru adăugarea unor coloane într-un tabel:</p>
@@ -1934,31 +2041,29 @@ ALTER TABLE nume_tabel DROP CONSTRAINT nume_constrangere;</code></pre>
   tranzacții determină revenirea la starea inițială, dinaintea 
   tranzacției.</p>
 
-<p>Implicit, PostgreSQL funcționează în mod <i>autocommit</i>: fiecare comandă
-  reprezintă propria sa tranzacție și este salvată (commit) automat imediat ce
-  se execută cu succes. Pentru a grupa mai multe comenzi într-o singură
-  tranzacție, o începem explicit cu comanda <code>BEGIN</code> (sau
-  <code>START TRANSACTION</code>) și o încheiem cu <code>COMMIT</code> sau
-  <code>ROLLBACK</code>.</p>
+<p>Despre modul de funcţionare implicit:</p>
+<ul>
+  <li>PostgreSQL funcţionează în mod <i>autocommit</i>: fiecare comandă reprezintă propria sa tranzacţie şi este salvată (commit) automat imediat ce se execută cu succes;</li>
+  <li>pentru a grupa mai multe comenzi într-o singură tranzacţie, o începem explicit cu <code>BEGIN</code> (sau <code>START TRANSACTION</code>) şi o încheiem cu <code>COMMIT</code> sau <code>ROLLBACK</code>.</li>
+</ul>
 
-<p>Comanda <code>COMMIT</code> face permanente toate modificările efectuate de la
-  începutul tranzacției. Comanda <code>ROLLBACK</code> încheie tranzacția
-  readucând baza de date la starea de dinaintea începerii ei. O eroare în
-  cadrul tranzacției sau o cădere a sistemului are același efect ca un
-  ROLLBACK - este modalitatea prin care este protejată integritatea datelor.</p>
+<ul>
+  <li><code>COMMIT</code> face permanente toate modificările efectuate de la începutul tranzacţiei;</li>
+  <li><code>ROLLBACK</code> încheie tranzacţia readucând baza de date la starea de dinaintea începerii ei;</li>
+  <li>o eroare în cadrul tranzacţiei sau o cădere a sistemului are acelaşi efect ca un ROLLBACK - este modalitatea prin care este protejată integritatea datelor.</li>
+</ul>
 
-<p>În PostgreSQL și comenzile DDL (CREATE, ALTER, DROP) sunt tranzacționale:
-  dacă au fost executate în interiorul unei tranzacții deschise cu BEGIN, ele
-  pot fi anulate cu ROLLBACK, la fel ca modificările de date. Astfel, dacă într-o
-  tranzacție ștergeți date și apoi creați un tabel, un ROLLBACK anulează ambele
-  operații.</p>
+<p>În PostgreSQL şi comenzile DDL (CREATE, ALTER, DROP) sunt tranzacţionale:</p>
+<ul>
+  <li>dacă au fost executate în interiorul unei tranzacţii deschise cu BEGIN, ele pot fi anulate cu ROLLBACK, la fel ca modificările de date;</li>
+  <li>astfel, dacă într-o tranzacţie ştergeţi date şi apoi creaţi un tabel, un ROLLBACK anulează ambele operaţii.</li>
+</ul>
 
-<p>Pe parcursul unei tranzacții pot fi adăugați niște marcatori/indicatori
-  cu ajutorul cărora să putem reveni la stări intermediare. Adăugarea
-  unui indicator se realizează cu ajutorul comenzii
-  <code>SAVEPOINT nume_indicator</code> iar revenirea la starea bazei de
-  date din acel moment se realizează cu ajutorul comenzii
-  <code>ROLLBACK TO SAVEPOINT nume_indicator</code>.</p>
+<p>Pe parcursul unei tranzacţii pot fi adăugaţi marcatori cu ajutorul cărora putem reveni la stări intermediare:</p>
+<ul>
+  <li>adăugarea unui indicator se realizează cu comanda <code>SAVEPOINT nume_indicator</code>;</li>
+  <li>revenirea la starea bazei de date din acel moment se realizează cu comanda <code>ROLLBACK TO SAVEPOINT nume_indicator</code>.</li>
+</ul>
 
 
 <h3>Exerciții</h3>
