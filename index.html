@@ -36,6 +36,11 @@
         pre { background:#f6f8fa; padding:12px; border-radius:6px; overflow:auto; }
         code { color:#1b4332; }
         .offline-note { font-size:.85em; color:#6c757d; margin-top:8px; }
+        .code-wrap { position:relative; }
+        .copy-btn { position:absolute; top:6px; right:6px; padding:3px 10px; font-size:.78em; font-family:inherit; line-height:1.4; color:#1b4332; background:#e6f4ea; border:1px solid #a5d6a7; border-radius:4px; cursor:pointer; opacity:.55; transition:opacity .15s, background .15s, color .15s; }
+        .code-wrap:hover .copy-btn, .copy-btn:focus { opacity:1; }
+        .copy-btn:hover { background:#2e7d32; color:#fff; border-color:#2e7d32; }
+        .copy-btn.copied { background:#2e7d32; color:#fff; border-color:#2e7d32; opacity:1; }
     </style>
 </head>
 <body>
@@ -460,7 +465,21 @@
 <p>Pentru a vedea care este structura unei tabele (în cazul în care aţi uitat spre exemplu din câte litere poate fi format numele de familie al unui student), o puteți inspecta în arborele din stânga al pgAdmin (<i>Schemas → public → Tables → nume_tabel → Columns</i>). În consola psql, comanda echivalentă este:</p>
 
 <pre><code class="language-sql">\d nume_tabel</code></pre>
-  
+
+
+<h2>Exerciții extra</h2>
+<ol>
+    <li> Creați o tabelă <code>proiecte</code> cu coloanele <code>id_proiect</code> (alfanumeric, max 4 caractere, NOT NULL), <code>denumire</code> (text, max 30 caractere), <code>data_start</code> (dată) și <code>buget</code> (numeric cu 2 zecimale).</li>
+    <li> Adăugați tabelei <code>proiecte</code> o coloană nouă <code>responsabil</code> de tip text (max 20 caractere) folosind <code>ALTER TABLE</code>.</li>
+    <li> Modificați tipul coloanei <code>denumire</code> din tabela <code>proiecte</code> astfel încât să permită 50 de caractere.</li>
+    <li> Inserați 3 înregistrări în tabela <code>proiecte</code> folosind o singură comandă <code>INSERT</code>.</li>
+    <li> Inserați un student nou în tabela <code>studenti</code>, specificând explicit numele coloanelor și lăsând bursa <code>NULL</code>.</li>
+    <li> Măriți cu 10% bursa tuturor studenților din anul 1.</li>
+    <li> Ștergeți din tabela <code>note</code> toate înregistrările cu valoarea mai mică decât 5.</li>
+    <li> Redenumiți coloana <code>responsabil</code> din tabela <code>proiecte</code> în <code>coordonator</code> (<code>ALTER TABLE ... RENAME COLUMN</code>).</li>
+    <li> Ștergeți coloana <code>buget</code> din tabela <code>proiecte</code>.</li>
+    <li> Ștergeți complet tabela <code>proiecte</code> din baza de date.</li>
+</ol>
 </div>
 
 <div id="lab_lab2" class="lab-section" style="display:none">
@@ -785,6 +804,20 @@
     <li> Afișați toate informatiile despre studentii ale caror prenume contine EXACT o singura data litera 'a' (se ignora litera 'A' de la inceputul unor prenume).</li>
     <li> Afişaţi numele şi prenumele profesorilor a căror prenume se termină cu litera "n" (întrebare capcană)..</li>
 </ol>
+
+<h2>Exerciții extra</h2>
+<ol>
+    <li> Afișați toate cursurile (titlu și număr de credite) care au mai mult de 5 credite, ordonate descrescător după credite.</li>
+    <li> Afișați în mod unic anii de studiu în care există cursuri.</li>
+    <li> Afișați numele și prenumele studenților din grupa 'A1', ordonați alfabetic după nume.</li>
+    <li> Afișați studenții care au bursa între 250 și 400 (inclusiv), folosind operatorul <code>BETWEEN</code>.</li>
+    <li> Afișați cursurile al căror titlu conține cuvântul „Baze”.</li>
+    <li> Afișați numele profesorilor care au gradul didactic 'prof' sau 'conf', folosind operatorul <code>IN</code>.</li>
+    <li> Afișați studenții care NU sunt în grupele 'A1' și 'A2'.</li>
+    <li> Afișați numele, prenumele și bursa studenților bursieri, concatenând numele și prenumele într-o singură coloană numită „Student”.</li>
+    <li> Afișați valorile distincte ale notelor care apar în tabela <code>note</code>, ordonate crescător.</li>
+    <li> Afișați primii 5 studenți în ordine alfabetică a numelui (folosiți <code>ORDER BY</code> și <code>LIMIT</code>).</li>
+</ol>
 </div>
 
 <div id="lab_lab3" class="lab-section" style="display:none">
@@ -1095,7 +1128,21 @@
         <li> Presupunând că în următoarea lună bursa de 450 RON se mărește cu 10%, cea de 350 RON cu 15% și cea de 250 RON cu 20%, afișați pentru fiecare student numele acestuia, data corespunzătoare primei zile din luna urmatoare și valoarea bursei pe care o va încasa luna următoare. Pentru cei care nu iau bursa, se va afisa valoarea 0.</li>
         <li> Pentru studentii bursieri (doar pentru ei) afisati numele studentului si bursa in stelute: fiecare steluta valoreaza 50 RON. In tabel, alineati stelutele la dreapta.</li>
     </ol>
-    
+
+    <h2>Exerciții extra</h2>
+    <ol>
+        <li> Afișați numele fiecărui student scris integral cu litere mari (<code>UPPER</code>).</li>
+        <li> Afișați prenumele fiecărui student și numărul de caractere al acestuia (<code>LENGTH</code>).</li>
+        <li> Afișați pentru fiecare student primele 3 litere ale numelui (<code>SUBSTRING</code>).</li>
+        <li> Afișați bursa fiecărui student bursier rotunjită la cel mai apropiat întreg (<code>ROUND</code>).</li>
+        <li> Afișați anul nașterii fiecărui student folosind funcția <code>EXTRACT</code> aplicată pe <code>data_nastere</code>.</li>
+        <li> Afișați numele fiecărui profesor cu prima literă mare și restul mici (<code>INITCAP</code>), după eliminarea spațiilor de la capete (<code>TRIM</code>).</li>
+        <li> Afișați pentru fiecare notă valoarea și restul împărțirii acesteia la 2 (<code>MOD</code>), pentru a determina dacă nota este pară sau impară.</li>
+        <li> Afișați data curentă formatată ca 'DD-MM-YYYY' (<code>TO_CHAR</code>).</li>
+        <li> Afișați numele studenților în care litera 'a' este înlocuită cu '@' (<code>REPLACE</code>).</li>
+        <li> Afișați pentru fiecare student vârsta în ani împliniți la data curentă (<code>AGE</code> / <code>EXTRACT</code>).</li>
+    </ol>
+
 </div>
 
 <div id="lab_lab4" class="lab-section" style="display:none">
@@ -1289,8 +1336,22 @@
    <li>Afișați numele studenților care au toate notele mai mari ca 7 sau egale cu 7.</li> 
    <li>Să se afișeze studenții care au luat nota 7 sau nota 10 la OOP într-o zi de marți.</li> 
    <li>O sesiune este identificată prin luna și anul în care a fost ținută. Scrieți numele și prenumele studenților ce au promovat o anumită materie, cu notele luate de aceștia și sesiunea în care a fost promovată materia. Formatul ce identifică sesiunea este "LUNA, AN", fără alte spații suplimentare (De ex. "JUNE, 2015" sau "FEBRUARY, 2014"). În cazul în care luna în care s-a ținut sesiunea a avut mai puțin de 30 de zile, afișați simbolul "+" pe o coloană suplimentară, indicând faptul că acea sesiune a fost mai grea (având mai puține zile), în caz contrar (când luna are mai mult de 29 de zile) valoarea coloanei va fi null.</li>
-</ol>  
-    
+</ol>
+
+<h2>Exerciții extra</h2>
+<ol>
+    <li> Afișați numele studenților împreună cu titlul cursurilor la care au note (join <code>studenti</code> - <code>note</code> - <code>cursuri</code>).</li>
+    <li> Afișați fiecare notă împreună cu numele studentului și titlul cursului corespunzător.</li>
+    <li> Afișați profesorii împreună cu titlurile cursurilor pe care le predau (join <code>profesori</code> - <code>didactic</code> - <code>cursuri</code>).</li>
+    <li> Afișați toți studenții și notele lor, inclusiv studenții care nu au nicio notă (<code>LEFT JOIN</code>).</li>
+    <li> Afișați cursurile care nu au fost predate de niciun profesor (<code>LEFT JOIN</code> / <code>RIGHT JOIN</code> + <code>IS NULL</code>).</li>
+    <li> Afișați numele studenților și numele profesorilor de la care au primit note (join prin <code>note</code> - <code>didactic</code> - <code>profesori</code>).</li>
+    <li> Folosind un self-join, afișați perechile de studenți din aceeași grupă, fără a asocia un student cu el însuși.</li>
+    <li> Afișați titlul fiecărui curs și anul acestuia, alături de numele profesorului care îl predă, folosind alias de tabele.</li>
+    <li> Afișați toți profesorii și toate cursurile (<code>FULL OUTER JOIN</code>), indiferent dacă există asociere între ele.</li>
+    <li> Afișați numele studenților care au luat nota 10, împreună cu materia la care au luat-o.</li>
+</ol>
+
 </div>
 
 <div id="lab_lab5" class="lab-section" style="display:none">
@@ -1477,6 +1538,20 @@
     <!--li>Pentru fiecare student afișați media lui. Studenții care sunt în anul 1 și nu au încă medii vor avea valoarea NULL în acest câmp. (fără subinterogări) </li-->
 </ol>
 
+<h2>Exerciții extra</h2>
+<ol>
+    <li> Afișați numărul total de studenți din tabela <code>studenti</code>.</li>
+    <li> Afișați media generală a tuturor notelor din baza de date.</li>
+    <li> Afișați pentru fiecare grupă numărul de studenți (<code>GROUP BY grupa</code>).</li>
+    <li> Afișați pentru fiecare curs media notelor (<code>GROUP BY id_curs</code>).</li>
+    <li> Afișați bursa minimă, maximă și medie a studenților bursieri.</li>
+    <li> Afișați grupele care au mai mult de 3 studenți (<code>HAVING</code>).</li>
+    <li> Afișați pentru fiecare an de studiu numărul de studenți și valoarea totală a burselor acordate.</li>
+    <li> Afișați cursurile la care media notelor este mai mare decât 8 (<code>GROUP BY</code> + <code>HAVING</code>).</li>
+    <li> Afișați numărul de note distincte acordate la fiecare curs.</li>
+    <li> Afișați profesorul (<code>id_prof</code>) care predă cele mai multe cursuri (<code>GROUP BY</code> + <code>ORDER BY</code> + <code>LIMIT</code>).</li>
+</ol>
+
 <p><!--</p>
 <p>Tematica: </p>
 <p># operatori în algebra relațională</p>
@@ -1633,6 +1708,20 @@
     <li> Din tabela studenti, afisati al cincilea prenume in ordine alfabetica.</li>
     <li> Punctajul unui student se calculeaza ca fiind o suma intre produsul dintre notele luate si creditele la materiile la care au fost luate notele. Afisati toate informatiile studentului care este pe locul 3 in acest top.</li>
     <li>Afișați studenții care au notă maximă la o materie precum și nota și materia respectivă.</li>
+</ol>
+
+<h2>Exerciții extra</h2>
+<ol>
+    <li> Afișați studenții care au bursa mai mare decât bursa medie (subinterogare necorelată).</li>
+    <li> Afișați numele studenților care au luat nota maximă din baza de date.</li>
+    <li> Afișați cursurile care au numărul de credite egal cu numărul maxim de credite.</li>
+    <li> Afișați studenții care au cel puțin o notă (folosind <code>IN</code> cu o subinterogare pe tabela <code>note</code>).</li>
+    <li> Afișați studenții care nu au nicio notă (<code>NOT IN</code> cu o subinterogare).</li>
+    <li> Afișați al doilea cel mai mare nivel de bursă din tabela <code>studenti</code> (<code>LIMIT</code> + <code>OFFSET</code>).</li>
+    <li> Afișați profesorii care predau cursuri din anul 1 (subinterogare cu <code>IN</code> pe <code>didactic</code> / <code>cursuri</code>).</li>
+    <li> Afișați studenții care au bursa egală cu bursa minimă (subinterogare).</li>
+    <li> Afișați cursurile a căror medie de note depășește media generală a tuturor notelor.</li>
+    <li> Afișați a treia cea mai recentă dată de notare (<code>data_notare</code>) folosind <code>ORDER BY</code> + <code>LIMIT</code> + <code>OFFSET</code>.</li>
 </ol>
 
 <!--</p>
@@ -1814,6 +1903,20 @@ cât timp este executată subinterogarea ? Când se iese din subinterogare ?</p>
    <li>Fără a folosi join, afișați numele și media fiecărui student.</li>
    <li>Afișați cursurile care au cel mai mare număr de credite din fiecare an (pot exista și mai multe pe an). - Rezolvati acest exercițiu și corelat și necorelat (se poate în ambele moduri). Care variantă este mai eficientă ?</li>
 </ol>   
+
+<h3>Exerciții extra</h3>
+<ol>
+   <li> Afișați studenții care au cel puțin o notă mai mare ca 8, folosind <code>EXISTS</code>.</li>
+   <li> Afișați studenții care nu au nicio notă, folosind <code>NOT EXISTS</code>.</li>
+   <li> Afișați pentru fiecare student nota maximă pe care a obținut-o, folosind o subinterogare corelată.</li>
+   <li> Afișați cursurile la care există cel puțin un student care a luat nota 10 (<code>EXISTS</code>).</li>
+   <li> Afișați profesorii care predau cel puțin un curs (<code>EXISTS</code> pe <code>didactic</code>).</li>
+   <li> Afișați studenții care au bursa mai mare decât media burselor din grupa lor (subinterogare corelată pe grupă).</li>
+   <li> Afișați cursurile la care nu s-a pus nicio notă (<code>NOT EXISTS</code>).</li>
+   <li> Afișați studenții care au luat cel puțin o notă mai mare decât media propriilor note.</li>
+   <li> Afișați profesorii care nu predau niciun curs (<code>NOT EXISTS</code> pe <code>didactic</code>).</li>
+   <li> Afișați pentru fiecare grupă studentul cu cea mai mare bursă (subinterogare corelată).</li>
+</ol>
 
 </div>
 
@@ -2106,6 +2209,20 @@ ALTER TABLE nume_tabel DROP CONSTRAINT nume_constrangere;</code></pre>
   <li> In sesiunea B rulați <code>BEGIN</code>, apoi o comandă de modificare a burselor din 250 în 400 - în sesiunea B ar fi trebuit să vedeți că există încă burse de 250, la pasul precedent. Ce se întâmplă și de ce ? (nu vă speriați, nu vi s-a blocat calculatorul - sesiunea B așteaptă să se elibereze blocajul pe rânduri).</li>
   <li> Executați comanda <code>COMMIT</code> în sesiunea A. Ce s-a întâmplat cu sesiunea B și de ce ?</li>
 </ol>
+
+<h3>Exerciții extra</h3>
+<ol>
+  <li> Porniți o tranzacție cu <code>BEGIN</code>, măriți toate bursele cu 50 RON, apoi anulați modificarea cu <code>ROLLBACK</code>. Verificați că bursele au revenit la valorile inițiale.</li>
+  <li> Porniți o tranzacție, ștergeți un curs din tabela <code>cursuri</code>, apoi confirmați modificarea cu <code>COMMIT</code>.</li>
+  <li> Într-o tranzacție, inserați un student nou, creați un <code>SAVEPOINT</code>, inserați o notă pentru el, apoi reveniți la savepoint cu <code>ROLLBACK TO</code>. Ce rămâne în baza de date după <code>COMMIT</code>?</li>
+  <li> Demonstrați că, după un <code>COMMIT</code>, modificările nu mai pot fi anulate printr-un <code>ROLLBACK</code>.</li>
+  <li> Porniți o tranzacție, efectuați două actualizări diferite și confirmați-le împreună cu un singur <code>COMMIT</code> (atomicitate).</li>
+  <li> Folosind două sesiuni, arătați că modificările necomise dintr-o sesiune nu sunt vizibile în cealaltă (izolare).</li>
+  <li> Creați un <code>SAVEPOINT</code>, faceți mai multe modificări, apoi eliberați savepoint-ul cu <code>RELEASE SAVEPOINT</code>.</li>
+  <li> Într-o tranzacție, încercați să inserați un rând care încalcă o restricție; observați comportamentul și anulați cu <code>ROLLBACK</code>.</li>
+  <li> Setați nivelul de izolare al unei tranzacții la <code>SERIALIZABLE</code> (<code>SET TRANSACTION ISOLATION LEVEL</code>) și descrieți efectul.</li>
+  <li> Explicați, printr-un exemplu pe tabela <code>studenti</code>, diferența dintre <code>ROLLBACK</code> și <code>ROLLBACK TO SAVEPOINT</code>.</li>
+</ol>
 </div>
 
 <div id="lab_lab11" class="lab-section" style="display:none">
@@ -2220,6 +2337,44 @@ Realizarea de exercitii: modelare a bazelor de date.
         // evidentiere sintaxa SQL pentru tot continutul incarcat
         document.addEventListener('DOMContentLoaded', function() {
             if (window.hljs) hljs.highlightAll();
+        });
+        // buton "Copiaza" pentru fiecare bloc de cod SQL
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('pre').forEach(function(pre) {
+                if (pre.parentElement && pre.parentElement.classList.contains('code-wrap')) return;
+                var wrap = document.createElement('div');
+                wrap.className = 'code-wrap';
+                pre.parentNode.insertBefore(wrap, pre);
+                wrap.appendChild(pre);
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'copy-btn';
+                btn.textContent = 'Copiază';
+                btn.addEventListener('click', function() {
+                    var text = pre.innerText;
+                    function ok() {
+                        btn.textContent = 'Copiat!';
+                        btn.classList.add('copied');
+                        setTimeout(function() { btn.textContent = 'Copiază'; btn.classList.remove('copied'); }, 1500);
+                    }
+                    function fallback() {
+                        var ta = document.createElement('textarea');
+                        ta.value = text;
+                        ta.style.position = 'fixed';
+                        ta.style.opacity = '0';
+                        document.body.appendChild(ta);
+                        ta.select();
+                        try { document.execCommand('copy'); ok(); } catch (e) {}
+                        document.body.removeChild(ta);
+                    }
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(ok).catch(fallback);
+                    } else {
+                        fallback();
+                    }
+                });
+                wrap.appendChild(btn);
+            });
         });
     </script>
 </body>
