@@ -150,6 +150,51 @@ cât timp este executată subinterogarea ? Când se iese din subinterogare ?</p>
 
 
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Subinterogări corelate şi EXISTS în R (tidyverse)</h2>
+
+<p>O subinterogare corelată recalculează ceva "per grup" (ex. media burselor din anul fiecărui student) şi compară fiecare linie cu acel rezultat. În SQL asta cere o subinterogare reexecutată rând cu rând; în R devine surprinzător de simplu: <code>group_by()</code> urmat de un <code>filter()</code> care foloseşte o funcţie de agregare. Într-un <code>filter()</code> aplicat pe grupuri, <code>mean(bursa)</code> se calculează separat pentru fiecare grup, exact ca subinterogarea corelată.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare necorelată (o singură valoare globală)</h3>
+<pre><code class="language-r"># SELECT * FROM studenti NATURAL JOIN note
+#   WHERE valoare >= (SELECT ROUND(AVG(valoare)) FROM note)
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  filter(valoare &gt;= round(mean(note$valoare, na.rm = TRUE)))</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare corelată → group_by() + filter()</h3>
+<pre><code class="language-r"># SELECT nume, prenume, bursa, an FROM studenti s1
+#   WHERE bursa >= (SELECT AVG(bursa) FROM studenti s2
+#                   GROUP BY an HAVING s1.an = s2.an)
+studenti %&gt;%
+  group_by(an) %&gt;%                       # corelarea pe an
+  filter(bursa &gt;= mean(bursa, na.rm = TRUE)) %&gt;%
+  ungroup() %&gt;%
+  select(nume, prenume, bursa, an)</code></pre>
+<p>Aici <code>mean(bursa)</code> se evaluează independent pentru fiecare an - exact ce făcea subinterogarea reexecutată pentru fiecare student.</p>
+
+<h3 style="color:#1a56b8;">EXISTS → "există măcar unul în grup" cu any()</h3>
+<pre><code class="language-r"># studenţii care au în grupă (an + grupa) măcar un bursier
+# WHERE EXISTS (SELECT 1 FROM studenti s2
+#               WHERE bursa IS NOT NULL AND s1.an = s2.an AND s1.grupa = s2.grupa)
+studenti %&gt;%
+  group_by(an, grupa) %&gt;%
+  filter(any(!is.na(bursa))) %&gt;%        # any() = "există măcar unul"
+  ungroup() %&gt;%
+  select(nume, prenume, bursa, grupa, an)</code></pre>
+
+<h3 style="color:#1a56b8;">NOT EXISTS → niciunul în grup</h3>
+<pre><code class="language-r"># grupele în care NU există niciun bursier
+studenti %&gt;%
+  group_by(an, grupa) %&gt;%
+  filter(all(is.na(bursa))) %&gt;%         # echivalent cu !any(!is.na(bursa))
+  ungroup()</code></pre>
+
+<p>Pentru EXISTS între tabele diferite (nu pe grupuri), echivalentele sunt <code>semi_join()</code> (EXISTS) şi <code>anti_join()</code> (NOT EXISTS), prezentate la laboratorul 7.</p>
+</div>
+
 <h3>Exerciţii</h3>
 <ol>
    <li>Afişaţi toţi studenţii care au în an cu ei măcar un coleg care să fie mai mare ca ei (vezi data naşterii). Atentie, un student s1 este mai mare daca are data_nastere mai mica decat celalat student s2.</li>

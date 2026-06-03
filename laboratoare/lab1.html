@@ -240,6 +240,75 @@
 
 <p>  </p>
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Aceleaşi operaţii în R (tidyverse)</h2>
+
+<p>În R nu lucrăm cu tabele dintr-un server, ci cu <b>data frame</b>-uri (mai exact <i>tibble</i>-uri) ţinute în memorie. Fiecare tabel SQL devine un data frame, fiecare coloană SQL devine o coloană a acestuia, iar comenzile SQL de mai sus se traduc în verbe din pachetul <code>dplyr</code> (parte din <code>tidyverse</code>). Operatorul <code>%&gt;%</code> ("pipe") trimite rezultatul din stânga ca prim argument funcţiei din dreapta - exact cum în SQL rezultatul unei clauze devine intrarea următoarei.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Tipurile de date SQL ↔ R</h3>
+<table>
+   <tr><th>SQL (PostgreSQL)</th><th>R</th></tr>
+   <tr><td>CHAR(n), VARCHAR(n), TEXT</td><td><code>character</code> (şir de caractere)</td></tr>
+   <tr><td>SMALLINT, INTEGER, BIGINT</td><td><code>integer</code> (ex. <code>2L</code>)</td></tr>
+   <tr><td>NUMERIC, REAL, DOUBLE PRECISION</td><td><code>double</code> / <code>numeric</code></td></tr>
+   <tr><td>DATE, TIMESTAMP</td><td><code>Date</code> (cu <code>as.Date()</code>)</td></tr>
+   <tr><td>BOOLEAN</td><td><code>logical</code> (<code>TRUE</code>/<code>FALSE</code>)</td></tr>
+   <tr><td>NULL</td><td><code>NA</code> (valoare lipsă)</td></tr>
+</table>
+
+<h3 style="color:#1a56b8;">CREATE TABLE → definirea unui tibble</h3>
+<p>Crearea unui tabel gol cu tipurile coloanelor stabilite:</p>
+<pre><code class="language-r"># CREATE TABLE studenti (nr_matricol CHAR(6) NOT NULL, nume VARCHAR(10) NOT NULL,
+#                        prenume VARCHAR(10), an SMALLINT, grupa CHAR(2),
+#                        bursa NUMERIC(6,2), data_nastere DATE)
+studenti &lt;- tibble(
+  nr_matricol  = character(),
+  nume         = character(),
+  prenume      = character(),
+  an           = integer(),
+  grupa        = character(),
+  bursa        = double(),
+  data_nastere = as.Date(character())
+)</code></pre>
+
+<p>În practică nu construim datele de la zero, ci aducem tabelele direct din PostgreSQL în R:</p>
+<pre><code class="language-r">library(DBI)
+con &lt;- dbConnect(RPostgres::Postgres(), dbname = "facultate",
+                 host = "localhost", user = "student", password = "...")
+studenti &lt;- dbReadTable(con, "studenti") %&gt;% as_tibble()</code></pre>
+
+<h3 style="color:#1a56b8;">INSERT → add_row()</h3>
+<pre><code class="language-r"># INSERT INTO studenti VALUES ('IE1234','Popescu','Ionut',2,'A1',NULL,'2000-01-15')
+studenti &lt;- studenti %&gt;%
+  add_row(nr_matricol = "IE1234", nume = "Popescu", prenume = "Ionut",
+          an = 2L, grupa = "A1", bursa = NA, data_nastere = as.Date("2000-01-15"))</code></pre>
+
+<h3 style="color:#1a56b8;">UPDATE → mutate()</h3>
+<pre><code class="language-r"># UPDATE studenti SET bursa = 1000 WHERE nr_matricol = 'IE1234'
+studenti &lt;- studenti %&gt;%
+  mutate(bursa = if_else(nr_matricol == "IE1234", 1000, bursa))</code></pre>
+
+<h3 style="color:#1a56b8;">DELETE → filter() (păstrăm ce NU se şterge)</h3>
+<pre><code class="language-r"># DELETE FROM studenti WHERE an = 2
+studenti &lt;- studenti %&gt;%
+  filter(an != 2)</code></pre>
+
+<h3 style="color:#1a56b8;">SELECT → select() + filter()</h3>
+<pre><code class="language-r"># SELECT * FROM studenti
+studenti
+
+# SELECT nume, prenume FROM studenti WHERE an = 1
+studenti %&gt;%
+  filter(an == 1) %&gt;%
+  select(nume, prenume)</code></pre>
+
+<h3 style="color:#1a56b8;">DROP TABLE → rm()</h3>
+<pre><code class="language-r"># DROP TABLE studenti  -> ştergem data frame-ul din memoria R
+rm(studenti)</code></pre>
+</div>
+
 <p><span style="color:green">1. Creaţi aceste tabele utilizând contul student.</span></p>
 
 <p><span style="color:green">2. Inseraţi în baza de date nou creată un student Popescu Ionut, proaspat înmatriculat în anul 2 care a luat nota 10 la materia Logica pentru informatica predata de  Cristian Masalagiu în primul semestru din anul 1.</span></p>

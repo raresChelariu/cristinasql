@@ -144,6 +144,71 @@
 
 <p>Cum eliminăm înregistrarea în care studentul apare coleg cu el însuși?</p>
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Aceleaşi join-uri în R (tidyverse)</h2>
+
+<p>În <code>dplyr</code> fiecare tip de join din SQL are un verb dedicat: <code>inner_join()</code>, <code>left_join()</code>, <code>right_join()</code>, <code>full_join()</code> şi <code>cross_join()</code>. Condiţia de join (clauza ON) se dă prin argumentul <code>by</code>. Spre deosebire de SQL, nu avem nevoie de aliasuri de tabel pentru a dezambiguiza coloanele: <code>dplyr</code> adaugă automat sufixe (ex. <code>.x</code> / <code>.y</code>) coloanelor cu acelaşi nume care nu fac parte din join.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Produsul cartezian (CROSS JOIN)</h3>
+<pre><code class="language-r"># SELECT * FROM studenti CROSS JOIN note
+studenti %&gt;% cross_join(note)
+# numărul de linii = nrow(studenti) * nrow(note)</code></pre>
+
+<h3 style="color:#1a56b8;">Join intern (JOIN ... ON)</h3>
+<pre><code class="language-r"># SELECT * FROM studenti JOIN note ON studenti.nr_matricol = note.nr_matricol
+#        ORDER BY nume
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  arrange(nume)
+
+# join + filtrare:  WHERE prenume = 'Ioana'
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  filter(prenume == "Ioana") %&gt;%
+  select(nume, prenume, valoare)</code></pre>
+
+<p>Joinul "natural" din SQL (egalitate pe coloanele cu acelaşi nume) este chiar comportamentul implicit al lui <code>dplyr</code> când omiţi argumentul <code>by</code> - se uneşte automat pe toate coloanele comune:</p>
+<pre><code class="language-r"># SELECT nume, prenume, valoare FROM studenti NATURAL JOIN note WHERE prenume = 'Ioana'
+studenti %&gt;%
+  inner_join(note) %&gt;%             # by = coloanele comune (aici nr_matricol)
+  filter(prenume == "Ioana") %&gt;%
+  select(nume, prenume, valoare)</code></pre>
+
+<h3 style="color:#1a56b8;">Join extern (LEFT / RIGHT / FULL OUTER JOIN)</h3>
+<pre><code class="language-r"># LEFT OUTER JOIN: toţi studenţii, chiar şi cei fără note
+studenti %&gt;%
+  left_join(note, by = "nr_matricol") %&gt;%
+  distinct(nume)
+
+# RIGHT OUTER JOIN
+note %&gt;% right_join(studenti, by = "nr_matricol")
+
+# FULL OUTER JOIN
+studenti %&gt;% full_join(note, by = "nr_matricol")</code></pre>
+<p>Înregistrările fără corespondent primesc <code>NA</code> pe coloanele celeilalte tabele - exact ca valoarea NULL din SQL.</p>
+
+<h3 style="color:#1a56b8;">Joinul mai multor tabele</h3>
+<pre><code class="language-r"># studenti JOIN note JOIN cursuri
+studenti %&gt;%
+  inner_join(note,    by = "nr_matricol") %&gt;%
+  inner_join(cursuri, by = "id_curs") %&gt;%
+  select(nume, prenume, titlu_curs, valoare)</code></pre>
+
+<h3 style="color:#1a56b8;">Self-join (joinul unei tabele cu ea însăşi)</h3>
+<pre><code class="language-r"># colegii de grupă ai lui Andrei
+# SELECT s.nume, colegi.nume FROM studenti s JOIN studenti colegi
+#        ON s.grupa = colegi.grupa AND s.an = colegi.an WHERE s.prenume = 'Andrei'
+studenti %&gt;%
+  inner_join(studenti, by = c("grupa", "an"),
+             suffix = c("", "_coleg")) %&gt;%
+  filter(prenume == "Andrei",
+         nr_matricol != nr_matricol_coleg) %&gt;%   # elimină studentul comparat cu el însuşi
+  transmute(coleg = str_c(nume, " ", prenume,
+                          " este coleg cu ", nume_coleg, " ", prenume_coleg))</code></pre>
+</div>
+
 <h2>Exerciții</h2>
 <ol>
    <li>Afişaţi studenţii şi notele pe care le-au luat si profesorii care le-au pus acele note.</li>

@@ -69,6 +69,7 @@ page = f"""<!DOCTYPE html>
     <link rel="stylesheet" href="assets/stil.css">
     <link rel="stylesheet" href="assets/highlight.default.min.css">
     <script src="assets/highlight.min.js"></script>
+    <script src="assets/highlight.r.min.js"></script>
     <style>
         body {{ margin: 0; }}
         .jumbotron-bd {{ background:#e9ecef; text-align:center; padding:25px; margin-bottom:0; }}

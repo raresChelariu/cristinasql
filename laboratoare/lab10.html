@@ -141,6 +141,62 @@ SET bursa=bursa*0.15 WHERE bursa&lt;300; </code></pre>
  <pre><code class="language-sql">DELETE FROM note WHERE valoare &lt; 5;</code></pre>
 
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Modificarea datelor în R (tidyverse)</h2>
+
+<p>În SQL, INSERT / UPDATE / DELETE modifică tabelul "pe loc" în baza de date. În R, un data frame este o valoare obişnuită: nu îl modificăm pe loc, ci construim o versiune nouă şi o reatribuim variabilei (cu <code>&lt;-</code>). Operaţiile de mai jos acoperă comenzile DML prezentate mai sus.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">INSERT → add_row() / bind_rows()</h3>
+<pre><code class="language-r"># INSERT INTO cursuri VALUES (30, 'Inv. automata', 3, 1, 5)
+cursuri &lt;- cursuri %&gt;%
+  add_row(id_curs = 30, titlu_curs = "Inv. automata", an = 3L, semestru = 1L, credite = 5L)
+
+# INSERT INTO cursuri (id_curs, titlu_curs) VALUES (31, 'NoSQL')
+#   coloanele neprecizate devin NA
+cursuri &lt;- cursuri %&gt;%
+  add_row(id_curs = 31, titlu_curs = "NoSQL")</code></pre>
+
+<p>Forma INSERT ... SELECT (inserare din rezultatul unei interogări) devine un <code>bind_rows()</code> cu un data frame calculat:</p>
+<pre><code class="language-r"># INSERT INTO note SELECT nr_matricol, 30, 10, CURRENT_DATE FROM studenti WHERE an = 3
+note_noi &lt;- studenti %&gt;%
+  filter(an == 3) %&gt;%
+  transmute(nr_matricol, id_curs = 30, valoare = 10, data_notare = Sys.Date())
+
+note &lt;- bind_rows(note, note_noi)</code></pre>
+
+<h3 style="color:#1a56b8;">Secvenţe (auto-increment) → row_number()</h3>
+<pre><code class="language-r"># echivalentul unei chei generate automat
+cursuri &lt;- cursuri %&gt;%
+  mutate(id_curs = row_number())          # 1, 2, 3, ...</code></pre>
+
+<h3 style="color:#1a56b8;">UPDATE → mutate() + if_else()</h3>
+<pre><code class="language-r"># UPDATE studenti SET bursa = bursa * 0.15 WHERE bursa < 300
+studenti &lt;- studenti %&gt;%
+  mutate(bursa = if_else(bursa &lt; 300, bursa * 0.15, bursa))</code></pre>
+
+<p>UPDATE cu subinterogare (valori care vin din alt tabel) se face printr-un join urmat de <code>mutate()</code>. De exemplu, bursa = 100 × media notelor fiecărui student:</p>
+<pre><code class="language-r">medii &lt;- note %&gt;%
+  group_by(nr_matricol) %&gt;%
+  summarise(media = mean(valoare, na.rm = TRUE))
+
+studenti &lt;- studenti %&gt;%
+  left_join(medii, by = "nr_matricol") %&gt;%
+  mutate(bursa = 100 * media) %&gt;%
+  select(-media)</code></pre>
+
+<h3 style="color:#1a56b8;">DELETE → filter() (păstrăm ce NU se şterge)</h3>
+<pre><code class="language-r"># DELETE FROM note WHERE valoare < 5
+note &lt;- note %&gt;%
+  filter(!(valoare &lt; 5))          # echivalent: filter(valoare >= 5)</code></pre>
+
+<h3 style="color:#1a56b8;">CREATE TABLE AS SELECT → atribuire</h3>
+<pre><code class="language-r"># CREATE TABLE raport AS SELECT nume, prenume, bursa FROM studenti
+raport &lt;- studenti %&gt;%
+  select(nume, prenume, bursa)</code></pre>
+</div>
+
 <h3>Exerciții</h3>
 <ol><li>1.Stergeti toti studentii care nu au nici o nota.</li></ol>
 

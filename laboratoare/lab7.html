@@ -126,6 +126,69 @@
     intr-o ordonare prin intermediul cuvintelor cheie "NULLS FIRST"
     sau "NULLS LAST" scrise dupa clauza ORDER BY.</p>
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Subinterogări şi LIMIT în R (tidyverse)</h2>
+
+<p>O subinterogare necorelată se execută o singură dată şi produce o valoare (sau o listă de valori) folosită apoi la filtrare. În R o traducem natural: calculăm întâi rezultatul "interior" şi îl stocăm într-o variabilă, apoi îl folosim în <code>filter()</code>. Pentru apartenenţa la o mulţime de valori folosim <code>%in%</code> (echivalentul lui IN), iar pentru subinterogări pe mai multe coloane folosim <code>semi_join()</code>.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare cu IN</h3>
+<pre><code class="language-r"># SELECT nume, prenume FROM studenti
+#   WHERE nr_matricol IN (SELECT nr_matricol FROM note WHERE valoare = 10)
+matricole_de_10 &lt;- note %&gt;%
+  filter(valoare == 10) %&gt;%
+  pull(nr_matricol)
+
+studenti %&gt;%
+  filter(nr_matricol %in% matricole_de_10) %&gt;%
+  arrange(nume, prenume) %&gt;%
+  select(nume, prenume)</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare cu operator scalar (&gt;, =)</h3>
+<pre><code class="language-r"># ... WHERE valoare > (SELECT MAX(valoare) ... WHERE nume = 'Archip')
+prag &lt;- studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  filter(nume == "Archip") %&gt;%
+  summarise(m = max(valoare, na.rm = TRUE)) %&gt;%
+  pull(m)
+
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  filter(valoare &gt; prag) %&gt;%
+  distinct(nume, prenume) %&gt;%
+  arrange(nume, prenume)</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare pe mai multe coloane → semi_join()</h3>
+<pre><code class="language-r"># ... WHERE (grupa, an, valoare) IN
+#       (SELECT grupa, an, MAX(valoare) ... GROUP BY grupa, an)
+maxime &lt;- studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  group_by(grupa, an) %&gt;%
+  summarise(valoare = max(valoare, na.rm = TRUE), .groups = "drop")
+
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  semi_join(maxime, by = c("grupa", "an", "valoare")) %&gt;%
+  distinct(an, grupa, nume, prenume, valoare) %&gt;%
+  arrange(an, grupa)</code></pre>
+<p><code>semi_join()</code> păstrează din stânga doar liniile care au corespondent în dreapta - exact ca un IN pe tuplu. (Complementul, <code>anti_join()</code>, corespunde lui NOT IN.)</p>
+
+<h3 style="color:#1a56b8;">LIMIT şi OFFSET → slice_head() / slice()</h3>
+<pre><code class="language-r"># SELECT * FROM studenti ORDER BY nume, prenume LIMIT 3
+studenti %&gt;%
+  arrange(nume, prenume) %&gt;%
+  slice_head(n = 3)
+
+# LIMIT 3 OFFSET 3  (sări peste primii 3, ia următorii 3)
+studenti %&gt;%
+  arrange(nume, prenume) %&gt;%
+  slice(4:6)
+
+# top n direct după o valoare (ex. primii 3 după bursă)
+studenti %&gt;% slice_max(bursa, n = 3)</code></pre>
+</div>
+
 <h2>Exerciții</h2>
 <ol>
     <li>Afișați numele studenților care iau cea mai mare bursa acordată.</li>

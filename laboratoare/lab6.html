@@ -144,6 +144,74 @@
 
 <pre><code class="language-sql">SELECT id_curs, COUNT(valoare) FROM note GROUP BY id_curs HAVING COUNT(valoare)>8; --Cate grupuri? De ce?</code></pre>
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Agregare şi grupare în R (tidyverse)</h2>
+
+<p>Funcţiile de agregare din SQL se calculează în R cu <code>summarise()</code>, care reduce mai multe linii la una singură. Gruparea (GROUP BY) se face cu <code>group_by()</code> înainte de <code>summarise()</code>, iar filtrarea grupurilor (HAVING) cu un <code>filter()</code> aplicat <i>după</i> agregare. Atenţie: la fel ca în SQL, funcţiile de agregare ignoră valorile lipsă - în R asta se obţine cu <code>na.rm = TRUE</code>.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Funcţiile de agregare SQL ↔ R</h3>
+<table>
+   <tr><th>SQL</th><th>R (în summarise)</th></tr>
+   <tr><td>COUNT(*)</td><td><code>n()</code></td></tr>
+   <tr><td>COUNT(bursa)</td><td><code>sum(!is.na(bursa))</code></td></tr>
+   <tr><td>COUNT(DISTINCT bursa)</td><td><code>n_distinct(bursa)</code></td></tr>
+   <tr><td>AVG(valoare)</td><td><code>mean(valoare, na.rm = TRUE)</code></td></tr>
+   <tr><td>MAX / MIN</td><td><code>max(...) / min(...)</code></td></tr>
+   <tr><td>SUM(bursa)</td><td><code>sum(bursa, na.rm = TRUE)</code></td></tr>
+   <tr><td>STDDEV / VARIANCE</td><td><code>sd(...) / var(...)</code></td></tr>
+</table>
+
+<h3 style="color:#1a56b8;">Agregare pe tot tabelul (fără grupare)</h3>
+<pre><code class="language-r"># SELECT COUNT(*) AS total_studenti FROM studenti
+studenti %&gt;% summarise(total_studenti = n())
+
+# SELECT AVG(valoare) FROM note
+note %&gt;% summarise(media = mean(valoare, na.rm = TRUE))
+
+# SELECT MAX(bursa), MIN(bursa), SUM(bursa) FROM studenti
+studenti %&gt;% summarise(
+  maxim = max(bursa, na.rm = TRUE),
+  minim = min(bursa, na.rm = TRUE),
+  total = sum(bursa, na.rm = TRUE)
+)</code></pre>
+
+<h3 style="color:#1a56b8;">Gruparea datelor (GROUP BY)</h3>
+<pre><code class="language-r"># SELECT MAX(valoare) FROM note GROUP BY nr_matricol
+note %&gt;%
+  group_by(nr_matricol) %&gt;%
+  summarise(nota_max = max(valoare, na.rm = TRUE))
+
+# SELECT an, COUNT(*) FROM cursuri GROUP BY an
+cursuri %&gt;%
+  group_by(an) %&gt;%
+  summarise(nr = n())
+
+# grupare pe mai multe atribute + ordonare
+# SELECT an, credite, COUNT(*) FROM cursuri GROUP BY an, credite ORDER BY an, credite
+cursuri %&gt;%
+  group_by(an, credite) %&gt;%
+  summarise(nr = n(), .groups = "drop") %&gt;%
+  arrange(an, credite)</code></pre>
+
+<h3 style="color:#1a56b8;">Filtrarea grupurilor (WHERE vs HAVING)</h3>
+<pre><code class="language-r"># WHERE: filtrează liniile ÎNAINTE de grupare
+# SELECT id_curs, COUNT(valoare) FROM note WHERE valoare > 8 GROUP BY id_curs
+note %&gt;%
+  filter(valoare &gt; 8) %&gt;%
+  group_by(id_curs) %&gt;%
+  summarise(nr = sum(!is.na(valoare)))
+
+# HAVING: filtrează grupurile DUPĂ agregare
+# SELECT id_curs, COUNT(valoare) FROM note GROUP BY id_curs HAVING COUNT(valoare) > 8
+note %&gt;%
+  group_by(id_curs) %&gt;%
+  summarise(nr = sum(!is.na(valoare))) %&gt;%
+  filter(nr &gt; 8)</code></pre>
+<p>Regula de aur se vede clar în R: <code>filter()</code> înainte de <code>group_by()</code> = WHERE, iar <code>filter()</code> după <code>summarise()</code> = HAVING.</p>
+</div>
+
 <h2>Exerciții</h2>
 <ol>
     <li>Afișați numărul de studenți din fiecare an.</li>

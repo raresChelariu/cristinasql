@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="assets/stil.css">
     <link rel="stylesheet" href="assets/highlight.default.min.css">
     <script src="assets/highlight.min.js"></script>
+    <script src="assets/highlight.r.min.js"></script>
     <style>
         body { margin: 0; }
         .jumbotron-bd { background:#e9ecef; text-align:center; padding:25px; margin-bottom:0; }
@@ -15,41 +16,26 @@
         .sidebar { flex:0 0 220px; background:rgba(0,0,0,.06); border-radius:6px; padding:12px; height:fit-content; position:sticky; top:10px; }
         .sidebar ul { list-style:none; padding:0; margin:0; }
         .sidebar li { margin:2px 0; }
-        .sidebar a.lab-link { display:block; padding:6px 10px; border-radius:4px; color:#1b6e1f; text-decoration:none; }
+        .sidebar a.lab-link { display:block; padding:6px 10px; border-radius:4px; color:#0a58ca; text-decoration:none; }
         .sidebar a.lab-link:hover { background:rgba(0,0,0,.08); }
-        .sidebar a.lab-link.active { background:#2e7d32; color:#fff; }
-        .sidebar-toggle { display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; background:none; border:none; padding:6px 4px; font:inherit; font-weight:bold; cursor:pointer; color:inherit; white-space:nowrap; }
-        .sidebar-toggle .chevron { transition:transform .2s; font-size:.8em; }
-        .sidebar { transition:flex-basis .2s; }
-        .sidebar.collapsed { flex:0 0 auto; }
-        .sidebar.collapsed .sidebar-toggle .chevron { transform:rotate(-90deg); }
-        .sidebar.collapsed .sidebar-toggle .label { display:none; }
-        .sidebar.collapsed ul { display:none; }
-        @media (max-width: 768px) {
-            .layout { flex-direction:column; }
-            .sidebar { flex:0 0 auto; position:static; width:100%; box-sizing:border-box; }
-            .sidebar.collapsed { width:auto; align-self:flex-start; }
-        }
+        .sidebar a.lab-link.active { background:#0d6efd; color:#fff; }
         .content { flex:1 1 auto; min-width:0; }
-        .lab-title { border-bottom:2px solid #a5d6a7; padding-bottom:8px; margin-bottom:18px; }
+        .lab-title { border-bottom:2px solid #dee2e6; padding-bottom:8px; margin-bottom:18px; }
         .content img { max-width:100%; height:auto; }
         pre { background:#f6f8fa; padding:12px; border-radius:6px; overflow:auto; }
-        code { color:#1b4332; }
         .offline-note { font-size:.85em; color:#6c757d; margin-top:8px; }
-        .code-wrap { position:relative; }
-        .copy-btn { position:absolute; top:6px; right:6px; padding:3px 10px; font-size:.78em; font-family:inherit; line-height:1.4; color:#1b4332; background:#e6f4ea; border:1px solid #a5d6a7; border-radius:4px; cursor:pointer; opacity:.55; transition:opacity .15s, background .15s, color .15s; }
-        .code-wrap:hover .copy-btn, .copy-btn:focus { opacity:1; }
-        .copy-btn:hover { background:#2e7d32; color:#fff; border-color:#2e7d32; }
-        .copy-btn.copied { background:#2e7d32; color:#fff; border-color:#2e7d32; opacity:1; }
     </style>
 </head>
 <body>
+    <div class="jumbotron-bd">
+        <img src="imagini/BD.png" style="height:50px;"><br>
+        <h1>Pagina disciplinei Baze de Date</h1>
+        <p class="offline-note">Copie offline - sectiunea Laborator (PostgreSQL / pgAdmin).</p>
+    </div>
+
     <div class="layout">
-        <nav class="sidebar" id="sidebar">
-            <button type="button" class="sidebar-toggle" onclick="toggleSidebar()" aria-expanded="true">
-                <span class="label">Laborator</span>
-                <span class="chevron">&#9660;</span>
-            </button>
+        <nav class="sidebar">
+            <strong>Laborator</strong>
             <ul>
 <li><a href="#" class="lab-link active" data-target="lab_instalare" onclick="showLab('lab_instalare', this); return false;">Instalare</a></li>
 <li><a href="#" class="lab-link" data-target="lab_pgadmin" onclick="showLab('lab_pgadmin', this); return false;">Ghid pgAdmin</a></li>
@@ -76,12 +62,7 @@
 
 <p>Pentru laboratoarele de Baze de date vom folosi sistemul de gestiune a bazelor de date <b>PostgreSQL</b>, unul dintre cele mai populare SGBD-uri relaționale, împreună cu interfața grafică <b>pgAdmin</b>. Tot lucrul la laborator (scrierea și rularea scripturilor SQL) se va face din pgAdmin.</p>
 
-<p>Pentru descărcarea și alegerea versiunii:</p>
-<ul>
-    <li>descărcați installer-ul de pe pagina oficială: <a href="https://www.postgresql.org/download/">https://www.postgresql.org/download/</a>;</li>
-    <li>pe Windows este recomandat installer-ul EDB, care include și serverul PostgreSQL, și pgAdmin 4;</li>
-    <li>versiunea PostgreSQL 14 sau mai nouă este suficientă pentru buna desfășurare a orelor de laborator.</li>
-</ul>
+<p>Descărcați installer-ul de pe pagina oficială: <a href="https://www.postgresql.org/download/">https://www.postgresql.org/download/</a> (pe Windows este recomandat installer-ul EDB, care include și serverul PostgreSQL, și pgAdmin 4). Versiunea PostgreSQL 14 sau mai nouă este suficientă pentru buna desfășurare a orelor de laborator.</p>
 
 <h2> Pașii de instalare </h2>
 <ul>
@@ -241,14 +222,7 @@
 
 <p>Limbajul SQL a fost pentru prima dată standardizat de către Organizaţia Internaţională pentru Standardizare (ISO) în anul 1987. De atunci limbajul a suferit modificări/îmbunătăţiri în mai multe rânduri, ultima versiune stabilă fiind SQL:2016.</p>
 
-<p>Deşi standardizat la nivel internaţional, în practică apar <b>dialecte SQL</b>:</p>
-<ul>
-<li>fiecare dezvoltator de baze de date a modificat şi a extins versiunea standard pentru a exploata avantajele implementării proprii;</li>
-<li>datorită dimensiunii mari şi a complexităţii standardului, cei mai mulţi dezvoltatori nu l-au implementat în totalitate;</li>
-<li>standardul nu specifică comportamentul bazei de date în anumite situaţii, deciziile rămânând la latitudinea dezvoltatorilor;</li>
-<li>rezultatul este apariţia de incompatibilităţi între SGBD-uri relaţionale diferite;</li>
-<li>unele incompatibilităţi sunt intenţionat păstrate de dezvoltatori cu scopul de fidelizare a clienţilor.</li>
-</ul>
+<p>Deşi standardizat la nivel internaţional, fiecare dezvoltator de baze de date a modificat şi a extins versiunea standard pentru a exploata avantajele oferite de implementarea particulară a produsului propriu. Datorită dimensiunii mari şi a complexităţii standardului cei mai mulţi dezvoltatori nu l-au implementat în totalitate. Vice-versa, standardul nu specifică comportamentul bazei de date în anumite situaţii, decizille ramânând la latitudinea dezvoltatorilor. Se vorbeşte astfel de dialecte SQL. Rezultatul este apariţia de incompatibilităţi între SGBD-uri relaţionale diferite. Unele incompatibilităţi sunt intenţionat păstrate de dezvoltatori cu scopul de fidelizare a clienţilor.</p>
 
 <p>Gradul de conformitate al PostgreSQL cu standardul SQL poate fi studiat în documentaţia oficială: </p>
 <p><a href="https://www.postgresql.org/docs/current/features.html">https://www.postgresql.org/docs/current/features.html</a></p>
@@ -276,24 +250,14 @@
 
 
 
-<p>Opţiunea TEMPORARY specifică crearea unui tabel temporar:</p>
-<ul>
-<li>cu <code>ON COMMIT DELETE ROWS</code> îşi păstrează conţinutul doar pe durata unei tranzacţii;</li>
-<li>cu <code>ON COMMIT PRESERVE ROWS</code> (implicit) îşi păstrează conţinutul pe parcursul sesiunii curente;</li>
-<li>în PostgreSQL un tabel temporar este vizibil doar în sesiunea care l-a creat şi este şters automat la închiderea sesiunii.</li>
-</ul>
+<p>Opţiunea TEMPORARY specifică crearea unui tabel temporar, care îşi păstrează conţinutul doar pe durata unei tranzacţii (opţiunea ON COMMIT DELETE ROWS) sau pe parcursul sesiunii curente (implicit, respectiv ON COMMIT PRESERVE ROWS). În PostgreSQL un tabel temporar este vizibil doar în sesiunea care l-a creat şi este şters automat la închiderea sesiunii. </p>
 
 
 <h4> Ştergerea unui tabel </h4>
 <pre><code class="language-sql">DROP TABLE &lt;nume_tabel&gt;  [CASCADE CONSTRAINTS]
 </code></pre>
 
-<p>Despre opţiunea CASCADE:</p>
-<ul>
-<li>permite ştergerea unui tabel care e referenţiat de un VIEW sau de chei străine din alte tabele;</li>
-<li>şterge automat şi obiectele dependente (view-ul şi restricţiile de tip cheie străină);</li>
-<li>fără CASCADE, ştergerea unui tabel referenţiat eşuează cu eroare.</li>
-</ul>
+<p>Opţiunea CASCADE permite ştergerea unui tabel care e referenţiat de un VIEW sau de chei străine din alte tabele, ştergând automat şi obiectele dependente (view-ul şi restricţiile de tip cheie străină). Fără CASCADE, ştergerea unui tabel referenţiat eşuează cu eroare.</p>
 
 <p>Atenţie: ştergerea unui tabel este definitivă - datele nu pot fi recuperate. Pentru a anula modificările făcute într-o tranzacţie încă neîncheiată se poate folosi ROLLBACK (vezi laboratorul despre tranzacţii).</p>
 
@@ -378,19 +342,9 @@
 
 <h2>Schema bazei de date - studiu de caz</h2>
 
-<p>Fiecare facultate a unei universităţi are nevoie să-şi facă managementul intern al studenţilor:</p>
-<ul>
-<li>un aspect important în cadrul secretariatului este cunoaşterea notelor pe care studenţii le-au luat la diversele materii studiate;</li>
-<li>pe baza acestor informaţii se poate decide dacă studentul va avea sau nu bursă, dacă va primi sau nu cazare în anul ce urmează sau dacă va trebui să repete o anumită materie;</li>
-<li>deşi aceste informaţii sunt disponibile şi în format clasic (în cataloage), este mult mai uşor de lucrat cu un număr mare de studenţi atunci când aceştia sunt stocaţi într-o bază de date.</li>
-</ul>
+<p>Fiecare facultate a unei universităţi are nevoie să-şi facă managementul intern al studenţilor pe care îi are. Spre exemplu, un aspect important în cadrul secretariatului este cunoaşterea notelor pe care studenţii le-au luat la diversele materii pe care le-au studiat. Pe baza acestor informaţii, se poate decide dacă studentul va avea sau nu bursă, dacă va primi sau nu cazare în anul ce urmează sau daca va trebui să repete o anumită materie. Deşi aceste informaţii sunt disponibile în format clasic, în cataloage, este mult mai uşor de lucrat cu un număr mare de studenţi atunci când aceştia sunt stocaţi într-o bază de date. </p>
 
-<p>Pe lângă informaţiile personale ale studenţilor (nume, prenume, anul de înmatriculare etc.), trebuie stocate şi notele sau numele cursurilor la care au participat:</p>
-<ul>
-<li>nu este natural ca aceste informaţii să fie stocate împreună cu datele personale ale studentului;</li>
-<li>de exemplu, participarea la două cursuri diferite ar presupune introducerea de două ori - ca înregistrări diferite în tabelă - a aceloraşi informaţii despre student;</li>
-<li>din acest motiv sunt necesare tabele suplimentare.</li>
-</ul>
+<p>În afara informaţiilor referitoare la studenţi (nume, prenume, anul în care sunt înmatriculaţi, etc.) ce ar putea forma o tabelă într-o bază de date, şi alte informaţii precum notele sau numele cursurilor la care au participat trebuie să fie stocate. Nu este natural ca aceste informaţii să fie stocate împreună cu informaţiile personale ale studentului (de exemplu din cauză ca participarea la doua cursuri diferite ar presupune introducerea de doua ori - ca şi înregistrari diferite în tabelă - a aceloraşi informaţii privitoare la student) şi din acest motiv sunt necesare tabele suplimentare.</p>
 
 <p>În cadrul laboratorului de baze de date, vom folosi tabelele studenti, cursuri, note şi profesori, ce au urmatoarele structuri: </p>
 
@@ -447,6 +401,75 @@
 
 <p>  </p>
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Aceleaşi operaţii în R (tidyverse)</h2>
+
+<p>În R nu lucrăm cu tabele dintr-un server, ci cu <b>data frame</b>-uri (mai exact <i>tibble</i>-uri) ţinute în memorie. Fiecare tabel SQL devine un data frame, fiecare coloană SQL devine o coloană a acestuia, iar comenzile SQL de mai sus se traduc în verbe din pachetul <code>dplyr</code> (parte din <code>tidyverse</code>). Operatorul <code>%&gt;%</code> ("pipe") trimite rezultatul din stânga ca prim argument funcţiei din dreapta - exact cum în SQL rezultatul unei clauze devine intrarea următoarei.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Tipurile de date SQL ↔ R</h3>
+<table>
+   <tr><th>SQL (PostgreSQL)</th><th>R</th></tr>
+   <tr><td>CHAR(n), VARCHAR(n), TEXT</td><td><code>character</code> (şir de caractere)</td></tr>
+   <tr><td>SMALLINT, INTEGER, BIGINT</td><td><code>integer</code> (ex. <code>2L</code>)</td></tr>
+   <tr><td>NUMERIC, REAL, DOUBLE PRECISION</td><td><code>double</code> / <code>numeric</code></td></tr>
+   <tr><td>DATE, TIMESTAMP</td><td><code>Date</code> (cu <code>as.Date()</code>)</td></tr>
+   <tr><td>BOOLEAN</td><td><code>logical</code> (<code>TRUE</code>/<code>FALSE</code>)</td></tr>
+   <tr><td>NULL</td><td><code>NA</code> (valoare lipsă)</td></tr>
+</table>
+
+<h3 style="color:#1a56b8;">CREATE TABLE → definirea unui tibble</h3>
+<p>Crearea unui tabel gol cu tipurile coloanelor stabilite:</p>
+<pre><code class="language-r"># CREATE TABLE studenti (nr_matricol CHAR(6) NOT NULL, nume VARCHAR(10) NOT NULL,
+#                        prenume VARCHAR(10), an SMALLINT, grupa CHAR(2),
+#                        bursa NUMERIC(6,2), data_nastere DATE)
+studenti &lt;- tibble(
+  nr_matricol  = character(),
+  nume         = character(),
+  prenume      = character(),
+  an           = integer(),
+  grupa        = character(),
+  bursa        = double(),
+  data_nastere = as.Date(character())
+)</code></pre>
+
+<p>În practică nu construim datele de la zero, ci aducem tabelele direct din PostgreSQL în R:</p>
+<pre><code class="language-r">library(DBI)
+con &lt;- dbConnect(RPostgres::Postgres(), dbname = "facultate",
+                 host = "localhost", user = "student", password = "...")
+studenti &lt;- dbReadTable(con, "studenti") %&gt;% as_tibble()</code></pre>
+
+<h3 style="color:#1a56b8;">INSERT → add_row()</h3>
+<pre><code class="language-r"># INSERT INTO studenti VALUES ('IE1234','Popescu','Ionut',2,'A1',NULL,'2000-01-15')
+studenti &lt;- studenti %&gt;%
+  add_row(nr_matricol = "IE1234", nume = "Popescu", prenume = "Ionut",
+          an = 2L, grupa = "A1", bursa = NA, data_nastere = as.Date("2000-01-15"))</code></pre>
+
+<h3 style="color:#1a56b8;">UPDATE → mutate()</h3>
+<pre><code class="language-r"># UPDATE studenti SET bursa = 1000 WHERE nr_matricol = 'IE1234'
+studenti &lt;- studenti %&gt;%
+  mutate(bursa = if_else(nr_matricol == "IE1234", 1000, bursa))</code></pre>
+
+<h3 style="color:#1a56b8;">DELETE → filter() (păstrăm ce NU se şterge)</h3>
+<pre><code class="language-r"># DELETE FROM studenti WHERE an = 2
+studenti &lt;- studenti %&gt;%
+  filter(an != 2)</code></pre>
+
+<h3 style="color:#1a56b8;">SELECT → select() + filter()</h3>
+<pre><code class="language-r"># SELECT * FROM studenti
+studenti
+
+# SELECT nume, prenume FROM studenti WHERE an = 1
+studenti %&gt;%
+  filter(an == 1) %&gt;%
+  select(nume, prenume)</code></pre>
+
+<h3 style="color:#1a56b8;">DROP TABLE → rm()</h3>
+<pre><code class="language-r"># DROP TABLE studenti  -> ştergem data frame-ul din memoria R
+rm(studenti)</code></pre>
+</div>
+
 <p><span style="color:green">1. Creaţi aceste tabele utilizând contul student.</span></p>
 
 <p><span style="color:green">2. Inseraţi în baza de date nou creată un student Popescu Ionut, proaspat înmatriculat în anul 2 care a luat nota 10 la materia Logica pentru informatica predata de  Cristian Masalagiu în primul semestru din anul 1.</span></p>
@@ -465,21 +488,7 @@
 <p>Pentru a vedea care este structura unei tabele (în cazul în care aţi uitat spre exemplu din câte litere poate fi format numele de familie al unui student), o puteți inspecta în arborele din stânga al pgAdmin (<i>Schemas → public → Tables → nume_tabel → Columns</i>). În consola psql, comanda echivalentă este:</p>
 
 <pre><code class="language-sql">\d nume_tabel</code></pre>
-
-
-<h2>Exerciții extra</h2>
-<ol>
-    <li> Creați o tabelă <code>proiecte</code> cu coloanele <code>id_proiect</code> (alfanumeric, max 4 caractere, NOT NULL), <code>denumire</code> (text, max 30 caractere), <code>data_start</code> (dată) și <code>buget</code> (numeric cu 2 zecimale).</li>
-    <li> Adăugați tabelei <code>proiecte</code> o coloană nouă <code>responsabil</code> de tip text (max 20 caractere) folosind <code>ALTER TABLE</code>.</li>
-    <li> Modificați tipul coloanei <code>denumire</code> din tabela <code>proiecte</code> astfel încât să permită 50 de caractere.</li>
-    <li> Inserați 3 înregistrări în tabela <code>proiecte</code> folosind o singură comandă <code>INSERT</code>.</li>
-    <li> Inserați un student nou în tabela <code>studenti</code>, specificând explicit numele coloanelor și lăsând bursa <code>NULL</code>.</li>
-    <li> Măriți cu 10% bursa tuturor studenților din anul 1.</li>
-    <li> Ștergeți din tabela <code>note</code> toate înregistrările cu valoarea mai mică decât 5.</li>
-    <li> Redenumiți coloana <code>responsabil</code> din tabela <code>proiecte</code> în <code>coordonator</code> (<code>ALTER TABLE ... RENAME COLUMN</code>).</li>
-    <li> Ștergeți coloana <code>buget</code> din tabela <code>proiecte</code>.</li>
-    <li> Ștergeți complet tabela <code>proiecte</code> din baza de date.</li>
-</ol>
+  
 </div>
 
 <div id="lab_lab2" class="lab-section" style="display:none">
@@ -508,22 +517,11 @@
 
 
 
-<p>Atunci când denumirea coloanei nu este reprezentativă la afișare, aceasta poate fi modificată în comanda SELECT prin definirea unui <b>alias</b>:</p>
-<ul>
-<li>se folosește cuvântul cheie "AS" după numele coloanei de redenumit, urmat de numele nou;</li>
-<li>dacă noua denumire este formată din mai multe cuvinte, aceasta trebuie încadrată între ghilimele.</li>
-</ul>
-<p>Spre exemplu, următoarea comandă va redenumi coloana "nume" din tabelul profesori în "Nume Profesor":</p>
+<p>Atunci când, dintr-un anumit motiv, denumirea coloanei nu este reprezentativă la afișare, aceasta poate fi modificată în timpul exprimării comenzii SELECT prin definirea unui alias. Pentru aceasta se va folosi cuvântul cheie "AS" după numele coloanei ce trebuie redenumită, urmat de numele nou al coloanei. În cazul în care noua denumire este formată din mai multe cuvinte, aceasta trebuie să fie incadrată între simbolurile ghilimele. Spre exemplu, următoarea comandă va redenumi numele coloanei "nume" din tabelul profesori în "Nume Profesor":</p>
 
 <pre><code class="language-sql">SELECT nume AS "Nume Profesor" FROM profesori;</code></pre>
 
-<p><span style="color:red">Observaţie:</span></p>
-<ul>
-<li>cuvântul AS este opţional; dacă lipseşte, se inserează doar un spaţiu între numele vechi al coloanei şi noul nume;</li>
-<li>dacă noul nume este format dintr-un singur cuvânt, ghilimelele pot fi omise;</li>
-<li>ghilimelele se folosesc când noul nume conţine spaţii, caractere speciale sau se doreşte afişarea case-sensitive (predefinit este afişat cu litere mari).</li>
-</ul>
-<p>Ca exemplu, încercaţi să executaţi comanda:</p>
+<p><span style="color:red">Observaţie:</span> Cuvântul AS este optional, în cazul în care acesta lipseste se va insera doar un spaţiu între numele vechi al coloanei ce trebuie selectat şi noul nume. Dacă numele nou al coloanei este format doar dintr-un singur cuvânt, ghilimelele pot fi omise (în fapt, ghilimelele sunt utilizate atunci când noul nume conţine spaţii, caractere speciale sau se doreşte a fi afişat case-sensitive - predefinit este afişat cu litere mari). Ca şi exemplu, încercaţi să executaţi comanda:</p>
 
 <pre><code class="language-sql">SELECT nume profesor FROM profesori;</code></pre>
 
@@ -542,13 +540,7 @@
 <pre><code class="language-sql">SELECT DISTINCT an, grupa FROM studenti;</code></pre>
 
 
-<p><span style="color:red">Observaţie:</span> despre litere mari/mici în SQL:</p>
-<ul>
-<li>limbajul SQL nu este case-sensitive, deci comenzile pot fi scrise şi cu litere mici;</li>
-<li>în cadrul laboratoarelor vom scrie totuşi cuvintele cheie cu litere mari, ca să le puteţi diferenţia de restul obiectelor (nume de tabele, nume de câmpuri) care nu fac parte din limbaj;</li>
-<li>singurul loc în care SQL face diferenţa între litere mari şi mici este în interiorul şirurilor de caractere din câmpurile unui tabel;</li>
-<li>de exemplu, comanda <code>SELECT * FROM cursuri WHERE titlu_curs='LOGICA';</code> probabil nu va funcţiona (decât dacă aveţi în tabelă un curs cu denumirea "LOGICA" scris cu litere mari).</li>
-</ul>
+<p><span style="color:red">Observaţie:</span> Deşi comenzile SQL au fost scrise cu litere mari, limbajul SQL nu este unul case-sensitive. Comenzile poti fi aşadar scrise şi cu litere mici. În cadrul laboratoarelor de baze de date (în această pagină) vom scrie totuşi (sau cel puţin vom încerca) cuvintele cheie cu litere mari tocmai pentru ca voi să le puteţi diferenţia de restul obiectelor (nume de tabele, nume de câmpuri) care nu fac parte din limbaj. Singurul loc în care SQL va face totuşi diferenţa între literele mari şi cele mici este în cadrul şirurilor de caractere din diverse câmpuri ale unui tabel. De exemplu, dacă veţi încerca să executaţi comanda <code>SELECT * FROM cursuri WHERE titlu_curs='LOGICA';</code> , probabil nu va funcţiona (decât dacă aveţi în tabelă un curs cu denumirea "LOGICA" - scris cu litere mari).</p>
 
 <p><span style="color:red">Observaţie:</span> O comanda SQL poate fi scrisă pe mai multe rânduri. Comanda va fi considerată completă la întâlnirea simbolului punct şi virgulă; abia atunci este trimisă serverului spre execuție.</p>
 
@@ -564,24 +556,11 @@
 
 <h3> Valori NULL </h3>
 
-<p>Despre câmpurile fără valoare:</p>
-<ul>
-<li>uneori un câmp poate fi lăsat fără valoare - de exemplu, pentru studenţii care nu au bursă, în loc de valoarea 0 nu se trece nicio valoare;</li>
-<li>uneori chiar şi valoarea 0 poate avea o semnificaţie: ar putea însemna că studentul ia bursă, dar că aceasta nu poate fi acoperită financiar;</li>
-<li>neinserarea unei valori într-un câmp duce la trecerea valorii NULL (sau &rsquo;&rsquo; - şirul vid, reprezentat prin două apostroafe);</li>
-<li>dacă un câmp nul este utilizat într-o expresie aritmetică, rezultatul este tot NULL (se observă în cazul studenţilor fără bursă).</li>
-</ul>
+<p>Uneori, anumite câmpuri pot fi lăsate fără valoare (de exemplu pentru studenţii care nu au bursă, în loc să trecem valoarea 0, nu va fi trecută nici o valoare - uneori chiar şi valoarea 0 poate avea o semnificaţie interpretabilă: spre exemplu, aceasta ar putea însemna că studentul ia de fapt bursă dar că această bursă nu poate fi acoperită din punct de vedere financiar [insert sad student image here]). Neinserarea unei valori într-un câmp va avea ca efect trecerea în acel câmp a valorii NULL (sau &rsquo;&rsquo; - şirul vid ce este reprezentat prin două apostroafe). Dacă valoarea unui câmp este nulă şi acest câmp este utilizat într-o expresie aritmetică, rezultatul va fi de asemenea o valoare nulă (se poate observa pentru cazul  studenţilor ce nu aveau bursă).</p>
 
 <h3> Concatenarea şirurilor de caractere </h3>
 
-<p>Pentru concatenarea a două şiruri de caractere se utilizează operatorul || (două bare verticale):</p>
-<ul>
-<li>pot fi concatenate două şiruri oarecare, un şir cu un număr, un şir cu valoarea dintr-o coloană sau chiar două valori tratate ca şiruri (conversia se face automat);</li>
-<li>rezultatul este o nouă coloană;</li>
-<li>la tipul <code>char</code>, în baza de date sunt reţinute şi spaţiile necesare pentru a atinge dimensiunea câmpului (ex. într-un câmp char de 10 caractere cu doar 3 introduse se stochează automat 7 spaţii);</li>
-<li>la tipul <code>varchar</code> nu sunt introduse spaţii suplimentare.</li>
-</ul>
-<p>Să vedem un exemplu:</p>
+<p>Pentru concatenarea a două şiruri de caractere se va utiliza operatorul || (două bare verticale). Prin intermediul acestuia pot fi concatenate două şiruri de caractere oarecare, un şir de caractere cu un număr, un şir de caractere cu valoarea dintr-o coloană, sau chiar două valori ce se dorește a fi tratate ca și șiruri de caractere (conversia va fi făcută automat prin utilizarea acestui operator). Rezultatul este o nouă coloană. In cazul tipurilor de date de tip char, în baza de date sunt reţinute şi spaţiile necesare ajungerii la un număr de caractere egal cu dimensiunea câmpului (de exemplu dacă într-un câmp de tip char de 10 caractere s-au introdus doar 3 caractere, automat sunt stocate 7 spaţii pentru a completa cele 10 caractere). In cazul datelor de tip varchar nu sunt introduse spaţii suplimentare.  Să vedem un exemplu:</p>
 
 <pre><code class="language-sql">SELECT 'Studentul '||nume||' '||prenume||' este inmatriculat in anul '|| an ||'.' AS info FROM studenti;</code></pre>
 
@@ -786,6 +765,109 @@
 
 
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Aceleaşi operaţii în R (tidyverse)</h2>
+
+<p>Comanda SELECT cu clauzele ei se descompune în R într-un lanţ de verbe <code>dplyr</code>: <code>select()</code> alege coloanele (proiecţia), <code>filter()</code> alege liniile (clauza WHERE), <code>distinct()</code> elimină duplicatele (DISTINCT), <code>mutate()</code> creează coloane calculate, iar <code>arrange()</code> ordonează (ORDER BY). Presupunem că tabelul <code>studenti</code> a fost deja încărcat în R.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">SELECT * şi proiecţia coloanelor</h3>
+<pre><code class="language-r"># SELECT * FROM studenti
+studenti
+
+# SELECT nume, prenume FROM studenti
+studenti %&gt;%
+  select(nume, prenume)</code></pre>
+
+<h3 style="color:#1a56b8;">Alias de coloană (AS)</h3>
+<pre><code class="language-r"># SELECT nume AS "Nume Profesor" FROM profesori
+profesori %&gt;%
+  select(`Nume Profesor` = nume)</code></pre>
+
+<h3 style="color:#1a56b8;">DISTINCT</h3>
+<pre><code class="language-r"># SELECT DISTINCT an FROM studenti
+studenti %&gt;%
+  distinct(an)
+
+# SELECT DISTINCT an, grupa FROM studenti
+studenti %&gt;%
+  distinct(an, grupa)</code></pre>
+
+<h3 style="color:#1a56b8;">Coloane calculate (operatori aritmetici)</h3>
+<pre><code class="language-r"># SELECT nume, prenume, bursa + 10 FROM studenti
+studenti %&gt;%
+  mutate(bursa_noua = bursa + 10) %&gt;%
+  select(nume, prenume, bursa_noua)</code></pre>
+<p>La fel ca în SQL, dacă un operand este <code>NA</code> (NULL) rezultatul aritmetic este <code>NA</code>.</p>
+
+<h3 style="color:#1a56b8;">Concatenarea şirurilor (||)</h3>
+<pre><code class="language-r"># SELECT 'Studentul '||nume||' '||prenume||' este inmatriculat in anul '||an||'.' AS info
+studenti %&gt;%
+  mutate(info = str_c("Studentul ", nume, " ", prenume,
+                      " este inmatriculat in anul ", an, ".")) %&gt;%
+  select(info)</code></pre>
+
+<h3 style="color:#1a56b8;">Clauza WHERE → filter()</h3>
+<pre><code class="language-r"># SELECT nume, prenume FROM studenti WHERE an = 1
+studenti %&gt;%
+  filter(an == 1) %&gt;%
+  select(nume, prenume)
+
+# WHERE bursa IS NOT NULL          -> !is.na(bursa)
+studenti %&gt;% filter(!is.na(bursa))
+
+# WHERE bursa IS NOT NULL AND an = 1  (virgula = AND în filter)
+studenti %&gt;% filter(!is.na(bursa), an == 1)
+
+# WHERE an = 3 OR bursa IS NOT NULL
+studenti %&gt;% filter(an == 3 | !is.na(bursa))</code></pre>
+
+<h3 style="color:#1a56b8;">Operatorul LIKE → str_detect() (expresii regulate)</h3>
+<pre><code class="language-r"># WHERE nume LIKE '%escu'   (se termină cu "escu")
+studenti %&gt;% filter(str_detect(nume, "escu$"))
+
+# WHERE nume LIKE '%andr%'  (conţine "andr")
+studenti %&gt;% filter(str_detect(nume, "andr"))</code></pre>
+<p>În SQL <code>%</code> înseamnă "orice şir", iar <code>_</code> "un singur caracter"; în R, în expresiile regulate, echivalentele sunt <code>.*</code> respectiv <code>.</code> (sau ancorele <code>^</code> şi <code>$</code> pentru început/sfârşit).</p>
+
+<h3 style="color:#1a56b8;">Alţi operatori de comparare (IN, BETWEEN)</h3>
+<pre><code class="language-r"># WHERE prenume IN ('Adrian', 'Alex')
+studenti %&gt;% filter(prenume %in% c("Adrian", "Alex"))
+
+# WHERE an NOT IN (1, 2)
+studenti %&gt;% filter(!(an %in% c(1, 2)))
+
+# WHERE an BETWEEN 1 AND 3
+studenti %&gt;% filter(between(an, 1, 3))</code></pre>
+
+<h3 style="color:#1a56b8;">Ordonarea rezultatelor → arrange()</h3>
+<pre><code class="language-r"># ORDER BY an ASC
+studenti %&gt;% arrange(an)
+
+# ORDER BY an ASC, grupa DESC
+studenti %&gt;% arrange(an, desc(grupa))
+
+# WHERE an = 1 ORDER BY grupa ASC
+studenti %&gt;%
+  filter(an == 1) %&gt;%
+  arrange(grupa) %&gt;%
+  select(nume, prenume, grupa)</code></pre>
+
+<h3 style="color:#1a56b8;">Operatori pentru mulţimi (UNION, INTERSECT, EXCEPT)</h3>
+<pre><code class="language-r">a &lt;- studenti %&gt;% filter(an == 2) %&gt;% select(nume)
+b &lt;- studenti %&gt;% filter(an == 3) %&gt;% select(nume)
+
+# UNION
+union(a, b)
+# INTERSECT
+intersect(a, b)
+# EXCEPT (diferenţa de mulţimi)
+setdiff(a, b)
+# UNION ALL (păstrează duplicatele)
+bind_rows(a, b)</code></pre>
+</div>
+
 <h2> Exerciții </h2>
 <ol>
     <li> Scrieți o interogare pentru a afișa numele, prenumele, anul de studiu si data nașterii pentru toți studenții. Editați în Query Tool și executați. Salvați apoi interogarea intr-un fișier numit p1.sql.</li>
@@ -803,20 +885,6 @@
     <li> Afișați studenții bursieri din semianul A.</li>
     <li> Afișați toate informatiile despre studentii ale caror prenume contine EXACT o singura data litera 'a' (se ignora litera 'A' de la inceputul unor prenume).</li>
     <li> Afişaţi numele şi prenumele profesorilor a căror prenume se termină cu litera "n" (întrebare capcană)..</li>
-</ol>
-
-<h2>Exerciții extra</h2>
-<ol>
-    <li> Afișați toate cursurile (titlu și număr de credite) care au mai mult de 5 credite, ordonate descrescător după credite.</li>
-    <li> Afișați în mod unic anii de studiu în care există cursuri.</li>
-    <li> Afișați numele și prenumele studenților din grupa 'A1', ordonați alfabetic după nume.</li>
-    <li> Afișați studenții care au bursa între 250 și 400 (inclusiv), folosind operatorul <code>BETWEEN</code>.</li>
-    <li> Afișați cursurile al căror titlu conține cuvântul „Baze”.</li>
-    <li> Afișați numele profesorilor care au gradul didactic 'prof' sau 'conf', folosind operatorul <code>IN</code>.</li>
-    <li> Afișați studenții care NU sunt în grupele 'A1' și 'A2'.</li>
-    <li> Afișați numele, prenumele și bursa studenților bursieri, concatenând numele și prenumele într-o singură coloană numită „Student”.</li>
-    <li> Afișați valorile distincte ale notelor care apar în tabela <code>note</code>, ordonate crescător.</li>
-    <li> Afișați primii 5 studenți în ordine alfabetică a numelui (folosiți <code>ORDER BY</code> și <code>LIMIT</code>).</li>
 </ol>
 </div>
 
@@ -928,11 +996,7 @@
 
 
 
-    <p>Funcțiile care schimbă <span style="font-style:italic">case</span>-ul literelor (transformă textul în litere mici sau majuscule) sunt frecvent utilizate în clauza WHERE pentru a regăsi text:</p>
-    <ul>
-    <li>de exemplu, dacă dorim datele despre studentul Andrei şi nu avem garanţia formei în care a fost inserat prenumele (toate majuscule, doar prima literă etc.);</li>
-    <li>vom procesa atributul <i>prenume</i> aducându-l la forma dorită pentru testare.</li>
-    </ul>
+    <p>Funcțiile care schimbă <span style="font-style:italic">case</span>-ul literelor (transformă textul în litere mici sau în majuscule) sunt frecvent utilizate în clauza WHERE pentru a regăsi text. De exemplu, dacă dorim identificarea datelor despre studentul Andrei și nu avem garanția că prenumele acestuia a fost inserat în baza de date cu toate litere majuscule sau doar cu prima literă majusculă, vom procesa atributul <i>prenume</i> aducându-l la forma dorită pentru testare:</p>
 
     <pre><code class="language-sql">SELECT * FROM studenti WHERE prenume = 'ANDREI'; --returneaza 0 linii</code></pre>
     
@@ -953,12 +1017,7 @@
     <pre><code class="language-sql"> SELECT TRIM(BOTH '1' FROM '123Tech111'); -- elimina caracterele '1' de la inceput si de la sfarsit</code></pre>
     
     <h3>Funcţii pentru tipul DATE (date calendaristice)</h3>
-    <p>Despre formatul datelor calendaristice în PostgreSQL:</p>
-    <ul>
-    <li>formatul implicit pentru afişare este ISO, "YYYY-MM-DD" (ex: '2015-06-10');</li>
-    <li>constantele de tip dată se pot scrie ca literali tipaţi, de ex. <code>DATE '2015-06-10'</code>;</li>
-    <li>alternativ se foloseşte funcţia TO_DATE (descrisă mai jos), care specifică explicit formatul şirului introdus, evitând ambiguităţile.</li>
-    </ul>
+    <p>Formatul implicit pentru afişarea datelor calendaristice în PostgreSQL este ISO, "YYYY-MM-DD" (ex: '2015-06-10'). Constantele de tip dată se pot scrie ca literali tipaţi, de ex. <code>DATE '2015-06-10'</code>, sau folosind funcţia TO_DATE (descrisă mai jos) care specifică explicit formatul şirului introdus, evitând ambiguităţile.</p>
     
     
     <table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
@@ -1029,11 +1088,7 @@
     <pre><code class="language-sql"> SELECT (CURRENT_DATE - data_nastere)/365 FROM studenti;</code></pre>
     
     <h3>Funcţii de conversie</h3>
-    <p>Despre conversiile între tipuri în PostgreSQL:</p>
-    <ul>
-    <li>conversiile se fac explicit, fie cu funcţiile de mai jos, fie cu operatorul de cast <code>::tip</code> (de ex. <code>'123'::integer</code> sau <code>bursa::text</code>);</li>
-    <li>spre deosebire de alte sisteme, PostgreSQL nu converteşte automat un text într-un număr într-o expresie aritmetică.</li>
-    </ul>
+    <p>În PostgreSQL conversiile între tipuri se fac explicit, fie cu funcţiile de mai jos, fie cu operatorul de cast <code>::tip</code> (de ex. <code>'123'::integer</code> sau <code>bursa::text</code>). Spre deosebire de alte sisteme, PostgreSQL nu converteşte automat un text într-un număr într-o expresie aritmetică.</p>
 
     <p>Pentru conversii există funcţiile:</p>
     <table><tr><th>Functia</th><th>Descriere</th><th>Exemplu</th></tr>
@@ -1112,6 +1167,115 @@
 
     <pre><code class="language-sql">SELECT 100+COALESCE(bursa,0) FROM studenti;</code></pre>
     
+    <div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Aceleaşi funcţii linie în R (tidyverse)</h2>
+
+<p>Funcţiile linie din SQL se aplică element cu element pe o coloană; în R, funcţiile sunt deja "vectorizate" (se aplică automat fiecărui element al vectorului/coloanei), aşa că le folosim direct în <code>mutate()</code> sau <code>filter()</code>. Pentru şiruri folosim pachetul <code>stringr</code>, iar pentru date calendaristice pachetul <code>lubridate</code> (ambele incluse în <code>tidyverse</code>).</p>
+
+<pre><code class="language-r">library(tidyverse)
+library(lubridate)</code></pre>
+
+<h3 style="color:#1a56b8;">Funcţii numerice</h3>
+<pre><code class="language-r"># CEIL(51.3) / FLOOR(51.3)
+ceiling(51.3)            # 52
+floor(51.3)             # 51
+# ROUND(21.365, 2)
+round(21.365, 2)
+# TRUNC(21.365, 2)
+trunc(21.365 * 100) / 100
+# MOD(26, 11)
+26 %% 11
+# pe o coloană:
+note %&gt;% mutate(rotunjit = round(valoare, 1))</code></pre>
+
+<h3 style="color:#1a56b8;">Şiruri → numeric</h3>
+<pre><code class="language-r"># LENGTH('cuvant')
+str_length("cuvant")        # sau nchar("cuvant")
+# ASCII('A')
+utf8ToInt("A")[1]          # 65
+# POSITION('OR' IN 'CORPORATE') / STRPOS(...)
+str_locate("CORPORATE", "OR")[, "start"]
+profesori %&gt;% mutate(poz = str_locate(nume, "ra")[, "start"])</code></pre>
+
+<h3 style="color:#1a56b8;">Şiruri → şiruri</h3>
+<pre><code class="language-r"># INITCAP -> str_to_title ; UPPER/LOWER -> str_to_upper/str_to_lower
+str_to_title("prima litera majuscula")
+str_to_upper("Stefan")
+str_to_lower("LOWER")
+# REVERSE('OREZ')
+stringi::stri_reverse("OREZ")
+# CONCAT(nume, ' este student in anul ', an)
+studenti %&gt;% mutate(txt = str_c(nume, " este student in anul ", an))
+# SUBSTR('ABCDEFG', 3, 4)
+str_sub("ABCDEFG", 3, 3 + 4 - 1)        # "CDEF"
+# RPAD / LPAD
+str_pad("Pagina", 15, side = "right", pad = "*")
+str_pad("Pagina", 15, side = "left",  pad = "*")
+# TRIM / LTRIM / RTRIM
+str_trim("  test  ")            # ambele capete
+str_trim("  test  ", side = "left")
+# REPLACE('Andrei', 'i', 'ea')
+str_replace_all("Andrei", "i", "ea")
+# TRANSLATE(char, from, to)
+chartr("0123456789", "9999999999", "48KLM980")</code></pre>
+
+<p>La fel ca în SQL, aducerea textului la aceeaşi formă (case / trim) este utilă în filtrare:</p>
+<pre><code class="language-r"># WHERE UPPER(prenume) = 'ANDREI'
+studenti %&gt;% filter(str_to_upper(prenume) == "ANDREI")
+# WHERE TRIM(UPPER(nume)) = 'BREABAN'   (utile pentru coloane CHAR)
+profesori %&gt;% filter(str_to_upper(str_trim(nume)) == "BREABAN")</code></pre>
+
+<h3 style="color:#1a56b8;">Funcţii pentru date calendaristice</h3>
+<pre><code class="language-r"># CURRENT_DATE / NOW()
+Sys.Date()
+Sys.time()                  # sau lubridate::now()
+# AGE(d1, d2) -> diferenţa ca interval; nr. de luni:
+interval(ymd("2015-01-01"), ymd("2015-02-02")) %/% months(1)
+# data_nastere + INTERVAL '1 month'
+studenti %&gt;% mutate(luna_viitoare = data_nastere %m+% months(1))
+# CURRENT_DATE + 10  (adună 10 zile)
+Sys.Date() + 10
+# diferenţa a două date (în zile) / vârsta în ani
+studenti %&gt;% mutate(varsta = as.numeric(Sys.Date() - data_nastere) %/% 365)
+# EXTRACT(DOW FROM d) -> ziua săptămânii ; DATE_TRUNC('month', d)
+wday(ymd("2015-10-13"))          # ziua săptămânii
+floor_date(ymd("2016-10-27"), "month")   # prima zi a lunii
+# ultima zi din lună
+ceiling_date(Sys.Date(), "month") - days(1)</code></pre>
+
+<h3 style="color:#1a56b8;">Funcţii de conversie</h3>
+<pre><code class="language-r"># TO_CHAR(data, 'DD-MM-YYYY')   -> format()
+format(Sys.Date(), "%d-%m-%Y")
+# TO_CHAR(data_nastere, 'TMDay') -> ziua în română (cu locale setat)
+studenti %&gt;% mutate(zi = format(data_nastere, "%A"))
+# TO_DATE('January 26, 1996', 'Month DD YYYY')
+as.Date("January 26, 1996", format = "%B %d %Y")
+# TO_NUMBER('100.52', '9999.99')  /  '123'::integer
+as.numeric("100.52")
+as.integer("123")
+# CAST(expr AS VARCHAR) / expr::text
+as.character(Sys.time())</code></pre>
+
+<h3 style="color:#1a56b8;">Alte funcţii (COALESCE, NULLIF, CASE, LEAST/GREATEST)</h3>
+<pre><code class="language-r"># COALESCE(bursa, 0) -> prima valoare ne-NA
+studenti %&gt;% mutate(bursa = coalesce(bursa, 0))
+# NULLIF(expr1, expr2)
+na_if(x, 0)                  # returnează NA dacă x == 0
+# 100 + COALESCE(bursa, 0)
+studenti %&gt;% mutate(total = 100 + coalesce(bursa, 0))
+# CASE WHEN bursa = 450 THEN 'premiul 1' ... ELSE 'mentiune' END
+studenti %&gt;%
+  mutate(premiu = case_when(
+    bursa == 450 ~ "premiul 1",
+    bursa == 350 ~ "premiul 2",
+    bursa == 250 ~ "premiul 3",
+    TRUE         ~ "mentiune"
+  ))
+# LEAST / GREATEST  -> pmin / pmax (element cu element)
+pmin("Mihai", "Andrei", "Anca")
+pmax("Stefan", "Mihai", "Andrei", "Anca")</code></pre>
+</div>
+
     <h2>Exerciții</h2>
     <ol>
         <li> Scrieți o interogare pentru a afișa data de azi. Etichetați coloana "Astazi".</li>
@@ -1128,21 +1292,7 @@
         <li> Presupunând că în următoarea lună bursa de 450 RON se mărește cu 10%, cea de 350 RON cu 15% și cea de 250 RON cu 20%, afișați pentru fiecare student numele acestuia, data corespunzătoare primei zile din luna urmatoare și valoarea bursei pe care o va încasa luna următoare. Pentru cei care nu iau bursa, se va afisa valoarea 0.</li>
         <li> Pentru studentii bursieri (doar pentru ei) afisati numele studentului si bursa in stelute: fiecare steluta valoreaza 50 RON. In tabel, alineati stelutele la dreapta.</li>
     </ol>
-
-    <h2>Exerciții extra</h2>
-    <ol>
-        <li> Afișați numele fiecărui student scris integral cu litere mari (<code>UPPER</code>).</li>
-        <li> Afișați prenumele fiecărui student și numărul de caractere al acestuia (<code>LENGTH</code>).</li>
-        <li> Afișați pentru fiecare student primele 3 litere ale numelui (<code>SUBSTRING</code>).</li>
-        <li> Afișați bursa fiecărui student bursier rotunjită la cel mai apropiat întreg (<code>ROUND</code>).</li>
-        <li> Afișați anul nașterii fiecărui student folosind funcția <code>EXTRACT</code> aplicată pe <code>data_nastere</code>.</li>
-        <li> Afișați numele fiecărui profesor cu prima literă mare și restul mici (<code>INITCAP</code>), după eliminarea spațiilor de la capete (<code>TRIM</code>).</li>
-        <li> Afișați pentru fiecare notă valoarea și restul împărțirii acesteia la 2 (<code>MOD</code>), pentru a determina dacă nota este pară sau impară.</li>
-        <li> Afișați data curentă formatată ca 'DD-MM-YYYY' (<code>TO_CHAR</code>).</li>
-        <li> Afișați numele studenților în care litera 'a' este înlocuită cu '@' (<code>REPLACE</code>).</li>
-        <li> Afișați pentru fiecare student vârsta în ani împliniți la data curentă (<code>AGE</code> / <code>EXTRACT</code>).</li>
-    </ol>
-
+    
 </div>
 
 <div id="lab_lab4" class="lab-section" style="display:none">
@@ -1190,11 +1340,7 @@
 
 <h2>Joinul natural a două tabele</h2>
 
-<p>Înregistrările dintr-o tabelă își găsesc corespondentul în alte tabele printr-un atribut ce joacă rol de cheie străină, trimiţând la un atribut cu rol de identificare unică în tabela referenţiată. De exemplu, în tabela <i>note</i>:</p>
-<ul>
-<li>atributul <i>nr_matricol</i> identifică studentul din tabela <i>studenti</i>;</li>
-<li>atributul <i>id_curs</i> identifică înregistrarea corespunzătoare din tabelul <i>cursuri</i>.</li>
-</ul>
+<p>Înregistrările dintr-o tabelă își găsesc corespondentul în alt(e) tabel(e) prin intermediul unui atribut ce joacă rol de cheie străină trimițând la un atribut cu rol de cheie (proprietate de identificare unică) în tabela referențiată. De exemplu, în tabela <i>note</i> atributul <i>nr_matricol</i> are rolul de a identifica studentul din tabela <i>studenti</i> iar atributul <i>id_curs</i> identifică înregistrarea corespunzătoare din tabelul <i>cursuri</i>.</p>
 
 <p>Pentru a identifica notele unui anumit student nu este suficient să solicităm informația din ambele tabele - studenti si note (vezi exemplul anterior unde solicitând notele lui Andrei s-a realizat de fapt un produs cartezian conducând la un rezultat incorect), ci trebuie să specificăm și condiția de join - și anume atributul care joacă rol de cheie străină să fie egal cu atributul care joaca rol de identificare unică în tabelul referențiat:</p>
 
@@ -1202,13 +1348,7 @@
    --cate inregistrari au fost returnate? de ce?</code></pre>
 
 
-<p>Operaţia efectuată a fost <b>joinul intern</b> a două tabele:</p>
-<ul>
-<li>se păstrează în rezultat acele linii din produsul cartezian care satisfac condiţia impusă de clauza WHERE;</li>
-<li>pentru a-l înţelege, este util să priviţi joinul ca un produs cartezian urmat de selecţie;</li>
-<li>în realitate sistemul tratează operaţia cu unul dintre algoritmii dedicaţi joinului (care vor fi explicaţi la curs).</li>
-</ul>
-<p>Versiunea recomandată de standardul SQL utilizează explicit cuvintele cheie JOIN...ON:</p>
+<p>Operația care s-a efectuat a fost joinul intern a două tabele, păstrându-se în rezultat acele linii din produsul cartezian care satisfac condiția impusă de clauza WHERE (pentru a înțelege operația de join este util să priviți joinul ca un produs cartezian urmat de selecție; în realitate sistemul tratează operația cu unul dintre algoritmii dedicați joinului - care vor fi explicati la curs). Versiunea recomandată de standardul SQL utilizează explicit cuvintele cheie JOIN...ON, după cum urmează:</p>
 
 <pre><code class="language-sql">SELECT * FROM studenti JOIN note ON studenti.nr_matricol = note.nr_matricol ORDER BY nume;</code></pre>
 
@@ -1239,12 +1379,7 @@
 
 <pre><code class="language-sql">SELECT nume, prenume, valoare, nr_matricol FROM studenti NATURAL JOIN note  WHERE prenume='Ioana';</code></pre>
 
-<p>Despre prefixarea atributelor şi aliasuri:</p>
-<ul>
-<li>orice atribut al cărui nume se regăseşte în mai multe tabele referenţiate trebuie prefixat de numele tabelei (excepţie fac tabelele implicate în join natural);</li>
-<li>dacă numele tabelelor este incomod de repetat, le putem da aliasuri simple, specificate în clauza FROM imediat după numele tabelei;</li>
-<li>în acest caz, identificarea atributelor se face folosind aliasul ca prefix.</li>
-</ul>
+<p>Orice utilizare a unui atribut a cărui nume se regăsește în mai multe tabele referențiate în interogare trebuie prefixat de numele tabelei (exceptie fac tabelele implicate în join natural). Dacă însă numele tabelelor este incomod a fi repetat, putem să dăm aliasuri simple acestora - specificate în clauza FROM imediat dupa numele tabelei. Identificarea atributelor în acest caz se face utilizand aliasul ca și prefix:</p>
 
 <pre><code class="language-sql">SELECT nume, prenume, valoare, s.nr_matricol FROM studenti s JOIN note n ON s.nr_matricol = n.nr_matricol;</code></pre>
 
@@ -1265,12 +1400,7 @@
 
 <p>Sunt cazuri în care nu toate înregistrările dintr-o tabelă au corespondent în altă tabelă. În exemplul anterior, nu toți studenții au note. În cadrul joinului anterior s-a văzut cum înregistrările fără corespondent nu fac parte din mulțimea rezultat.</p>
 
-<p>La un join între tabelele studenţi şi note:</p>
-<ul>
-<li>există studenţi care nu au încă note (fiind primul semestru, sunt înscrişi la cursurile din anul întâi, dar nu au primit încă note);</li>
-<li>spunem că tabela note este <b>deficitară în informaţii</b>, deoarece nu conţine toate numerele matricole existente în tabela studenţi;</li>
-<li>dacă dorim ca în rezultat să se regăsească şi studenţii fără note, vom utiliza un <b>join extern</b>.</li>
-</ul>
+<p>In cazul în care se doreşte realizarea unui join între tabelele studenţi şi note, se poate observa că există studenţi care nu au încă note (fiind primul semestru, ei sunt înscrişi la cursurile din anul întâi dar nu au primit încă note). Spunem despre tabela note că este deficitară în informaţii deoarece nu conţine toate numerele matricole existente în tabela studenţi. Dacă se doreşte ca în rezultat să se regăsească şi studenţii fără note, se va utiliza un join extern.</p>
 
 <p>Joinul extern poate fi de mai multe tipuri: </p>
 
@@ -1302,12 +1432,7 @@
 
 
 <h2>Self-joinul - joinul unei tabele cu ea insăși</h2>
-<p>Despre <i>self-join</i> (joinul unei tabele cu ea însăşi):</p>
-<ul>
-<li>uneori modul în care e structurată informaţia ne pune în situaţia de a căuta corespondentul unor înregistrări chiar în acelaşi tabel (ex. determinarea colegilor de grupă pentru un student);</li>
-<li>oricând apelăm de două ori la un tabel într-o singură interogare, spunem că realizăm un <i>self-join</i>;</li>
-<li>tabela în cauză este apelată de două ori cu aliasuri distincte, ca şi când ar exista două instanţe identice ale aceluiaşi tabel.</li>
-</ul>
+<p>Uneori, modul în care este structurată informația în tabele ne pune în situația de a căuta corespondentul unor înregistrări chiar în același tabel. În cazul de față, un exemplu este determinarea colegilor de grupă pentru un anumit student. Oricând suntem în situația de a apela de două ori la un tabel într-o singură interogare, spunem că realizăm un <i>self-join</i>. În cazul unui self join tabela în cauză este apelată de două ori cu aliasuri distincte, ca și când ar exista două instanțe identice ale aceluiași tabel.</p>
 
 <p>Exemplu:</p>
 <pre><code class="language-sql">SELECT s.nume||' '||s.prenume||' este coleg cu '||colegi.nume||' '||colegi.prenume AS "Colegi de grupa" 
@@ -1317,6 +1442,71 @@
 
 
 <p>Cum eliminăm înregistrarea în care studentul apare coleg cu el însuși?</p>
+
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Aceleaşi join-uri în R (tidyverse)</h2>
+
+<p>În <code>dplyr</code> fiecare tip de join din SQL are un verb dedicat: <code>inner_join()</code>, <code>left_join()</code>, <code>right_join()</code>, <code>full_join()</code> şi <code>cross_join()</code>. Condiţia de join (clauza ON) se dă prin argumentul <code>by</code>. Spre deosebire de SQL, nu avem nevoie de aliasuri de tabel pentru a dezambiguiza coloanele: <code>dplyr</code> adaugă automat sufixe (ex. <code>.x</code> / <code>.y</code>) coloanelor cu acelaşi nume care nu fac parte din join.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Produsul cartezian (CROSS JOIN)</h3>
+<pre><code class="language-r"># SELECT * FROM studenti CROSS JOIN note
+studenti %&gt;% cross_join(note)
+# numărul de linii = nrow(studenti) * nrow(note)</code></pre>
+
+<h3 style="color:#1a56b8;">Join intern (JOIN ... ON)</h3>
+<pre><code class="language-r"># SELECT * FROM studenti JOIN note ON studenti.nr_matricol = note.nr_matricol
+#        ORDER BY nume
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  arrange(nume)
+
+# join + filtrare:  WHERE prenume = 'Ioana'
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  filter(prenume == "Ioana") %&gt;%
+  select(nume, prenume, valoare)</code></pre>
+
+<p>Joinul "natural" din SQL (egalitate pe coloanele cu acelaşi nume) este chiar comportamentul implicit al lui <code>dplyr</code> când omiţi argumentul <code>by</code> - se uneşte automat pe toate coloanele comune:</p>
+<pre><code class="language-r"># SELECT nume, prenume, valoare FROM studenti NATURAL JOIN note WHERE prenume = 'Ioana'
+studenti %&gt;%
+  inner_join(note) %&gt;%             # by = coloanele comune (aici nr_matricol)
+  filter(prenume == "Ioana") %&gt;%
+  select(nume, prenume, valoare)</code></pre>
+
+<h3 style="color:#1a56b8;">Join extern (LEFT / RIGHT / FULL OUTER JOIN)</h3>
+<pre><code class="language-r"># LEFT OUTER JOIN: toţi studenţii, chiar şi cei fără note
+studenti %&gt;%
+  left_join(note, by = "nr_matricol") %&gt;%
+  distinct(nume)
+
+# RIGHT OUTER JOIN
+note %&gt;% right_join(studenti, by = "nr_matricol")
+
+# FULL OUTER JOIN
+studenti %&gt;% full_join(note, by = "nr_matricol")</code></pre>
+<p>Înregistrările fără corespondent primesc <code>NA</code> pe coloanele celeilalte tabele - exact ca valoarea NULL din SQL.</p>
+
+<h3 style="color:#1a56b8;">Joinul mai multor tabele</h3>
+<pre><code class="language-r"># studenti JOIN note JOIN cursuri
+studenti %&gt;%
+  inner_join(note,    by = "nr_matricol") %&gt;%
+  inner_join(cursuri, by = "id_curs") %&gt;%
+  select(nume, prenume, titlu_curs, valoare)</code></pre>
+
+<h3 style="color:#1a56b8;">Self-join (joinul unei tabele cu ea însăşi)</h3>
+<pre><code class="language-r"># colegii de grupă ai lui Andrei
+# SELECT s.nume, colegi.nume FROM studenti s JOIN studenti colegi
+#        ON s.grupa = colegi.grupa AND s.an = colegi.an WHERE s.prenume = 'Andrei'
+studenti %&gt;%
+  inner_join(studenti, by = c("grupa", "an"),
+             suffix = c("", "_coleg")) %&gt;%
+  filter(prenume == "Andrei",
+         nr_matricol != nr_matricol_coleg) %&gt;%   # elimină studentul comparat cu el însuşi
+  transmute(coleg = str_c(nume, " ", prenume,
+                          " este coleg cu ", nume_coleg, " ", prenume_coleg))</code></pre>
+</div>
 
 <h2>Exerciții</h2>
 <ol>
@@ -1336,22 +1526,8 @@
    <li>Afișați numele studenților care au toate notele mai mari ca 7 sau egale cu 7.</li> 
    <li>Să se afișeze studenții care au luat nota 7 sau nota 10 la OOP într-o zi de marți.</li> 
    <li>O sesiune este identificată prin luna și anul în care a fost ținută. Scrieți numele și prenumele studenților ce au promovat o anumită materie, cu notele luate de aceștia și sesiunea în care a fost promovată materia. Formatul ce identifică sesiunea este "LUNA, AN", fără alte spații suplimentare (De ex. "JUNE, 2015" sau "FEBRUARY, 2014"). În cazul în care luna în care s-a ținut sesiunea a avut mai puțin de 30 de zile, afișați simbolul "+" pe o coloană suplimentară, indicând faptul că acea sesiune a fost mai grea (având mai puține zile), în caz contrar (când luna are mai mult de 29 de zile) valoarea coloanei va fi null.</li>
-</ol>
-
-<h2>Exerciții extra</h2>
-<ol>
-    <li> Afișați numele studenților împreună cu titlul cursurilor la care au note (join <code>studenti</code> - <code>note</code> - <code>cursuri</code>).</li>
-    <li> Afișați fiecare notă împreună cu numele studentului și titlul cursului corespunzător.</li>
-    <li> Afișați profesorii împreună cu titlurile cursurilor pe care le predau (join <code>profesori</code> - <code>didactic</code> - <code>cursuri</code>).</li>
-    <li> Afișați toți studenții și notele lor, inclusiv studenții care nu au nicio notă (<code>LEFT JOIN</code>).</li>
-    <li> Afișați cursurile care nu au fost predate de niciun profesor (<code>LEFT JOIN</code> / <code>RIGHT JOIN</code> + <code>IS NULL</code>).</li>
-    <li> Afișați numele studenților și numele profesorilor de la care au primit note (join prin <code>note</code> - <code>didactic</code> - <code>profesori</code>).</li>
-    <li> Folosind un self-join, afișați perechile de studenți din aceeași grupă, fără a asocia un student cu el însuși.</li>
-    <li> Afișați titlul fiecărui curs și anul acestuia, alături de numele profesorului care îl predă, folosind alias de tabele.</li>
-    <li> Afișați toți profesorii și toate cursurile (<code>FULL OUTER JOIN</code>), indiferent dacă există asociere între ele.</li>
-    <li> Afișați numele studenților care au luat nota 10, împreună cu materia la care au luat-o.</li>
-</ol>
-
+</ol>  
+    
 </div>
 
 <div id="lab_lab5" class="lab-section" style="display:none">
@@ -1513,6 +1689,74 @@
 
 <pre><code class="language-sql">SELECT id_curs, COUNT(valoare) FROM note GROUP BY id_curs HAVING COUNT(valoare)>8; --Cate grupuri? De ce?</code></pre>
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Agregare şi grupare în R (tidyverse)</h2>
+
+<p>Funcţiile de agregare din SQL se calculează în R cu <code>summarise()</code>, care reduce mai multe linii la una singură. Gruparea (GROUP BY) se face cu <code>group_by()</code> înainte de <code>summarise()</code>, iar filtrarea grupurilor (HAVING) cu un <code>filter()</code> aplicat <i>după</i> agregare. Atenţie: la fel ca în SQL, funcţiile de agregare ignoră valorile lipsă - în R asta se obţine cu <code>na.rm = TRUE</code>.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Funcţiile de agregare SQL ↔ R</h3>
+<table>
+   <tr><th>SQL</th><th>R (în summarise)</th></tr>
+   <tr><td>COUNT(*)</td><td><code>n()</code></td></tr>
+   <tr><td>COUNT(bursa)</td><td><code>sum(!is.na(bursa))</code></td></tr>
+   <tr><td>COUNT(DISTINCT bursa)</td><td><code>n_distinct(bursa)</code></td></tr>
+   <tr><td>AVG(valoare)</td><td><code>mean(valoare, na.rm = TRUE)</code></td></tr>
+   <tr><td>MAX / MIN</td><td><code>max(...) / min(...)</code></td></tr>
+   <tr><td>SUM(bursa)</td><td><code>sum(bursa, na.rm = TRUE)</code></td></tr>
+   <tr><td>STDDEV / VARIANCE</td><td><code>sd(...) / var(...)</code></td></tr>
+</table>
+
+<h3 style="color:#1a56b8;">Agregare pe tot tabelul (fără grupare)</h3>
+<pre><code class="language-r"># SELECT COUNT(*) AS total_studenti FROM studenti
+studenti %&gt;% summarise(total_studenti = n())
+
+# SELECT AVG(valoare) FROM note
+note %&gt;% summarise(media = mean(valoare, na.rm = TRUE))
+
+# SELECT MAX(bursa), MIN(bursa), SUM(bursa) FROM studenti
+studenti %&gt;% summarise(
+  maxim = max(bursa, na.rm = TRUE),
+  minim = min(bursa, na.rm = TRUE),
+  total = sum(bursa, na.rm = TRUE)
+)</code></pre>
+
+<h3 style="color:#1a56b8;">Gruparea datelor (GROUP BY)</h3>
+<pre><code class="language-r"># SELECT MAX(valoare) FROM note GROUP BY nr_matricol
+note %&gt;%
+  group_by(nr_matricol) %&gt;%
+  summarise(nota_max = max(valoare, na.rm = TRUE))
+
+# SELECT an, COUNT(*) FROM cursuri GROUP BY an
+cursuri %&gt;%
+  group_by(an) %&gt;%
+  summarise(nr = n())
+
+# grupare pe mai multe atribute + ordonare
+# SELECT an, credite, COUNT(*) FROM cursuri GROUP BY an, credite ORDER BY an, credite
+cursuri %&gt;%
+  group_by(an, credite) %&gt;%
+  summarise(nr = n(), .groups = "drop") %&gt;%
+  arrange(an, credite)</code></pre>
+
+<h3 style="color:#1a56b8;">Filtrarea grupurilor (WHERE vs HAVING)</h3>
+<pre><code class="language-r"># WHERE: filtrează liniile ÎNAINTE de grupare
+# SELECT id_curs, COUNT(valoare) FROM note WHERE valoare > 8 GROUP BY id_curs
+note %&gt;%
+  filter(valoare &gt; 8) %&gt;%
+  group_by(id_curs) %&gt;%
+  summarise(nr = sum(!is.na(valoare)))
+
+# HAVING: filtrează grupurile DUPĂ agregare
+# SELECT id_curs, COUNT(valoare) FROM note GROUP BY id_curs HAVING COUNT(valoare) > 8
+note %&gt;%
+  group_by(id_curs) %&gt;%
+  summarise(nr = sum(!is.na(valoare))) %&gt;%
+  filter(nr &gt; 8)</code></pre>
+<p>Regula de aur se vede clar în R: <code>filter()</code> înainte de <code>group_by()</code> = WHERE, iar <code>filter()</code> după <code>summarise()</code> = HAVING.</p>
+</div>
+
 <h2>Exerciții</h2>
 <ol>
     <li>Afișați numărul de studenți din fiecare an.</li>
@@ -1538,20 +1782,6 @@
     <!--li>Pentru fiecare student afișați media lui. Studenții care sunt în anul 1 și nu au încă medii vor avea valoarea NULL în acest câmp. (fără subinterogări) </li-->
 </ol>
 
-<h2>Exerciții extra</h2>
-<ol>
-    <li> Afișați numărul total de studenți din tabela <code>studenti</code>.</li>
-    <li> Afișați media generală a tuturor notelor din baza de date.</li>
-    <li> Afișați pentru fiecare grupă numărul de studenți (<code>GROUP BY grupa</code>).</li>
-    <li> Afișați pentru fiecare curs media notelor (<code>GROUP BY id_curs</code>).</li>
-    <li> Afișați bursa minimă, maximă și medie a studenților bursieri.</li>
-    <li> Afișați grupele care au mai mult de 3 studenți (<code>HAVING</code>).</li>
-    <li> Afișați pentru fiecare an de studiu numărul de studenți și valoarea totală a burselor acordate.</li>
-    <li> Afișați cursurile la care media notelor este mai mare decât 8 (<code>GROUP BY</code> + <code>HAVING</code>).</li>
-    <li> Afișați numărul de note distincte acordate la fiecare curs.</li>
-    <li> Afișați profesorul (<code>id_prof</code>) care predă cele mai multe cursuri (<code>GROUP BY</code> + <code>ORDER BY</code> + <code>LIMIT</code>).</li>
-</ol>
-
 <p><!--</p>
 <p>Tematica: </p>
 <p># operatori în algebra relațională</p>
@@ -1572,15 +1802,19 @@
 <h2 class="lab-title">Laborator 7</h2>
 <h2>Subinterogări necorelate</h2>
 
-<p>Caracteristicile subinterogărilor necorelate:</p>
-<ul>
-    <li>sunt fraze SELECT încorporate în clauzele WHERE, HAVING şi FROM ale altei fraze SELECT (foarte rar se pot întâlni şi în ORDER BY sau SELECT);</li>
-    <li>se mai numesc <i>interogarea interioară</i> sau <i>interogarea imbricată</i>;</li>
-    <li>se execută o singură dată, înaintea <i>interogării exterioare</i>, care îi foloseşte rezultatul în general pentru a filtra;</li>
-    <li>au rolul de a extrage valori din baza de date ce vor servi ulterior la filtrarea altor înregistrări;</li>
-    <li>trebuie delimitate de fiecare dată de paranteze;</li>
-    <li>pot apărea doar în partea din dreapta a operatorului de comparaţie.</li>
-</ul>
+<p>Subinterogările necorelate sunt fraze SELECT încorporate în 
+    clauzele WHERE, HAVING și FROM ale unei interogări (foarte 
+    foarte rar se pot intalni in ORDER BY sau in SELECT), adica 
+    ale altei fraze SELECT. Subinterogarea necorelată (denumită 
+    și <i>interogarea interioară</i> sau <i>interogarea imbricată</i>) 
+    se execută o singură dată, înaintea <i>interogării exterioare</i>, 
+    cea din urmă utilizând rezultatul subinterogării în general 
+    pentru a filtra. </p>
+
+<p>Subinterogarea are în general rolul de extrage valori din 
+    baza de date care ulterior vor servi la filtrarea altor înregistrări. 
+    Subinterogarea trebuie delimitata de fiecare data de paranteze si 
+    poate sa apară doar în partea din dreapta a operatorului de comparatie.</p>
 
 <p>Sintaxa este următoarea:</p>
 <pre><code class="language-sql">SELECT ...
@@ -1615,11 +1849,10 @@
 --ce returneaza interogarea de mai sus?
 </code></pre>
 
-<p>În funcţie de numărul de linii returnate de subinterogare, operatorul diferă:</p>
-<ul>
-    <li>o singură linie rezultat &rarr; operator standard: &gt;, =, &gt;=, &lt;, &lt;&gt;, &lt;=;</li>
-    <li>mai multe linii rezultat &rarr; operatori specifici: IN, ALL, ANY, SOME.</li>
-</ul>
+<p>Dacă subinterogarea returnează o singură linie rezultat, 
+    operatorul poate fi unul standard precum &gt;, =, &gt;=, &lt;, &lt;&gt;, &lt;=. 
+    Dacă subinterogarea returnează mai multe linii rezultat se utilizează operatori 
+    specifici precum IN, ALL, ANY, SOME.</p>
 
 <p>Într-o interogare pot fi utilizate si mai multe subinterogări:</p>
 <pre><code class="language-sql">SELECT DISTINCT nume, prenume
@@ -1656,11 +1889,10 @@
     specific ar fi <i>"Care sunt primii trei studenți în ordinea
         descrescătoare a mediilor?"</i></p>
 
-<p>În PostgreSQL limitarea numărului de linii se face astfel:</p>
-<ul>
-    <li>clauza <b>LIMIT n</b> (sau, echivalent şi conform standardului SQL, <b>FETCH FIRST n ROWS ONLY</b>), scrisă la finalul interogării;</li>
-    <li>opţional, clauza <b>OFFSET m</b> sare peste primele m linii.</li>
-</ul>
+<p>În PostgreSQL limitarea numărului de linii se face cu clauza
+    <b>LIMIT n</b> (sau, echivalent şi conform standardului SQL,
+    <b>FETCH FIRST n ROWS ONLY</b>), scrisă la finalul interogării.
+    Opţional, clauza <b>OFFSET m</b> sare peste primele m linii.</p>
 
 <p>Spre deosebire de filtrarea din clauza WHERE, clauza LIMIT se aplică
     <u>după</u> ce întreaga interogare a fost procesată şi ordonată.
@@ -1696,6 +1928,69 @@
     intr-o ordonare prin intermediul cuvintelor cheie "NULLS FIRST"
     sau "NULLS LAST" scrise dupa clauza ORDER BY.</p>
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Subinterogări şi LIMIT în R (tidyverse)</h2>
+
+<p>O subinterogare necorelată se execută o singură dată şi produce o valoare (sau o listă de valori) folosită apoi la filtrare. În R o traducem natural: calculăm întâi rezultatul "interior" şi îl stocăm într-o variabilă, apoi îl folosim în <code>filter()</code>. Pentru apartenenţa la o mulţime de valori folosim <code>%in%</code> (echivalentul lui IN), iar pentru subinterogări pe mai multe coloane folosim <code>semi_join()</code>.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare cu IN</h3>
+<pre><code class="language-r"># SELECT nume, prenume FROM studenti
+#   WHERE nr_matricol IN (SELECT nr_matricol FROM note WHERE valoare = 10)
+matricole_de_10 &lt;- note %&gt;%
+  filter(valoare == 10) %&gt;%
+  pull(nr_matricol)
+
+studenti %&gt;%
+  filter(nr_matricol %in% matricole_de_10) %&gt;%
+  arrange(nume, prenume) %&gt;%
+  select(nume, prenume)</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare cu operator scalar (&gt;, =)</h3>
+<pre><code class="language-r"># ... WHERE valoare > (SELECT MAX(valoare) ... WHERE nume = 'Archip')
+prag &lt;- studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  filter(nume == "Archip") %&gt;%
+  summarise(m = max(valoare, na.rm = TRUE)) %&gt;%
+  pull(m)
+
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  filter(valoare &gt; prag) %&gt;%
+  distinct(nume, prenume) %&gt;%
+  arrange(nume, prenume)</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare pe mai multe coloane → semi_join()</h3>
+<pre><code class="language-r"># ... WHERE (grupa, an, valoare) IN
+#       (SELECT grupa, an, MAX(valoare) ... GROUP BY grupa, an)
+maxime &lt;- studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  group_by(grupa, an) %&gt;%
+  summarise(valoare = max(valoare, na.rm = TRUE), .groups = "drop")
+
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  semi_join(maxime, by = c("grupa", "an", "valoare")) %&gt;%
+  distinct(an, grupa, nume, prenume, valoare) %&gt;%
+  arrange(an, grupa)</code></pre>
+<p><code>semi_join()</code> păstrează din stânga doar liniile care au corespondent în dreapta - exact ca un IN pe tuplu. (Complementul, <code>anti_join()</code>, corespunde lui NOT IN.)</p>
+
+<h3 style="color:#1a56b8;">LIMIT şi OFFSET → slice_head() / slice()</h3>
+<pre><code class="language-r"># SELECT * FROM studenti ORDER BY nume, prenume LIMIT 3
+studenti %&gt;%
+  arrange(nume, prenume) %&gt;%
+  slice_head(n = 3)
+
+# LIMIT 3 OFFSET 3  (sări peste primii 3, ia următorii 3)
+studenti %&gt;%
+  arrange(nume, prenume) %&gt;%
+  slice(4:6)
+
+# top n direct după o valoare (ex. primii 3 după bursă)
+studenti %&gt;% slice_max(bursa, n = 3)</code></pre>
+</div>
+
 <h2>Exerciții</h2>
 <ol>
     <li>Afișați numele studenților care iau cea mai mare bursa acordată.</li>
@@ -1710,20 +2005,6 @@
     <li>Afișați studenții care au notă maximă la o materie precum și nota și materia respectivă.</li>
 </ol>
 
-<h2>Exerciții extra</h2>
-<ol>
-    <li> Afișați studenții care au bursa mai mare decât bursa medie (subinterogare necorelată).</li>
-    <li> Afișați numele studenților care au luat nota maximă din baza de date.</li>
-    <li> Afișați cursurile care au numărul de credite egal cu numărul maxim de credite.</li>
-    <li> Afișați studenții care au cel puțin o notă (folosind <code>IN</code> cu o subinterogare pe tabela <code>note</code>).</li>
-    <li> Afișați studenții care nu au nicio notă (<code>NOT IN</code> cu o subinterogare).</li>
-    <li> Afișați al doilea cel mai mare nivel de bursă din tabela <code>studenti</code> (<code>LIMIT</code> + <code>OFFSET</code>).</li>
-    <li> Afișați profesorii care predau cursuri din anul 1 (subinterogare cu <code>IN</code> pe <code>didactic</code> / <code>cursuri</code>).</li>
-    <li> Afișați studenții care au bursa egală cu bursa minimă (subinterogare).</li>
-    <li> Afișați cursurile a căror medie de note depășește media generală a tuturor notelor.</li>
-    <li> Afișați a treia cea mai recentă dată de notare (<code>data_notare</code>) folosind <code>ORDER BY</code> + <code>LIMIT</code> + <code>OFFSET</code>.</li>
-</ol>
-
 <!--</p>
 <p>Tematică: Proiectarea bazelor de date. Normalizare</p>
 
@@ -1735,10 +2016,9 @@
 
 <div id="lab_lab8" class="lab-section" style="display:none">
 <h2 class="lab-title">Laborator 8</h2>
-<ul>
-<li>în această săptămână se recomandă studiul individual acasă (deoarece este săptămâna în care se fac evaluări);</li>
-<li>deşi nu vom face evaluări la materia Baze de Date, ne dorim să vă consolidaţi cunoştinţele acumulate până acum.</li>
-</ul>
+<p>In aceasta saptamana se recomanda studiul individual acasa (deoarece este 
+saptamana in care se fac evaluari). Desi nu vom face evaluari la materia Baze de Date, 
+ne dorim sa va consolidati cunostintele acumulate pana acum.</p>
 
 </div>
 
@@ -1791,19 +2071,21 @@ Această medie a putut fi obţinută numai din subinterogarea în care am ţinut
 cont că media trebuie să fie calculată doar pentru anul 3 (în interogarea 
 interioară am utilizat utilizat valoarea s1.an). </p>
 
-<p>A doua procesare se face (să presupunem) pentru studentul Pintescu Andrei, care este în anul 1:</p>
-<ul>
-<li>el nu apare în rezultatul final deoarece bursa lui este 250, în timp ce media burselor studenţilor din anul său este 300;</li>
-<li>este important de reţinut că subinterogarea se execută chiar şi pentru rândurile care nu sunt afişate;</li>
-<li>acestea nu sunt afişate tocmai pentru că valoarea returnată de subinterogare nu satisface condiţia din clauza WHERE.</li>
-</ul>
+<p>A doua procesare poate este facuta pentru studentul Pintescu Andrei 
+(sa presupunem) care este in anul 1. El nu apare in rezultatul final deoarece 
+bursa lui este de 250 in timp ce media burselor studentilor din anul sau este 
+300. Este important sa retinem ca subinterogarea este executata chiar si 
+pentru randurile care nu sunt afisate - acestea nefiind afisate tocmai din 
+cauza ca valoarea returnata de subinterogare nu satisface conditia din clauza WHERE.</p>
 
-<p>Linia următoare este pentru un student din anul 2:</p>
-<ul>
-<li>deoarece puţin mai înainte subinterogarea a întors media burselor studenţilor din anul 1, aceasta trebuie recalculată pentru anul 2 - deci subinterogarea va fi executată din nou;</li>
-<li>procesul continuă: pentru fiecare linie ce ar putea fi returnată de interogarea principală se calculează media studenţilor din acelaşi an cu studentul din linia curentă;</li>
-<li>linia curentă este apoi filtrată după criteriul stabilit (sunt considerate doar liniile în care bursa este mai mare sau egală cu această medie).</li>
-</ul>
+<p>Linia următoare este pentru un student din anul 2. Deoarece puţin 
+mai înainte subinterogarea a întors media burselor studenţilor din anul 1, 
+aceasta trebuie recalculată pentru studenţii din anul 2 - deci subinterogarea 
+va fi executată din nou. Procesul continuă şi, pentru fiecare linie ce ar 
+putea fi returnată în cadrul interogării principale, este calculată media 
+studenţilor din acelaşi an cu studentul din linia curentă. Linia curentă este 
+apoi filtrată în funcţie de criteriul stabilit (vor fi considerate doar liniile 
+în care bursa este mai mare sau egală cu această medie).</p>
 
 
 <p>În cazul interogărilor corelate, interogarea principală preia unul câte 
@@ -1820,12 +2102,14 @@ aceasta utilizează valoarea unei coloane din interogarea principală.</p>
 
 <h3>EXISTS</h3>
 
-<p>Uneori nu ne interesează valoarea returnată de subinterogare, ci doar dacă aceasta returnează măcar un rând. Spre exemplu, să afişăm toţi studenţii care au în grupă măcar un bursier:</p>
-<ul>
-<li>grupa este identificată atât prin an, cât şi prin grupă, deci ambele câmpuri vor fi utilizate în subinterogare;</li>
-<li>în subinterogare selectăm <code>count(*)</code> şi cerem ca valoarea să fie strict mai mare ca 0;</li>
-<li>dacă subinterogarea returnează măcar un rând, înseamnă că studentul din rândul curent are în grupă măcar un bursier.</li>
-</ul>
+<p>Uneori, nu ne interesează efectiv valoarea returnată de subinterogare ci 
+doar dacă aceasta returnează măcar un rând. Spre exemplu, am putea fi 
+interesaţi să afişăm toţi studenţii care au în grupă măcar un bursier. 
+Deoarece grupa este identificată atât prin an cât şi prin grupă, ambele 
+câmpuri vor fi utilizate în subinterogare. Dacă subinterogarea returnează 
+măcar un rând (de fapt, în subinterogare vom selecta count(*) şi vom ţine 
+cont ca valoarea să fie strict mai mare ca 0) atunci înseamnă că studentul 
+din rândul curent are în grupă măcar un bursier:</p>
 
 <pre><code class="language-sql"> SELECT nume, prenume, bursa, grupa, an 
     FROM studenti s1 
@@ -1838,11 +2122,12 @@ aceasta utilizează valoarea unei coloane din interogarea principală.</p>
         ) > 0;
 </code></pre> 
 
-<p>Operaţia count în acest caz este destul de costisitoare:</p>
-<ul>
-<li>chiar dacă s-a găsit deja un student bursier, tabelul studenti este parcurs în continuare pentru a-i găsi şi pe ceilalţi studenţi din aceeaşi grupă care au bursă;</li>
-<li>de fapt nu ne interesează dacă numărarea returnează 1, 2 sau mai mulţi bursieri în aceeaşi grupă, ci doar că acolo există măcar unul.</li>
-</ul>
+<p>Operaţia count în acest caz este destul de costisitoare: chiar dacă 
+s-a găsit că există un student bursier, tabelul studenti este parcurs 
+în continuare de către subinterogare pentru a-i găsi şi pe alţi eventuali 
+studenţi care sunt în aceeaşi grupă şi au bursă). Cu alte cuvinte, nu ne 
+interesează foarte tare dacă operaţia de numărare returnează 1,2 sau mai 
+mulţi bursieri aflaţi în aceeaşi grupă ci doar că acolo există măcar unul. </p>
 
 
 <p>Un operator important în cazul interogărilor corelate este operatorul 
@@ -1864,12 +2149,11 @@ până când se găseşte primul student bursier. În acel moment, condiţia est
 îndeplinită şi nu se încearcă numărarea tuturor studenţilor ce au bursă în 
 acea grupă ci se va trece la următoarea linie din interogarea principală.</p>
 
-<p>În versiunile anterioare, subinterogările erau materializate chiar şi în cazul lui EXISTS:</p>
-<ul>
-<li>acest lucru înseamnă că efectiv erau întoarse rânduri de către subinterogare;</li>
-<li>pentru a evita accesul la HDD, ca optimizare, se putea cere altceva decât rânduri efective din tabel;</li>
-<li>spre exemplu, în locul informaţiei se putea trece o constantă:</li>
-</ul>
+<p>În versiunile anterioare, subinterogările erau materializate chiar şi 
+în cazul lui EXISTS. Acest lucru înseamnă că efectiv erau intoarse randuri 
+de către subinterogare. Pentru a se evita accesul la HDD, ca şi optimizare, 
+se putea cere altceva decât randuri efective din tabel. Spre exemplu, în 
+locul informaţiei se putea trece o constanta:</p>
 
 <pre><code class="language-sql"> SELECT nume, prenume, bursa, grupa, an 
      FROM studenti s1 
@@ -1892,6 +2176,51 @@ cât timp este executată subinterogarea ? Când se iese din subinterogare ?</p>
 
 
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Subinterogări corelate şi EXISTS în R (tidyverse)</h2>
+
+<p>O subinterogare corelată recalculează ceva "per grup" (ex. media burselor din anul fiecărui student) şi compară fiecare linie cu acel rezultat. În SQL asta cere o subinterogare reexecutată rând cu rând; în R devine surprinzător de simplu: <code>group_by()</code> urmat de un <code>filter()</code> care foloseşte o funcţie de agregare. Într-un <code>filter()</code> aplicat pe grupuri, <code>mean(bursa)</code> se calculează separat pentru fiecare grup, exact ca subinterogarea corelată.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare necorelată (o singură valoare globală)</h3>
+<pre><code class="language-r"># SELECT * FROM studenti NATURAL JOIN note
+#   WHERE valoare >= (SELECT ROUND(AVG(valoare)) FROM note)
+studenti %&gt;%
+  inner_join(note, by = "nr_matricol") %&gt;%
+  filter(valoare &gt;= round(mean(note$valoare, na.rm = TRUE)))</code></pre>
+
+<h3 style="color:#1a56b8;">Subinterogare corelată → group_by() + filter()</h3>
+<pre><code class="language-r"># SELECT nume, prenume, bursa, an FROM studenti s1
+#   WHERE bursa >= (SELECT AVG(bursa) FROM studenti s2
+#                   GROUP BY an HAVING s1.an = s2.an)
+studenti %&gt;%
+  group_by(an) %&gt;%                       # corelarea pe an
+  filter(bursa &gt;= mean(bursa, na.rm = TRUE)) %&gt;%
+  ungroup() %&gt;%
+  select(nume, prenume, bursa, an)</code></pre>
+<p>Aici <code>mean(bursa)</code> se evaluează independent pentru fiecare an - exact ce făcea subinterogarea reexecutată pentru fiecare student.</p>
+
+<h3 style="color:#1a56b8;">EXISTS → "există măcar unul în grup" cu any()</h3>
+<pre><code class="language-r"># studenţii care au în grupă (an + grupa) măcar un bursier
+# WHERE EXISTS (SELECT 1 FROM studenti s2
+#               WHERE bursa IS NOT NULL AND s1.an = s2.an AND s1.grupa = s2.grupa)
+studenti %&gt;%
+  group_by(an, grupa) %&gt;%
+  filter(any(!is.na(bursa))) %&gt;%        # any() = "există măcar unul"
+  ungroup() %&gt;%
+  select(nume, prenume, bursa, grupa, an)</code></pre>
+
+<h3 style="color:#1a56b8;">NOT EXISTS → niciunul în grup</h3>
+<pre><code class="language-r"># grupele în care NU există niciun bursier
+studenti %&gt;%
+  group_by(an, grupa) %&gt;%
+  filter(all(is.na(bursa))) %&gt;%         # echivalent cu !any(!is.na(bursa))
+  ungroup()</code></pre>
+
+<p>Pentru EXISTS între tabele diferite (nu pe grupuri), echivalentele sunt <code>semi_join()</code> (EXISTS) şi <code>anti_join()</code> (NOT EXISTS), prezentate la laboratorul 7.</p>
+</div>
+
 <h3>Exerciţii</h3>
 <ol>
    <li>Afişaţi toţi studenţii care au în an cu ei măcar un coleg care să fie mai mare ca ei (vezi data naşterii). Atentie, un student s1 este mai mare daca are data_nastere mai mica decat celalat student s2.</li>
@@ -1904,33 +2233,16 @@ cât timp este executată subinterogarea ? Când se iese din subinterogare ?</p>
    <li>Afișați cursurile care au cel mai mare număr de credite din fiecare an (pot exista și mai multe pe an). - Rezolvati acest exercițiu și corelat și necorelat (se poate în ambele moduri). Care variantă este mai eficientă ?</li>
 </ol>   
 
-<h3>Exerciții extra</h3>
-<ol>
-   <li> Afișați studenții care au cel puțin o notă mai mare ca 8, folosind <code>EXISTS</code>.</li>
-   <li> Afișați studenții care nu au nicio notă, folosind <code>NOT EXISTS</code>.</li>
-   <li> Afișați pentru fiecare student nota maximă pe care a obținut-o, folosind o subinterogare corelată.</li>
-   <li> Afișați cursurile la care există cel puțin un student care a luat nota 10 (<code>EXISTS</code>).</li>
-   <li> Afișați profesorii care predau cel puțin un curs (<code>EXISTS</code> pe <code>didactic</code>).</li>
-   <li> Afișați studenții care au bursa mai mare decât media burselor din grupa lor (subinterogare corelată pe grupă).</li>
-   <li> Afișați cursurile la care nu s-a pus nicio notă (<code>NOT EXISTS</code>).</li>
-   <li> Afișați studenții care au luat cel puțin o notă mai mare decât media propriilor note.</li>
-   <li> Afișați profesorii care nu predau niciun curs (<code>NOT EXISTS</code> pe <code>didactic</code>).</li>
-   <li> Afișați pentru fiecare grupă studentul cu cea mai mare bursă (subinterogare corelată).</li>
-</ol>
-
 </div>
 
 <div id="lab_lab10" class="lab-section" style="display:none">
 <h2 class="lab-title">Laborator 10</h2>
 <h2>Variabile în psql</h2>
 
-<p>Variabilele au rolul de a refolosi aceeaşi interogare cu valori diferite. Ele pot suplini:</p>
-<ul>
-  <li>constante;</li>
-  <li>condiţii utilizate în clauza WHERE;</li>
-  <li>nume de câmpuri utilizate în clauza ORDER BY;</li>
-  <li>nume de tabele sau chiar întregi fraze SELECT.</li>
-</ul>
+<p>Variabilele au rolul de a suplini constante,
+  condiții utilizate în clauza WHERE, nume de câmpuri utilizate în
+  clauza ORDER BY, nume de tabele sau chiar întregi fraze SELECT,
+  pentru a refolosi aceeași interogare cu valori diferite.</p>
 
 <p>În consola <b>psql</b> variabilele se definesc cu meta-comanda
   <code>\set</code> și se folosesc prefixându-le cu <b>:</b>. Pentru a
@@ -1994,11 +2306,10 @@ SELECT nr_matricol, 30, 10, CURRENT_DATE
 </code></pre>
 
 <h2>Secvențe</h2>
-<p>Despre secvenţe:</p>
-<ul>
-  <li>de multe ori trebuie să creăm atribute sintetice care să joace rol de cheie, deci să ia valori unice în cadrul unei tabele;</li>
-  <li>secvenţele sunt obiecte care ne ajută să generăm automat numere întregi unice în momentul inserării înregistrărilor.</li>
-</ul>
+<p>De multe ori suntem puși în situația de a crea atribute sintetice 
+  care să joace rol de cheie, deci să ia valori unice în cadrul unei 
+  tabele. Secvențele sunt obiecte care ne ajută să generăm automat 
+  numere întregi unice în momentul inserării înregistrilor.</p>
 
 <p>Sintaxa creării unei secvențe:</p>
 <pre><code class="language-sql">CREATE SEQUENCE nume_secventa
@@ -2069,6 +2380,62 @@ SET bursa=bursa*0.15 WHERE bursa&lt;300; </code></pre>
  <pre><code class="language-sql">DELETE FROM note WHERE valoare &lt; 5;</code></pre>
 
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Modificarea datelor în R (tidyverse)</h2>
+
+<p>În SQL, INSERT / UPDATE / DELETE modifică tabelul "pe loc" în baza de date. În R, un data frame este o valoare obişnuită: nu îl modificăm pe loc, ci construim o versiune nouă şi o reatribuim variabilei (cu <code>&lt;-</code>). Operaţiile de mai jos acoperă comenzile DML prezentate mai sus.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">INSERT → add_row() / bind_rows()</h3>
+<pre><code class="language-r"># INSERT INTO cursuri VALUES (30, 'Inv. automata', 3, 1, 5)
+cursuri &lt;- cursuri %&gt;%
+  add_row(id_curs = 30, titlu_curs = "Inv. automata", an = 3L, semestru = 1L, credite = 5L)
+
+# INSERT INTO cursuri (id_curs, titlu_curs) VALUES (31, 'NoSQL')
+#   coloanele neprecizate devin NA
+cursuri &lt;- cursuri %&gt;%
+  add_row(id_curs = 31, titlu_curs = "NoSQL")</code></pre>
+
+<p>Forma INSERT ... SELECT (inserare din rezultatul unei interogări) devine un <code>bind_rows()</code> cu un data frame calculat:</p>
+<pre><code class="language-r"># INSERT INTO note SELECT nr_matricol, 30, 10, CURRENT_DATE FROM studenti WHERE an = 3
+note_noi &lt;- studenti %&gt;%
+  filter(an == 3) %&gt;%
+  transmute(nr_matricol, id_curs = 30, valoare = 10, data_notare = Sys.Date())
+
+note &lt;- bind_rows(note, note_noi)</code></pre>
+
+<h3 style="color:#1a56b8;">Secvenţe (auto-increment) → row_number()</h3>
+<pre><code class="language-r"># echivalentul unei chei generate automat
+cursuri &lt;- cursuri %&gt;%
+  mutate(id_curs = row_number())          # 1, 2, 3, ...</code></pre>
+
+<h3 style="color:#1a56b8;">UPDATE → mutate() + if_else()</h3>
+<pre><code class="language-r"># UPDATE studenti SET bursa = bursa * 0.15 WHERE bursa < 300
+studenti &lt;- studenti %&gt;%
+  mutate(bursa = if_else(bursa &lt; 300, bursa * 0.15, bursa))</code></pre>
+
+<p>UPDATE cu subinterogare (valori care vin din alt tabel) se face printr-un join urmat de <code>mutate()</code>. De exemplu, bursa = 100 × media notelor fiecărui student:</p>
+<pre><code class="language-r">medii &lt;- note %&gt;%
+  group_by(nr_matricol) %&gt;%
+  summarise(media = mean(valoare, na.rm = TRUE))
+
+studenti &lt;- studenti %&gt;%
+  left_join(medii, by = "nr_matricol") %&gt;%
+  mutate(bursa = 100 * media) %&gt;%
+  select(-media)</code></pre>
+
+<h3 style="color:#1a56b8;">DELETE → filter() (păstrăm ce NU se şterge)</h3>
+<pre><code class="language-r"># DELETE FROM note WHERE valoare < 5
+note &lt;- note %&gt;%
+  filter(!(valoare &lt; 5))          # echivalent: filter(valoare >= 5)</code></pre>
+
+<h3 style="color:#1a56b8;">CREATE TABLE AS SELECT → atribuire</h3>
+<pre><code class="language-r"># CREATE TABLE raport AS SELECT nume, prenume, bursa FROM studenti
+raport &lt;- studenti %&gt;%
+  select(nume, prenume, bursa)</code></pre>
+</div>
+
 <h3>Exerciții</h3>
 <ol><li>1.Stergeti toti studentii care nu au nici o nota.</li></ol>
 
@@ -2085,15 +2452,7 @@ SET bursa=bursa*0.15 WHERE bursa&lt;300; </code></pre>
 <p>Asigurați-vă că lucrați pe datele inițiale (re-rulați scriptul de creare dacă ați modificat datele). Creați apoi o tabelă care să stocheze numele, prenumele, bursa și mediile studenților.</p>
 
 <h2>ALTER TABLE</h2>
-<p>Structura tabelelor create deja poate fi modificată, chiar dacă tabelul conţine deja date. Modificările pot viza:</p>
-<ul>
-<li>adăugarea de noi coloane;</li>
-<li>ştergerea unor coloane existente;</li>
-<li>modificarea definiţiei unei coloane (tipul şi constrângerile impuse);</li>
-<li>redenumirea unei coloane;</li>
-<li>redenumirea tabelului;</li>
-<li>adăugarea sau ştergerea de constrângeri (chei candidat, chei primare, chei străine, constrângeri NOT NULL, CHECK).</li>
-</ul>
+<p>Structura tabelelor create deja poate fi modificată, chiar dacă tabelul conține deja date. Modificările pot să vizeze adăugarea de noi coloane, ștergerea unor coloane existente, modificarea definiției unei coloane (tipul și constrângerile impuse), redenumirea unei coloane, redenumirea tabelului, adăugarea sau ștergerea de constângeri (chei candidat, chei primare, chei străine, constrângeri NOT NULL, CHECK).</p>
 
 <p>Găsiți în continuare comenzile necesare: </p>
 <p>Pentru adăugarea unor coloane într-un tabel:</p>
@@ -2159,29 +2518,31 @@ ALTER TABLE nume_tabel DROP CONSTRAINT nume_constrangere;</code></pre>
   tranzacții determină revenirea la starea inițială, dinaintea 
   tranzacției.</p>
 
-<p>Despre modul de funcţionare implicit:</p>
-<ul>
-  <li>PostgreSQL funcţionează în mod <i>autocommit</i>: fiecare comandă reprezintă propria sa tranzacţie şi este salvată (commit) automat imediat ce se execută cu succes;</li>
-  <li>pentru a grupa mai multe comenzi într-o singură tranzacţie, o începem explicit cu <code>BEGIN</code> (sau <code>START TRANSACTION</code>) şi o încheiem cu <code>COMMIT</code> sau <code>ROLLBACK</code>.</li>
-</ul>
+<p>Implicit, PostgreSQL funcționează în mod <i>autocommit</i>: fiecare comandă
+  reprezintă propria sa tranzacție și este salvată (commit) automat imediat ce
+  se execută cu succes. Pentru a grupa mai multe comenzi într-o singură
+  tranzacție, o începem explicit cu comanda <code>BEGIN</code> (sau
+  <code>START TRANSACTION</code>) și o încheiem cu <code>COMMIT</code> sau
+  <code>ROLLBACK</code>.</p>
 
-<ul>
-  <li><code>COMMIT</code> face permanente toate modificările efectuate de la începutul tranzacţiei;</li>
-  <li><code>ROLLBACK</code> încheie tranzacţia readucând baza de date la starea de dinaintea începerii ei;</li>
-  <li>o eroare în cadrul tranzacţiei sau o cădere a sistemului are acelaşi efect ca un ROLLBACK - este modalitatea prin care este protejată integritatea datelor.</li>
-</ul>
+<p>Comanda <code>COMMIT</code> face permanente toate modificările efectuate de la
+  începutul tranzacției. Comanda <code>ROLLBACK</code> încheie tranzacția
+  readucând baza de date la starea de dinaintea începerii ei. O eroare în
+  cadrul tranzacției sau o cădere a sistemului are același efect ca un
+  ROLLBACK - este modalitatea prin care este protejată integritatea datelor.</p>
 
-<p>În PostgreSQL şi comenzile DDL (CREATE, ALTER, DROP) sunt tranzacţionale:</p>
-<ul>
-  <li>dacă au fost executate în interiorul unei tranzacţii deschise cu BEGIN, ele pot fi anulate cu ROLLBACK, la fel ca modificările de date;</li>
-  <li>astfel, dacă într-o tranzacţie ştergeţi date şi apoi creaţi un tabel, un ROLLBACK anulează ambele operaţii.</li>
-</ul>
+<p>În PostgreSQL și comenzile DDL (CREATE, ALTER, DROP) sunt tranzacționale:
+  dacă au fost executate în interiorul unei tranzacții deschise cu BEGIN, ele
+  pot fi anulate cu ROLLBACK, la fel ca modificările de date. Astfel, dacă într-o
+  tranzacție ștergeți date și apoi creați un tabel, un ROLLBACK anulează ambele
+  operații.</p>
 
-<p>Pe parcursul unei tranzacţii pot fi adăugaţi marcatori cu ajutorul cărora putem reveni la stări intermediare:</p>
-<ul>
-  <li>adăugarea unui indicator se realizează cu comanda <code>SAVEPOINT nume_indicator</code>;</li>
-  <li>revenirea la starea bazei de date din acel moment se realizează cu comanda <code>ROLLBACK TO SAVEPOINT nume_indicator</code>.</li>
-</ul>
+<p>Pe parcursul unei tranzacții pot fi adăugați niște marcatori/indicatori
+  cu ajutorul cărora să putem reveni la stări intermediare. Adăugarea
+  unui indicator se realizează cu ajutorul comenzii
+  <code>SAVEPOINT nume_indicator</code> iar revenirea la starea bazei de
+  date din acel moment se realizează cu ajutorul comenzii
+  <code>ROLLBACK TO SAVEPOINT nume_indicator</code>.</p>
 
 
 <h3>Exerciții</h3>
@@ -2208,20 +2569,6 @@ ALTER TABLE nume_tabel DROP CONSTRAINT nume_constrangere;</code></pre>
   <li> Are loc modificarea în sesiunea B ? De ce ?</li>
   <li> In sesiunea B rulați <code>BEGIN</code>, apoi o comandă de modificare a burselor din 250 în 400 - în sesiunea B ar fi trebuit să vedeți că există încă burse de 250, la pasul precedent. Ce se întâmplă și de ce ? (nu vă speriați, nu vi s-a blocat calculatorul - sesiunea B așteaptă să se elibereze blocajul pe rânduri).</li>
   <li> Executați comanda <code>COMMIT</code> în sesiunea A. Ce s-a întâmplat cu sesiunea B și de ce ?</li>
-</ol>
-
-<h3>Exerciții extra</h3>
-<ol>
-  <li> Porniți o tranzacție cu <code>BEGIN</code>, măriți toate bursele cu 50 RON, apoi anulați modificarea cu <code>ROLLBACK</code>. Verificați că bursele au revenit la valorile inițiale.</li>
-  <li> Porniți o tranzacție, ștergeți un curs din tabela <code>cursuri</code>, apoi confirmați modificarea cu <code>COMMIT</code>.</li>
-  <li> Într-o tranzacție, inserați un student nou, creați un <code>SAVEPOINT</code>, inserați o notă pentru el, apoi reveniți la savepoint cu <code>ROLLBACK TO</code>. Ce rămâne în baza de date după <code>COMMIT</code>?</li>
-  <li> Demonstrați că, după un <code>COMMIT</code>, modificările nu mai pot fi anulate printr-un <code>ROLLBACK</code>.</li>
-  <li> Porniți o tranzacție, efectuați două actualizări diferite și confirmați-le împreună cu un singur <code>COMMIT</code> (atomicitate).</li>
-  <li> Folosind două sesiuni, arătați că modificările necomise dintr-o sesiune nu sunt vizibile în cealaltă (izolare).</li>
-  <li> Creați un <code>SAVEPOINT</code>, faceți mai multe modificări, apoi eliberați savepoint-ul cu <code>RELEASE SAVEPOINT</code>.</li>
-  <li> Într-o tranzacție, încercați să inserați un rând care încalcă o restricție; observați comportamentul și anulați cu <code>ROLLBACK</code>.</li>
-  <li> Setați nivelul de izolare al unei tranzacții la <code>SERIALIZABLE</code> (<code>SET TRANSACTION ISOLATION LEVEL</code>) și descrieți efectul.</li>
-  <li> Explicați, printr-un exemplu pe tabela <code>studenti</code>, diferența dintre <code>ROLLBACK</code> și <code>ROLLBACK TO SAVEPOINT</code>.</li>
 </ol>
 </div>
 
@@ -2311,21 +2658,6 @@ Realizarea de exercitii: modelare a bazelor de date.
     </div>
 
     <script>
-        function toggleSidebar() {
-            var sb = document.getElementById('sidebar');
-            var collapsed = sb.classList.toggle('collapsed');
-            sb.querySelector('.sidebar-toggle').setAttribute('aria-expanded', String(!collapsed));
-        }
-        // colapsare automata pe ecrane mici
-        var sidebarMq = window.matchMedia('(max-width: 768px)');
-        function applySidebarMq(e) {
-            var sb = document.getElementById('sidebar');
-            if (e.matches) sb.classList.add('collapsed');
-            else sb.classList.remove('collapsed');
-            sb.querySelector('.sidebar-toggle').setAttribute('aria-expanded', String(!sb.classList.contains('collapsed')));
-        }
-        sidebarMq.addEventListener('change', applySidebarMq);
-        document.addEventListener('DOMContentLoaded', function() { applySidebarMq(sidebarMq); });
         function showLab(id, el) {
             document.querySelectorAll('.lab-section').forEach(function(s) { s.style.display='none'; });
             var t = document.getElementById(id);
@@ -2337,44 +2669,6 @@ Realizarea de exercitii: modelare a bazelor de date.
         // evidentiere sintaxa SQL pentru tot continutul incarcat
         document.addEventListener('DOMContentLoaded', function() {
             if (window.hljs) hljs.highlightAll();
-        });
-        // buton "Copiaza" pentru fiecare bloc de cod SQL
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('pre').forEach(function(pre) {
-                if (pre.parentElement && pre.parentElement.classList.contains('code-wrap')) return;
-                var wrap = document.createElement('div');
-                wrap.className = 'code-wrap';
-                pre.parentNode.insertBefore(wrap, pre);
-                wrap.appendChild(pre);
-                var btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'copy-btn';
-                btn.textContent = 'Copiază';
-                btn.addEventListener('click', function() {
-                    var text = pre.innerText;
-                    function ok() {
-                        btn.textContent = 'Copiat!';
-                        btn.classList.add('copied');
-                        setTimeout(function() { btn.textContent = 'Copiază'; btn.classList.remove('copied'); }, 1500);
-                    }
-                    function fallback() {
-                        var ta = document.createElement('textarea');
-                        ta.value = text;
-                        ta.style.position = 'fixed';
-                        ta.style.opacity = '0';
-                        document.body.appendChild(ta);
-                        ta.select();
-                        try { document.execCommand('copy'); ok(); } catch (e) {}
-                        document.body.removeChild(ta);
-                    }
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        navigator.clipboard.writeText(text).then(ok).catch(fallback);
-                    } else {
-                        fallback();
-                    }
-                });
-                wrap.appendChild(btn);
-            });
         });
     </script>
 </body>

@@ -270,6 +270,109 @@
 
 
 
+<div class="r-equiv" style="border-left:4px solid #2c7be5; background:#f0f6ff; padding:1px 18px 12px; margin:24px 0; border-radius:6px;">
+<h2 style="color:#1a56b8; border:none;">Aceleaşi operaţii în R (tidyverse)</h2>
+
+<p>Comanda SELECT cu clauzele ei se descompune în R într-un lanţ de verbe <code>dplyr</code>: <code>select()</code> alege coloanele (proiecţia), <code>filter()</code> alege liniile (clauza WHERE), <code>distinct()</code> elimină duplicatele (DISTINCT), <code>mutate()</code> creează coloane calculate, iar <code>arrange()</code> ordonează (ORDER BY). Presupunem că tabelul <code>studenti</code> a fost deja încărcat în R.</p>
+
+<pre><code class="language-r">library(tidyverse)</code></pre>
+
+<h3 style="color:#1a56b8;">SELECT * şi proiecţia coloanelor</h3>
+<pre><code class="language-r"># SELECT * FROM studenti
+studenti
+
+# SELECT nume, prenume FROM studenti
+studenti %&gt;%
+  select(nume, prenume)</code></pre>
+
+<h3 style="color:#1a56b8;">Alias de coloană (AS)</h3>
+<pre><code class="language-r"># SELECT nume AS "Nume Profesor" FROM profesori
+profesori %&gt;%
+  select(`Nume Profesor` = nume)</code></pre>
+
+<h3 style="color:#1a56b8;">DISTINCT</h3>
+<pre><code class="language-r"># SELECT DISTINCT an FROM studenti
+studenti %&gt;%
+  distinct(an)
+
+# SELECT DISTINCT an, grupa FROM studenti
+studenti %&gt;%
+  distinct(an, grupa)</code></pre>
+
+<h3 style="color:#1a56b8;">Coloane calculate (operatori aritmetici)</h3>
+<pre><code class="language-r"># SELECT nume, prenume, bursa + 10 FROM studenti
+studenti %&gt;%
+  mutate(bursa_noua = bursa + 10) %&gt;%
+  select(nume, prenume, bursa_noua)</code></pre>
+<p>La fel ca în SQL, dacă un operand este <code>NA</code> (NULL) rezultatul aritmetic este <code>NA</code>.</p>
+
+<h3 style="color:#1a56b8;">Concatenarea şirurilor (||)</h3>
+<pre><code class="language-r"># SELECT 'Studentul '||nume||' '||prenume||' este inmatriculat in anul '||an||'.' AS info
+studenti %&gt;%
+  mutate(info = str_c("Studentul ", nume, " ", prenume,
+                      " este inmatriculat in anul ", an, ".")) %&gt;%
+  select(info)</code></pre>
+
+<h3 style="color:#1a56b8;">Clauza WHERE → filter()</h3>
+<pre><code class="language-r"># SELECT nume, prenume FROM studenti WHERE an = 1
+studenti %&gt;%
+  filter(an == 1) %&gt;%
+  select(nume, prenume)
+
+# WHERE bursa IS NOT NULL          -> !is.na(bursa)
+studenti %&gt;% filter(!is.na(bursa))
+
+# WHERE bursa IS NOT NULL AND an = 1  (virgula = AND în filter)
+studenti %&gt;% filter(!is.na(bursa), an == 1)
+
+# WHERE an = 3 OR bursa IS NOT NULL
+studenti %&gt;% filter(an == 3 | !is.na(bursa))</code></pre>
+
+<h3 style="color:#1a56b8;">Operatorul LIKE → str_detect() (expresii regulate)</h3>
+<pre><code class="language-r"># WHERE nume LIKE '%escu'   (se termină cu "escu")
+studenti %&gt;% filter(str_detect(nume, "escu$"))
+
+# WHERE nume LIKE '%andr%'  (conţine "andr")
+studenti %&gt;% filter(str_detect(nume, "andr"))</code></pre>
+<p>În SQL <code>%</code> înseamnă "orice şir", iar <code>_</code> "un singur caracter"; în R, în expresiile regulate, echivalentele sunt <code>.*</code> respectiv <code>.</code> (sau ancorele <code>^</code> şi <code>$</code> pentru început/sfârşit).</p>
+
+<h3 style="color:#1a56b8;">Alţi operatori de comparare (IN, BETWEEN)</h3>
+<pre><code class="language-r"># WHERE prenume IN ('Adrian', 'Alex')
+studenti %&gt;% filter(prenume %in% c("Adrian", "Alex"))
+
+# WHERE an NOT IN (1, 2)
+studenti %&gt;% filter(!(an %in% c(1, 2)))
+
+# WHERE an BETWEEN 1 AND 3
+studenti %&gt;% filter(between(an, 1, 3))</code></pre>
+
+<h3 style="color:#1a56b8;">Ordonarea rezultatelor → arrange()</h3>
+<pre><code class="language-r"># ORDER BY an ASC
+studenti %&gt;% arrange(an)
+
+# ORDER BY an ASC, grupa DESC
+studenti %&gt;% arrange(an, desc(grupa))
+
+# WHERE an = 1 ORDER BY grupa ASC
+studenti %&gt;%
+  filter(an == 1) %&gt;%
+  arrange(grupa) %&gt;%
+  select(nume, prenume, grupa)</code></pre>
+
+<h3 style="color:#1a56b8;">Operatori pentru mulţimi (UNION, INTERSECT, EXCEPT)</h3>
+<pre><code class="language-r">a &lt;- studenti %&gt;% filter(an == 2) %&gt;% select(nume)
+b &lt;- studenti %&gt;% filter(an == 3) %&gt;% select(nume)
+
+# UNION
+union(a, b)
+# INTERSECT
+intersect(a, b)
+# EXCEPT (diferenţa de mulţimi)
+setdiff(a, b)
+# UNION ALL (păstrează duplicatele)
+bind_rows(a, b)</code></pre>
+</div>
+
 <h2> Exerciții </h2>
 <ol>
     <li> Scrieți o interogare pentru a afișa numele, prenumele, anul de studiu si data nașterii pentru toți studenții. Editați în Query Tool și executați. Salvați apoi interogarea intr-un fișier numit p1.sql.</li>
