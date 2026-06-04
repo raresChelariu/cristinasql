@@ -136,6 +136,3 @@ having avg(n.valoare)>8
 order by avg(n.valoare) desc;
 
 -- 13. Afișați numele, cea mai mare notă, cea mai mică notă și media doar pentru acei studenti care au primit doar note mai mari sau egale cu 7 (au cea mai mică notă mai mare sau egală cu 7).
-
-
---Pentru fiecare grupă afișați numele studenților care au obținut cea mai mică notă la nivelul grupei.Pentru fiecare grupă afișați numele studenților care au obținut cea mai mică notă la nivelul grupei.

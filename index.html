@@ -11,8 +11,11 @@
     <script src="assets/highlight.r.min.js"></script>
     <style>
         body { margin: 0; }
-        .jumbotron-bd { background:#e9ecef; text-align:center; padding:25px; margin-bottom:0; }
-        .layout { display:flex; gap:20px; max-width:1200px; margin:20px auto; padding:0 15px; }
+        #sidebarToggle { margin:10px 15px 0; padding:6px 12px; border:1px solid #ccc; border-radius:4px; background:#fff; cursor:pointer; font-size:.95em; }
+        #sidebarToggle:hover { background:#f1f3f5; }
+        .layout { display:flex; gap:20px; max-width:1200px; margin:10px auto 20px; padding:0 15px; }
+        .layout.sidebar-collapsed { max-width:100%; }
+        .layout.sidebar-collapsed .sidebar { display:none; }
         .sidebar { flex:0 0 220px; background:rgba(0,0,0,.06); border-radius:6px; padding:12px; height:fit-content; position:sticky; top:10px; }
         .sidebar ul { list-style:none; padding:0; margin:0; }
         .sidebar li { margin:2px 0; }
@@ -27,11 +30,7 @@
     </style>
 </head>
 <body>
-    <div class="jumbotron-bd">
-        <img src="imagini/BD.png" style="height:50px;"><br>
-        <h1>Pagina disciplinei Baze de Date</h1>
-        <p class="offline-note">Copie offline - sectiunea Laborator (PostgreSQL / pgAdmin).</p>
-    </div>
+    <button id="sidebarToggle" onclick="toggleSidebar()" title="Ascunde/afiseaza meniul">&#9776; Meniu</button>
 
     <div class="layout">
         <nav class="sidebar">
@@ -2658,6 +2657,9 @@ Realizarea de exercitii: modelare a bazelor de date.
     </div>
 
     <script>
+        function toggleSidebar() {
+            document.querySelector('.layout').classList.toggle('sidebar-collapsed');
+        }
         function showLab(id, el) {
             document.querySelectorAll('.lab-section').forEach(function(s) { s.style.display='none'; });
             var t = document.getElementById(id);
